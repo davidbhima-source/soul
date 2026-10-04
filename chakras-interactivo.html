@@ -66,7 +66,10 @@ body{
 .balance-btn .dot{width:9px; height:9px; border-radius:50%; background:var(--gold); box-shadow:0 0 10px var(--gold);}
 .balance-btn:hover{background:var(--gold-soft);}
 .balanced .balance-btn{background:var(--gold-soft); box-shadow:0 0 28px var(--gold-soft);}
-button:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+button:focus-visible,a:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+.home-link{display:inline-flex; align-items:center; gap:8px; margin:0 0 14px; font-size:.85rem; color:var(--muted);
+  text-decoration:none; border:1px solid var(--line); border-radius:999px; padding:6px 14px 6px 12px; transition:color .25s, border-color .25s;}
+.home-link:hover{color:var(--ink); border-color:var(--gold);}
 
 /* Estructura */
 .wrap{max-width:1180px; margin:0 auto; padding:22px 20px 10px; display:grid;
@@ -193,6 +196,7 @@ button:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
 
 <header class="top">
   <div>
+    <a class="home-link" href="index.html"><span aria-hidden="true">←</span>Inicio</a>
     <h1>Los siete lotos<br>y sus dualidades</h1>
     <p>Toca un chakra para abrirlo. Cada dualidad muestra sus dos polos y lo que permanece cuando la energía deja de oscilar entre iḍā y piṅgalā. Toca cualquier polo, atributo o emoción para leer su descripción.</p>
     <p id="state">Iḍā y piṅgalā oscilan: cada chakra sostiene sus opuestos.</p>
