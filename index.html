@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Soul · Inicio</title>
-<meta name="description" content="Mapas interactivos del cuerpo sutil: chakras, nāḍīs y práctica.">
+<meta name="description" content="Mapas interactivos del cuerpo sutil y de los ciclos cósmicos: chakras, yugas, nāḍīs y práctica.">
 <script>
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
 </script>
@@ -236,7 +236,7 @@ a.card:hover .go .arr{transform:translateX(5px);}
   <div>
     <p class="eyebrow">Mapas del cuerpo sutil</p>
     <h1>Un mapa interior,<br>de la raíz a la <em>corona</em></h1>
-    <p class="lead">Recorridos interactivos para explorar los chakras, las corrientes de energía y las prácticas que los atraviesan. Cada sección es un mapa que se toca: abre lo que te llame y lee a tu ritmo.</p>
+    <p class="lead">Recorridos interactivos para explorar los chakras, las corrientes de energía, los grandes ciclos del tiempo y las prácticas que los atraviesan. Cada sección es un mapa que se toca: abre lo que te llame y lee a tu ritmo.</p>
     <div class="cta">
       <a class="btn" id="ctaMain" href="chakras-interactivo.html"><span class="dot"></span><span>Comenzar con los siete lotos</span></a>
       <a class="btn ghost" href="#secciones">Ver todas las secciones</a>
@@ -277,12 +277,16 @@ a.card:hover .go .arr{transform:translateX(5px);}
     grupo       agrupa las entradas dentro del menú
     href        enlace a la página; si se omite, la sección aparece como «Próximamente»
     color       color de acento (hex)
-    petalos     número de pétalos del icono
+    petalos     número de pétalos del icono de loto
+    icono       opcional: 'rueda' dibuja la rueda de los yugas en lugar de un loto
 */
 const SECCIONES = [
   {id:'chakras', titulo:'Los siete lotos', subtitulo:'Chakras y sus dualidades', grupo:'Cuerpo sutil',
    descripcion:'Recorre la columna de mūlādhāra a sahasrāra. Cada chakra muestra sus atributos, sus emociones y las dualidades que se integran en suṣumnā.',
    href:'chakras-interactivo.html', color:'#e0bd45', petalos:10},
+  {id:'yugas', titulo:'La rueda de los yugas', subtitulo:'Los ciclos cósmicos de Sri Yukteswar', grupo:'Ciclos cósmicos',
+   descripcion:'El Sol gira alrededor de su estrella dual en 24.000 años y, al acercarse o alejarse de Vishnunabhi, la inteligencia humana se expande o se contrae. Recorre las cuatro eras y descubre en cuál vivimos.',
+   href:'yugas-yukteswar.html', color:'#c4824f', icono:'rueda'},
   {id:'nadis', titulo:'Las tres nāḍīs', subtitulo:'Iḍā, piṅgalā y suṣumnā', grupo:'Cuerpo sutil',
    descripcion:'Las corrientes lunar y solar que se entrelazan alrededor de la columna, y el canal central donde se reúnen.',
    color:'#8b7ce0', petalos:2},
@@ -314,8 +318,32 @@ function ring(n,b,l,fill,stroke,off,op,wMax){
   return s;
 }
 
+/* Icono de la rueda de los yugas: ocho arcos proporcionales a su duración,
+   Satya arriba (junto a Vishnunabhi) y el Sol girando sobre la órbita */
+const YUGA_ARCOS = [['#e8c46a',4],['#b9c5de',3],['#c4824f',2],['#7a8095',1],['#7a8095',1],['#c4824f',2],['#b9c5de',3],['#e8c46a',4]];
+function wheel(s, p){
+  const id = p+'-'+s.id, R = 80, pt = a => (R*Math.cos(a*Math.PI/180)).toFixed(1)+' '+(R*Math.sin(a*Math.PI/180)).toFixed(1);
+  let a = -90, arcs = '';
+  YUGA_ARCOS.forEach(([c,u]) => {
+    const a0 = a+2, a1 = a+u*18-2;
+    arcs += '<path d="M'+pt(a0)+' A'+R+' '+R+' 0 0 1 '+pt(a1)+'" fill="none" stroke="'+c+'" stroke-width="22"/>';
+    a += u*18;
+  });
+  const hoy = 112.9; // 2026 d.C. en la órbita del modelo
+  return '<svg viewBox="-125 -125 250 250" aria-hidden="true"><defs>'+
+    '<radialGradient id="'+id+'-h"><stop offset="0" stop-color="'+s.color+'" stop-opacity=".5"/>'+
+    '<stop offset="1" stop-color="'+s.color+'" stop-opacity="0"/></radialGradient></defs>'+
+    '<circle r="124" fill="url(#'+id+'-h)"/>'+
+    '<g opacity=".9">'+arcs+'</g>'+
+    '<circle cy="-112" r="7" fill="#f6f1ff"/>'+
+    '<circle r="9" fill="#dbe8ff"/>'+
+    '<g class="petals-s"><circle r="'+R+'" fill="none" stroke="none"/>'+
+    '<circle cx="'+(R*Math.cos(hoy*Math.PI/180)).toFixed(1)+'" cy="'+(R*Math.sin(hoy*Math.PI/180)).toFixed(1)+'" r="15" fill="#ffd27a" stroke="var(--card)" stroke-width="4"/></g></svg>';
+}
+
 /* Icono de loto para cada sección */
 function icon(s, p){
+  if(s.icono==='rueda') return wheel(s, p);
   const id = p+'-'+s.id;
   const petals = s.petalos===2
     ? '<path d="'+petal(38,72,36)+'" transform="rotate(90)" fill="url(#'+id+')" fill-opacity=".9" stroke="'+s.color+'"/>'+
