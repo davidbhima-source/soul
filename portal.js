@@ -30,7 +30,7 @@
     href        enlace a la página; si se omite, aparece como «Próximamente»
     color       color de acento (hex)
     petalos     número de pétalos del icono de loto
-    icono       opcional: 'rueda' dibuja la rueda de los yugas en lugar de un loto
+    icono       opcional: 'rueda' (rueda de los yugas) o 'bhava' (rueda de la vida) en lugar de un loto
 */
 const PORTAL = {
   nombre: 'Kriya',
@@ -54,7 +54,11 @@ const PORTAL = {
      ]},
     {id:'buda', titulo:'Buda', subtitulo:'Budismo', href:'buda.html', color:'#e0654a', figura:'buda',
      descripcion:'La enseñanza del Buda sobre la mente, el sufrimiento y el camino que lleva a su cese.',
-     secciones:[]}
+     secciones:[
+      {id:'rueda', titulo:'La rueda de Vida y Renacimiento', subtitulo:'El bhavacakra', grupo:'Fundamentos',
+       descripcion:'Los tres venenos, el karma, los seis mundos y los doce eslabones: toca cada parte de la rueda para entender qué simboliza, y descubre la Espiral que sale de ella.',
+       href:'rueda-de-la-vida.html', color:'#e0654a', icono:'bhava'}
+     ]}
   ]
 };
 
@@ -105,9 +109,27 @@ function wheel(s, p){
     '<g class="petals-s"><circle r="'+R+'" fill="none" stroke="none"/>'+
     '<circle cx="'+(R*Math.cos(hoy*Math.PI/180)).toFixed(1)+'" cy="'+(R*Math.sin(hoy*Math.PI/180)).toFixed(1)+'" r="15" fill="#ffd27a" stroke="var(--card)" stroke-width="4"/></g></svg>';
 }
+/* Rueda de la vida: el eje, el anillo del karma, los seis mundos y el borde */
+const BHAVA = ['#efe9dc','#2f6b55','#4f86c6','#b8402c','#857a84','#e8c04a'];
+function bhava(s, p){
+  const id = p+'-'+s.id, rad = a => a*Math.PI/180;
+  const sec = (r0,r1,a0,a1) => { const q = (r,a) => (r*Math.cos(rad(a))).toFixed(1)+' '+(r*Math.sin(rad(a))).toFixed(1);
+    return 'M'+q(r1,a0)+' A'+r1+' '+r1+' 0 0 1 '+q(r1,a1)+' L'+q(r0,a1)+' A'+r0+' '+r0+' 0 0 0 '+q(r0,a0)+' Z'; };
+  let mundos = '', borde = '';
+  BHAVA.forEach((c,i) => { const a = -90+i*60; mundos += '<path d="'+sec(48,84,a-30+1,a+30-1)+'" fill="'+c+'"/>'; });
+  for(let i=0;i<12;i++){ const a = -90+i*30; borde += '<path d="'+sec(88,104,a+1,a+29)+'" fill="'+(i%2?'#e6d6b0':'#efe3c4')+'"/>'; }
+  return '<svg viewBox="-125 -125 250 250" aria-hidden="true"><defs><radialGradient id="'+id+'-h"><stop offset="0" stop-color="'+s.color+'" stop-opacity=".5"/>'+
+    '<stop offset="1" stop-color="'+s.color+'" stop-opacity="0"/></radialGradient></defs>'+
+    '<circle r="124" fill="url(#'+id+'-h)"/><circle r="110" fill="#5c1f2b"/>'+
+    '<g class="petals-s">'+borde+mundos+'</g>'+
+    '<path d="'+sec(26,44,90,270)+'" fill="#f4eee0"/><path d="'+sec(26,44,-90,90)+'" fill="#17132a"/>'+
+    '<circle r="24" fill="#efe3c4"/><circle cx="0" cy="-10" r="5" fill="#d9573f"/><circle cx="9" cy="6" r="5" fill="#5fae7a"/><circle cx="-9" cy="6" r="5" fill="#3a3046"/></svg>';
+}
+
 /* Loto con el número de pétalos de la sección */
 function icon(s, p){
   if(s.icono==='rueda') return wheel(s, p);
+  if(s.icono==='bhava') return bhava(s, p);
   const id = p+'-'+s.id;
   const petals = s.petalos===2
     ? '<path d="'+petal(38,72,36)+'" transform="rotate(90)" fill="url(#'+id+')" fill-opacity=".9" stroke="'+s.color+'"/>'+

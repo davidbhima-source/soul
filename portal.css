@@ -21,7 +21,8 @@
      8. Página: portada de Kriya yoga  .pg-kriya
      9. Página: los siete lotos        .pg-chakras
     10. Página: los yugas              .pg-yugas
-    11. Movimiento reducido
+    11. Página: la rueda de la vida  .pg-rueda
+    12. Movimiento reducido
 
    La estructura del portal (caminos, secciones, menú) vive en portal.js.
 
@@ -533,7 +534,129 @@ html.pg-yugas{padding-top:env(safe-area-inset-top,0px);}
 .pg-yugas footer .note strong{color:var(--ink); font-weight:500;}
 
 
-/* 11. Movimiento reducido -------------------------------------------------- */
+/* 11. Página: la rueda de la vida ------------------------------------------- */
+html.pg-rueda{padding-top:env(safe-area-inset-top,0px);}
+.pg-rueda .top{max-width:1240px; margin:0 auto; padding:32px 20px 18px; position:relative; z-index:1;}
+.pg-rueda .top h1{font-family:var(--display); font-weight:500; font-size:clamp(2.2rem,5vw,3.4rem); line-height:1.02; margin:0 0 10px; letter-spacing:-.01em;}
+.pg-rueda .lede{max-width:66ch; color:var(--muted); margin:0; line-height:1.6;}
+.pg-rueda main{max-width:1240px; margin:0 auto; padding:0 20px 28px; display:grid; gap:22px; position:relative; z-index:1;}
+@media (min-width:1000px){.pg-rueda main{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); align-items:start;}}
+
+/* Lienzo con la rueda */
+.pg-rueda .lienzo{background:var(--sky); color:var(--sky-ink); border-radius:22px; overflow:hidden;}
+.pg-rueda .lienzo svg{display:block; width:100%; height:auto;}
+.pg-rueda .zona{cursor:pointer; transition:opacity .4s, filter .3s; outline:none;}
+.pg-rueda .zona:hover{filter:brightness(1.12);}
+.pg-rueda .zona:focus-visible{filter:drop-shadow(0 0 6px #fff6dc) brightness(1.1);}
+.pg-rueda #rueda.has-sel .zona{opacity:.35;}
+.pg-rueda #rueda.has-sel .zona.sel{opacity:1;}
+.pg-rueda #rueda .zona.sel .seg{stroke:#fff6dc; stroke-width:2.5;}
+.pg-rueda .zona.vida .seg{fill:var(--vida); fill-opacity:.9;}
+.pg-rueda .zona.apagado{opacity:.18 !important;}
+.pg-rueda .num{font-family:var(--body); font-size:11px; font-weight:500; fill:#7a5a2a;}
+.pg-rueda .nombre{font-family:var(--display); font-size:17px; font-weight:600; letter-spacing:.02em;}
+.pg-rueda .rotulo{font-family:var(--display); font-style:italic; font-size:17px; fill:var(--sky-muted);}
+.pg-rueda .estrella{animation:tw 4s ease-in-out infinite;}
+.pg-rueda .animales{transform-box:view-box; transform-origin:400px 440px; animation:spin 48s linear infinite;}
+.pg-rueda .ojos{animation:late-r 3.6s ease-in-out infinite;}
+.pg-rueda .late{animation:late-r 4s ease-in-out infinite;}
+.pg-rueda .senda{animation:senda 3s linear infinite;}
+
+/* Lectura y botones bajo la rueda */
+.pg-rueda .mando{display:grid; gap:12px; padding:14px 20px 20px; border-top:1px solid var(--sky-line);}
+.pg-rueda .lectura{display:flex; gap:12px; align-items:baseline; min-height:2.6em; color:var(--sky-muted); font-size:.95rem; line-height:1.45;}
+.pg-rueda .lectura strong{color:var(--sky-ink); font-family:var(--display); font-size:1.15rem; font-weight:600;}
+.pg-rueda .paso-n{font-family:var(--display); font-size:1.8rem; line-height:1; color:var(--sky-accent); min-width:1.2em;}
+.pg-rueda .botones{display:flex; flex-wrap:wrap; gap:10px;}
+.pg-rueda .sbtn{font:inherit; font-size:.9rem; background:var(--sky-2); border:1px solid var(--sky-line); border-radius:999px; padding:8px 16px; cursor:pointer; color:var(--sky-ink);}
+.pg-rueda .sbtn:hover{background:var(--sky-hover);}
+
+/* Panel de explicación */
+.pg-rueda .panel-r{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:20px 22px 24px;}
+@media (min-width:1000px){.pg-rueda .panel-r{position:sticky; top:calc(16px + env(safe-area-inset-top,0px)); max-height:calc(100vh - 32px); overflow:auto;}}
+.pg-rueda .migas{display:flex; flex-wrap:wrap; align-items:center; gap:4px 6px; font-size:.8rem; color:var(--muted); margin-bottom:12px;}
+.pg-rueda .migas button{font:inherit; background:none; border:0; padding:0; color:var(--muted); cursor:pointer; text-decoration:underline; text-underline-offset:3px;}
+.pg-rueda .migas button:hover{color:var(--ink);}
+.pg-rueda .migas [aria-current]{color:var(--ink);}
+.pg-rueda .cab{display:grid; grid-template-columns:96px 1fr; gap:16px; align-items:center; margin-bottom:10px;}
+.pg-rueda .visor{width:96px; height:96px; display:block; overflow:visible;}
+.pg-rueda .visor-n{font-family:var(--display); font-size:22px; font-weight:600; fill:var(--ink);}
+.pg-rueda .cab h2{font-family:var(--display); font-weight:500; font-size:clamp(1.6rem,3vw,2.1rem); line-height:1.08; margin:0;}
+.pg-rueda .num-g{display:inline-grid; place-items:center; width:1.4em; height:1.4em; margin-right:8px; border-radius:50%;
+  background:color-mix(in srgb,var(--ac) 30%,transparent); font-size:.75em; vertical-align:.12em;}
+.pg-rueda .san{font-family:var(--display); font-style:italic; color:var(--gold); font-size:1.1rem; margin:4px 0 0;}
+.pg-rueda .gloss{color:var(--muted); font-size:.92rem; margin:2px 0 0;}
+.pg-rueda .panel-r p{line-height:1.62; margin:0 0 12px;}
+.pg-rueda .fila{border-left:2px solid color-mix(in srgb,var(--ac) 70%,transparent); padding:2px 0 2px 14px; margin:14px 0;}
+.pg-rueda .fila p{margin:2px 0 0;}
+.pg-rueda .k{font-size:.74rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); display:inline-flex; align-items:center; gap:7px;}
+.pg-rueda .bdot{width:11px; height:11px; border-radius:50%; background:var(--bc); box-shadow:0 0 0 1.5px var(--gold);}
+.pg-rueda .lista{margin:12px 0 16px; display:grid; gap:8px;}
+.pg-rueda .lista div{display:grid; grid-template-columns:minmax(110px,30%) 1fr; gap:10px; padding:9px 12px; border-radius:10px; background:var(--chip);}
+.pg-rueda .lista dt{font-family:var(--display); font-weight:600; font-size:1.02rem; line-height:1.25;}
+.pg-rueda .lista dd{margin:0; font-size:.92rem; line-height:1.5;}
+.pg-rueda .ejemplo{margin:16px 0; padding:12px 16px; border-radius:12px; background:color-mix(in srgb,var(--ac) 12%,var(--card)); border:1px solid color-mix(in srgb,var(--ac) 35%,transparent);}
+.pg-rueda .ejemplo p{margin:4px 0 0; font-family:var(--display); font-size:1.12rem; line-height:1.45;}
+.pg-rueda .ejemplo.cotidiano{border-style:dashed;}
+.pg-rueda .panel-r h3{font-family:var(--body); font-weight:500; font-size:.85rem; color:var(--muted); margin:22px 0 10px; display:flex; align-items:center; gap:12px;}
+.pg-rueda .panel-r h3::after{content:""; flex:1; height:1px; background:var(--line);}
+.pg-rueda .chips{display:flex; flex-wrap:wrap; gap:8px;}
+.pg-rueda .chip{font:inherit; font-size:.88rem; color:var(--ink); background:var(--chip); border:1px solid var(--line); border-radius:999px;
+  padding:6px 14px; cursor:pointer; display:inline-flex; align-items:center; gap:8px; transition:border-color .25s, background .25s;}
+.pg-rueda .chip .d{width:8px; height:8px; border-radius:50%; background:var(--ac);}
+.pg-rueda .chip:hover{border-color:var(--ac); background:var(--chip-hover);}
+.pg-rueda .pasar{display:flex; justify-content:space-between; gap:10px; margin-top:20px; padding-top:14px; border-top:1px solid var(--line);}
+.pg-rueda .sbtn-c{font:inherit; font-size:.85rem; color:var(--ink); background:var(--chip); border:1px solid var(--line); border-radius:999px; padding:7px 14px; cursor:pointer;}
+.pg-rueda .sbtn-c:hover{border-color:var(--gold); background:var(--chip-hover);}
+.pg-rueda .botones-p{display:flex; flex-wrap:wrap; gap:8px; margin:6px 0 12px;}
+.pg-rueda .vidas{display:grid; gap:8px; margin:12px 0;}
+.pg-rueda .vida-f{display:grid; grid-template-columns:14px 1fr; gap:10px; align-items:start;}
+.pg-rueda .vida-f .sw{width:14px; height:14px; border-radius:4px; background:var(--vc); margin-top:4px;}
+.pg-rueda .vida-f p{margin:2px 0 0; font-size:.9rem; color:var(--muted);}
+.pg-rueda .ns{color:var(--muted); font-size:.85rem;}
+.pg-rueda .pasos{list-style:none; margin:0; padding:0; display:grid; gap:6px;}
+.pg-rueda .pasos li{display:grid; grid-template-columns:28px 1fr; gap:10px; align-items:start; padding:8px 10px; border-radius:10px; border:1px solid transparent; transition:background .3s, border-color .3s; font-size:.92rem; line-height:1.45;}
+.pg-rueda .pasos li .b{display:grid; place-items:center; width:26px; height:26px; border-radius:50%; background:var(--chip); font-family:var(--display); font-weight:600;}
+.pg-rueda .pasos li.on{background:color-mix(in srgb,var(--ac) 14%,transparent); border-color:var(--ac);}
+.pg-rueda .pasos li.on .b{background:var(--ac); color:#1e1a36;}
+.pg-rueda .estado-r{font-family:var(--display); font-size:1.12rem; line-height:1.45; margin:4px 0 12px;}
+.pg-rueda .escalera{width:100%; max-width:380px; height:auto; display:block; margin:6px auto 4px; overflow:visible;}
+.pg-rueda .peld{cursor:pointer; outline:none;}
+.pg-rueda .peld:hover circle,.pg-rueda .peld:focus-visible circle{stroke:var(--ink); stroke-width:2.5;}
+.pg-rueda .esc-n{font-family:var(--body); font-size:11px; font-weight:600; fill:#1e1a36; pointer-events:none;}
+.pg-rueda .esc-t{font-family:var(--display); font-size:13px; fill:var(--ink);}
+.pg-rueda .esc-et{font-family:var(--body); font-size:10px; fill:#8a78d8; letter-spacing:.04em;}
+.pg-rueda .leyenda-esc{display:flex; justify-content:center; gap:16px; font-size:.8rem; color:var(--muted); margin-bottom:8px;}
+.pg-rueda .leyenda-esc span::before{content:""; display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--vc); margin-right:6px; vertical-align:-1px;}
+.pg-rueda .fadein{animation:fadein .45s ease-out;}
+
+/* Animaciones del visor */
+.pg-rueda .visor .flota{animation:flota 6s ease-in-out infinite;}
+.pg-rueda .visor .gira-lento{animation:spin 30s linear infinite; transform-box:fill-box; transform-origin:center;}
+.pg-rueda .visor .gira-rapido{animation:spin 4s linear infinite; transform-origin:0 0;}
+.pg-rueda .visor .flota-arriba{animation:arriba 3s ease-in-out infinite;}
+.pg-rueda .visor .flota-abajo{animation:abajo 3s ease-in-out infinite;}
+.pg-rueda .visor .eslabon{animation:late-r 3s ease-in-out infinite;}
+.pg-rueda .visor .llamita{animation:llamita 1.6s ease-in-out infinite; transform-box:fill-box; transform-origin:50% 100%;}
+.pg-rueda .visor .brilla{animation:late-r 2.4s ease-in-out infinite;}
+
+.pg-rueda .pie{max-width:1240px; margin:0 auto; padding:4px 20px 40px; position:relative; z-index:1;}
+.pg-rueda .nota{max-width:80ch; border-top:1px solid var(--line); padding-top:18px; color:var(--muted); font-size:.93rem; line-height:1.65;}
+.pg-rueda .nota strong{color:var(--ink); font-weight:500;}
+@media (max-width:560px){
+  .pg-rueda .cab{grid-template-columns:72px 1fr;}
+  .pg-rueda .visor{width:72px; height:72px;}
+  .pg-rueda .lista div{grid-template-columns:1fr; gap:2px;}
+}
+@keyframes late-r{0%,100%{opacity:.6;}50%{opacity:1;}}
+@keyframes senda{to{stroke-dashoffset:-24;}}
+@keyframes flota{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
+@keyframes arriba{0%{transform:translateY(10px); opacity:.2;}50%{opacity:1;}100%{transform:translateY(-14px); opacity:.2;}}
+@keyframes abajo{0%{transform:translateY(-10px); opacity:.2;}50%{opacity:1;}100%{transform:translateY(14px); opacity:.2;}}
+@keyframes llamita{0%,100%{transform:scale(1,1);}50%{transform:scale(.9,1.1);}}
+
+
+/* 12. Movimiento reducido -------------------------------------------------- */
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none !important; transition:none !important;}
 }
