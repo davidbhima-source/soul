@@ -748,7 +748,9 @@ svg.addEventListener('keydown', e => {
   if(e.key==='Enter' || e.key===' '){ e.preventDefault(); abrir(z.dataset.n, true); }
 });
 
-abrir('rueda');
+// Un enlace como rueda-de-la-vida.html#brecha abre directamente esa explicación
+const inicial = decodeURIComponent(location.hash.slice(1));
+abrir(Object.prototype.hasOwnProperty.call(N, inicial) ? inicial : 'rueda');
 })();
 </script>
 </body>

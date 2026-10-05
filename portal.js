@@ -30,7 +30,8 @@
     href        enlace a la página; si se omite, aparece como «Próximamente»
     color       color de acento (hex)
     petalos     número de pétalos del icono de loto
-    icono       opcional: 'rueda' (rueda de los yugas) o 'bhava' (rueda de la vida) en lugar de un loto
+    icono       opcional: 'rueda' (rueda de los yugas), 'bhava' (rueda de la vida) o 'vedanas'
+                (mandala de los 108) en lugar de un loto
 */
 const PORTAL = {
   nombre: 'Kriya',
@@ -57,7 +58,10 @@ const PORTAL = {
      secciones:[
       {id:'rueda', titulo:'La rueda de Vida y Renacimiento', subtitulo:'El bhavacakra', grupo:'Fundamentos',
        descripcion:'Los tres venenos, el karma, los seis mundos y los doce eslabones: toca cada parte de la rueda para entender qué simboliza, y descubre la Espiral que sale de ella.',
-       href:'rueda-de-la-vida.html', color:'#e0654a', icono:'bhava'}
+       href:'rueda-de-la-vida.html', color:'#e0654a', icono:'bhava'},
+      {id:'vedanas', titulo:'108 Vedanās', subtitulo:'Las ciento ocho formas de sentir', grupo:'Fundamentos',
+       descripcion:'Seis sentidos, tres tonos, mundano o renuncia, y tres tiempos: un mandala que se despliega para mostrar cómo nace cada sentimiento y por qué del sentimiento nace el deseo.',
+       href:'vedanas-108.html', color:'#d9b265', icono:'vedanas'}
      ]}
   ]
 };
@@ -126,10 +130,30 @@ function bhava(s, p){
     '<circle r="24" fill="#efe3c4"/><circle cx="0" cy="-10" r="5" fill="#d9573f"/><circle cx="9" cy="6" r="5" fill="#5fae7a"/><circle cx="-9" cy="6" r="5" fill="#3a3046"/></svg>';
 }
 
+/* Mandala de los 108: seis sentidos, 18 tonos, 36 direcciones y 108 tiempos */
+const VED = {s:['#5fb2d9','#8b7ce0','#5fbf8a','#e48d45','#e0697a','#c7a2ec'], t:['#f0c75e','#cf5a78','#93a4b8'], c:['#c07a45','#5fb39b'], k:['#7c86c4','#e6cf8a','#8fc3e6']};
+function vedanas(s, p){
+  const id = p+'-'+s.id, rad = a => a*Math.PI/180;
+  const sec = (r0,r1,a0,a1) => { const q = (r,a) => (r*Math.cos(rad(a))).toFixed(1)+' '+(r*Math.sin(rad(a))).toFixed(1);
+    return 'M'+q(r1,a0)+' A'+r1+' '+r1+' 0 0 1 '+q(r1,a1)+' L'+q(r0,a1)+' A'+r0+' '+r0+' 0 0 0 '+q(r0,a0)+' Z'; };
+  let d = '';
+  for(let i=0;i<6;i++){ const a = -120+i*60; d += '<path d="'+sec(34,62,a,a+60)+'" fill="'+VED.s[i]+'"/>';
+    for(let j=0;j<3;j++){ const b = a+j*20; d += '<path d="'+sec(62,80,b,b+20)+'" fill="'+VED.t[j]+'"/>';
+      for(let k=0;k<2;k++){ const c = b+k*10; d += '<path d="'+sec(80,94,c,c+10)+'" fill="'+VED.c[k]+'"/>';
+        for(let l=0;l<3;l++){ const e = c+l*10/3; d += '<path d="'+sec(94,106,e,e+10/3)+'" fill="'+VED.k[l]+'"/>'; } } } }
+  return '<svg viewBox="-125 -125 250 250" aria-hidden="true"><defs><radialGradient id="'+id+'-h"><stop offset="0" stop-color="'+s.color+'" stop-opacity=".5"/>'+
+    '<stop offset="1" stop-color="'+s.color+'" stop-opacity="0"/></radialGradient></defs>'+
+    '<circle r="124" fill="url(#'+id+'-h)"/><circle r="110" fill="#11143a"/>'+
+    '<g class="petals-s"><g stroke="#11143a" stroke-width=".8">'+d+'</g></g>'+
+    '<circle r="32" fill="#efd99a" stroke="#11143a" stroke-width="2"/>'+
+    '<text y="8" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="24" font-weight="600" fill="#17122b">108</text></svg>';
+}
+
 /* Loto con el número de pétalos de la sección */
 function icon(s, p){
   if(s.icono==='rueda') return wheel(s, p);
   if(s.icono==='bhava') return bhava(s, p);
+  if(s.icono==='vedanas') return vedanas(s, p);
   const id = p+'-'+s.id;
   const petals = s.petalos===2
     ? '<path d="'+petal(38,72,36)+'" transform="rotate(90)" fill="url(#'+id+')" fill-opacity=".9" stroke="'+s.color+'"/>'+
