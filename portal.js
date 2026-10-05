@@ -52,7 +52,7 @@ const PORTAL = {
        descripcion:'El sonido de cada centro: cómo se pronuncia, dónde resuena y cómo se usa en japa.',
        color:'#5fb2d9', petalos:16}
      ]},
-    {id:'buda', titulo:'Buda', subtitulo:'Budismo', href:'buda.html', color:'#d0843f', figura:'buda',
+    {id:'buda', titulo:'Buda', subtitulo:'Budismo', href:'buda.html', color:'#e0654a', figura:'buda',
      descripcion:'La enseñanza del Buda sobre la mente, el sufrimiento y el camino que lleva a su cese.',
      secciones:[]}
   ]
@@ -124,116 +124,106 @@ function icon(s, p){
     '<circle r="14" fill="'+s.color+'"/></svg>';
 }
 
-/* ---- Figuras de entrada: Krishna y Buda en meditación ---- */
-const FIGURAS = {
-  krishna:{skin:'#5a7fd6', shade:'#3c5bab', cloth:'#e8b23a', clothShade:'#b9851d', hair:'#1b1838', halo:'#8da0e8', aura:'#e8c46a'},
-  buda:   {skin:'#e6b872', shade:'#c09049', cloth:'#c9662c', clothShade:'#9a4a1c', hair:'#2b2552', halo:'#f0cf7a', aura:'#e8c46a'}
+/* ---- Figuras de entrada: Krishna y el Buda en meditación (medallón cósmico) ----
+   Una figura de iconografía clásica, pintada en colores planos dentro de un
+   medallón, sobre un trono de loto, con un cielo de puntos que titilan.
+   Cada figura usa una paleta corta definida en MEDALLON. */
+const MEDALLON = {
+  krishna:{bg:['#d9e6fa','#7fa3e3'], skin:'#2f58bd', robe2:'#a8741a', dhoti:'#e3a52a', hair:'#13224f', gold:'#f2c14e',
+           garland:'#f6f2e6', flower:'#e3a52a', flower2:'#ffffff', lotus:'#f3f7fd', lotus2:'#b7cdf1', dark:'#0d1a40',
+           feather:'#2f58bd', plinth:'#e3a52a'},
+  buda:   {bg:['#e2654a','#9c2c1d'], skin:'#f2b53c', skin2:'#b77d17', robeFill:'#7a2214', robe2:'#52160c', hair:'#3a1a10',
+           gold:'#f2b53c', lotus:'#f39a7f', lotus2:'#c4472f', dark:'#5a2a08', plinth:'#f2b53c'}
 };
-function figura(tipo){
-  const P = FIGURAS[tipo], k = tipo==='krishna', p = 'fg'+(++uid);
-  const u = s => 'url(#'+p+s+')', line = '#2a2140';
-  const skin = u('s'), cloth = u('c');
-
-  // Loto del asiento: fila trasera (detrás de las piernas) y fila delantera
-  let back = '', front = '';
-  for(let i=0;i<9;i++) back += '<path d="'+petal(0,98,24)+'" transform="translate(150 304) scale(1 .36) rotate('+(-90+i*22.5)+')"/>';
-  for(let i=0;i<7;i++) front += '<path d="'+petal(0,46,17)+'" transform="translate(150 320) scale(1 .42) rotate('+(-75+i*25)+')"/>';
-
-  // Rayos del halo
-  const rays = ring(k?24:36, 46, k?30:24, u('r'), P.halo, 0, k?.45:.35);
-
-  // Chispas que ascienden
-  let sparks = '';
-  [[88,250],[212,236],[116,176],[186,166],[150,30],[74,140],[226,122],[150,214]].forEach(([x,y],i) => {
-    sparks += '<circle class="fig-spark" cx="'+x+'" cy="'+y+'" r="2.2" fill="'+P.aura+'" style="animation-delay:'+(i*.75).toFixed(2)+'s"/>';
-  });
-
-  let body = '';
-  // Piernas cruzadas en loto, cubiertas por la tela
-  body += '<path d="M66,290 C64,262 96,242 150,242 C204,242 236,262 234,290 C234,302 206,306 150,304 C94,306 66,302 66,290 Z" fill="'+cloth+'"/>';
-  body += '<path d="M92,278 Q150,264 208,278 M150,250 Q146,278 150,302 M84,292 Q118,286 140,296 M216,292 Q182,286 160,296" fill="none" stroke="'+P.clothShade+'" stroke-width="1.6" stroke-linecap="round" opacity=".55"/>';
-  // Pies sobre los muslos
-  body += '<ellipse cx="112" cy="261" rx="17" ry="6.5" transform="rotate(-12 112 261)" fill="'+skin+'"/>'+
-          '<ellipse cx="188" cy="261" rx="17" ry="6.5" transform="rotate(12 188 261)" fill="'+skin+'"/>';
+const attrs = o => Object.entries(o).filter(([,v]) => v!=null).map(([k,v]) => k+'="'+v+'"').join(' ');
+const trazo = (d,o) => '<path d="'+d+'" '+attrs(o)+'/>';
+function petalo(x, base, tip, w){
+  return 'M'+x+','+base+' C'+(x-w)+','+(base-10)+' '+(x-w*.85)+','+(tip+8)+' '+x+','+tip+
+         ' C'+(x+w*.85)+','+(tip+8)+' '+(x+w)+','+(base-10)+' '+x+','+base+' Z';
+}
+/* Figura sentada en loto: piernas cruzadas, manos en dhyāna mudrā y trono de loto */
+function figuraClasica(tipo, c){
+  const kr = tipo==='krishna';
+  let s = '';
+  for(let i=-4;i<4;i++) s += trazo(petalo(162+i*24, 362, 330, 13), {fill:c.lotus2});
+  // Piernas cruzadas: dhoti (Krishna) o hábito (Buda)
+  s += trazo('M58,300 C56,268 94,248 150,248 C206,248 244,268 242,300 C242,314 208,318 150,316 C92,318 58,314 58,300 Z', {fill:kr?c.dhoti:c.robeFill});
+  s += trazo('M90,292 Q150,276 210,292 M150,262 Q147,290 150,314', {fill:'none', stroke:c.robe2, 'stroke-width':1.4, opacity:.6});
+  s += '<ellipse cx="108" cy="274" rx="18" ry="7" transform="rotate(-14 108 274)" fill="'+c.skin+'"/>'+
+       '<ellipse cx="192" cy="274" rx="18" ry="7" transform="rotate(14 192 274)" fill="'+c.skin+'"/>';
   // Cuello y torso
-  body += '<path d="M141,126 L141,152 L159,152 L159,126 Z" fill="'+P.shade+'"/>';
-  body += '<path d="M150,146 C132,146 116,150 110,160 C104,182 108,214 116,244 L184,244 C192,214 196,182 190,160 C184,150 168,146 150,146 Z" fill="'+skin+'"/>';
-  if(k){
+  s += trazo('M142,120 L142,146 L158,146 L158,120 Z', {fill:c.skin});
+  s += trazo('M150,142 C128,142 108,148 100,162 C92,186 96,220 104,250 L196,250 C204,220 208,186 200,162 C192,148 172,142 150,142 Z', {fill:c.skin});
+  if(kr){
     // Collar y guirnalda vaijayantī
-    body += '<path d="M128,151 Q150,170 172,151" fill="none" stroke="#e8c46a" stroke-width="2.6"/>';
-    body += '<path d="M121,155 C117,190 133,220 150,226 C167,220 183,190 179,155" fill="none" stroke="#3f9a6c" stroke-width="5" stroke-linecap="round"/>';
-    [[120,170],[123,188],[131,205],[140,217],[150,224],[160,217],[169,205],[177,188],[180,170]].forEach(([x,y],i) => {
-      body += '<circle cx="'+x+'" cy="'+y+'" r="3.4" fill="'+['#d9574a','#f6efe0','#e8c46a'][i%3]+'"/>';
+    s += trazo('M128,150 Q150,168 172,150', {fill:'none', stroke:c.gold, 'stroke-width':2.6});
+    s += trazo('M118,150 C112,196 132,232 150,240 C168,232 188,196 182,150', {fill:'none', stroke:c.garland, 'stroke-width':4.5, 'stroke-linecap':'round'});
+    [[117,170],[120,192],[129,212],[140,228],[150,238],[160,228],[171,212],[180,192],[183,170]].forEach(([x,y],i) => {
+      s += '<circle cx="'+x+'" cy="'+y+'" r="3.4" fill="'+(i%2?c.flower2:c.flower)+'"/>';
     });
   } else {
-    // Hábito monástico sobre el hombro izquierdo, hombro derecho descubierto
-    body += '<path d="M150,147 C168,146 185,150 190,160 C196,182 192,214 184,244 L114,244 C118,230 124,218 131,206 C141,188 146,168 150,147 Z" fill="'+cloth+'"/>';
-    body += '<path d="M150,147 C146,168 141,188 131,206 C124,218 118,230 114,244" fill="none" stroke="'+P.clothShade+'" stroke-width="2"/>';
-    body += '<path d="M158,170 Q170,196 168,232 M174,164 Q184,192 180,236" fill="none" stroke="'+P.clothShade+'" stroke-width="1.4" opacity=".55"/>';
+    // Hábito sobre el hombro izquierdo, con su borde y sus pliegues
+    s += trazo('M150,143 C172,142 192,148 200,162 C208,186 204,220 196,250 L104,250 C110,232 120,214 128,198 C140,176 146,160 150,143 Z', {fill:c.robeFill});
+    s += trazo('M150,143 C146,160 140,176 128,198 C120,214 110,232 104,250', {fill:'none', stroke:c.robe2, 'stroke-width':3});
+    s += trazo('M160,170 Q174,200 170,240 M178,162 Q192,196 186,244', {fill:'none', stroke:c.robe2, 'stroke-width':1.4, opacity:.6});
   }
-  // Brazos con las manos en el regazo (dhyāna mudrā)
-  const armL = 'M114,162 C96,182 92,212 102,230 C110,244 128,250 146,251';
-  const armR = 'M186,162 C204,182 208,212 198,230 C190,244 172,250 154,251';
-  body += '<path d="'+armL+'" fill="none" stroke="'+skin+'" stroke-width="15" stroke-linecap="round"/>';
-  body += '<path d="'+armR+'" fill="none" stroke="'+(k?skin:cloth)+'" stroke-width="15" stroke-linecap="round"/>';
-  if(k) body += '<path d="M101,224 L111,222 M199,224 L189,222" stroke="#e8c46a" stroke-width="3" stroke-linecap="round"/>';
-  body += '<ellipse cx="150" cy="252" rx="21" ry="8.5" fill="'+skin+'"/>'+
-          '<path d="M137,249 Q150,241 163,249" fill="none" stroke="'+P.shade+'" stroke-width="1.4"/>';
-
+  // Brazos
+  s += trazo('M101,160 C88,182 84,214 90,236 C95,252 112,260 136,260 L142,248 C126,246 114,240 111,228 C107,208 111,186 118,170 Z', {fill:c.skin});
+  s += trazo('M199,160 C212,182 216,214 210,236 C205,252 188,260 164,260 L158,248 C174,246 186,240 189,228 C193,208 189,186 182,170 Z', {fill:kr?c.skin:c.robeFill});
+  if(kr){
+    // Brazaletes y flauta sobre el regazo
+    s += trazo('M101,224 L111,222 M199,224 L189,222', {stroke:c.gold, 'stroke-width':3, 'stroke-linecap':'round'});
+    s += '<line x1="90" y1="266" x2="210" y2="252" stroke="'+c.gold+'" stroke-width="5" stroke-linecap="round"/>';
+    [104,118,182,196].forEach(x => { s += '<circle cx="'+x+'" cy="'+(266-(x-90)*14/120).toFixed(1)+'" r="1.3" fill="'+c.dark+'" opacity=".6"/>'; });
+  }
+  // Manos en dhyāna mudrā
+  s += '<ellipse cx="150" cy="254" rx="24" ry="9" fill="'+c.skin+'"/>';
+  s += trazo('M136,251 Q150,242 164,251', {fill:'none', stroke:c.skin2||c.robe2, 'stroke-width':1.3, opacity:.7});
   // Cabeza
-  let head = '';
-  if(k){
-    head += '<path d="M130,100 C124,118 125,134 133,146 M170,100 C176,118 175,134 167,146" fill="none" stroke="'+P.hair+'" stroke-width="6" stroke-linecap="round"/>';
+  if(kr) s += trazo('M131,98 C125,116 126,132 133,144 M169,98 C175,116 174,132 167,144', {fill:'none', stroke:c.hair, 'stroke-width':6, 'stroke-linecap':'round'});
+  else s += '<ellipse cx="129" cy="114" rx="5" ry="14" fill="'+c.skin+'"/><ellipse cx="171" cy="114" rx="5" ry="14" fill="'+c.skin+'"/>';
+  s += '<ellipse cx="150" cy="104" rx="20" ry="24" fill="'+c.skin+'"/>';
+  s += trazo('M130,100 C130,82 140,78 150,78 C160,78 170,82 170,100 C165,90 158,88 150,88 C142,88 135,90 130,100 Z', {fill:c.hair});
+  if(kr){
+    // Pluma de pavo real, corona (mukuṭa), pendientes y tilaka
+    s += trazo('M162,66 Q170,48 178,32', {fill:'none', stroke:c.gold, 'stroke-width':2})+
+         '<ellipse cx="180" cy="26" rx="9" ry="16" transform="rotate(22 180 26)" fill="'+c.feather+'"/>'+
+         '<ellipse cx="181" cy="23" rx="4.6" ry="7" transform="rotate(22 181 23)" fill="'+c.gold+'"/>'+
+         '<ellipse cx="181.5" cy="22" rx="2.6" ry="4" transform="rotate(22 181.5 22)" fill="'+c.dark+'"/>';
+    s += trazo('M127,90 L130,62 L140,74 L150,50 L160,74 L170,62 L173,90 Z', {fill:c.gold});
+    s += '<rect x="126" y="84" width="48" height="8" rx="2" fill="'+c.gold+'"/>';
+    s += '<circle cx="129" cy="120" r="3.4" fill="'+c.gold+'"/><circle cx="171" cy="120" r="3.4" fill="'+c.gold+'"/>';
+    s += trazo('M147,94 L150,102 L153,94', {fill:'none', stroke:c.gold, 'stroke-width':1.5, 'stroke-linejoin':'round'});
   } else {
-    head += '<ellipse cx="128" cy="116" rx="5.5" ry="14" fill="'+skin+'"/><ellipse cx="172" cy="116" rx="5.5" ry="14" fill="'+skin+'"/>';
+    // Uṣṇīṣa
+    s += '<ellipse cx="150" cy="76" rx="11" ry="9" fill="'+c.hair+'"/>';
   }
-  head += '<ellipse cx="150" cy="108" rx="21" ry="25" fill="'+skin+'"/>';
-  head += '<path d="M129,104 C129,84 140,80 150,80 C160,80 171,84 171,104 C166,94 158,90 150,90 C142,90 134,94 129,104 Z" fill="'+P.hair+'"/>';
-  if(k){
-    // Corona (mukuṭa) y pluma de pavo real
-    head += '<g class="fig-pluma"><path d="M160,70 Q168,50 177,32" fill="none" stroke="#2f7d5b" stroke-width="2"/>'+
-            '<ellipse cx="179" cy="28" rx="9" ry="16" transform="rotate(22 179 28)" fill="'+u('f')+'"/>'+
-            '<ellipse cx="180" cy="25" rx="4.6" ry="7" transform="rotate(22 180 25)" fill="#e8c46a"/>'+
-            '<ellipse cx="180.5" cy="24" rx="2.6" ry="4" transform="rotate(22 180.5 24)" fill="#1e3a8a"/></g>';
-    head += '<path d="M128,88 L131,64 L140,74 L150,52 L160,74 L169,64 L172,88 Z" fill="#e8c46a" stroke="#a2751f" stroke-width="1"/>'+
-            '<rect x="127" y="82" width="46" height="7" rx="2" fill="#c9962f"/>'+
-            '<circle cx="150" cy="73" r="3.2" fill="#d9574a"/>';
-    head += '<path d="M147,92 L150,101 L153,92" fill="none" stroke="#e8c46a" stroke-width="1.6" stroke-linejoin="round"/>';
-    head += '<circle cx="129" cy="118" r="3" fill="#e8c46a"/><circle cx="171" cy="118" r="3" fill="#e8c46a"/>';
-  } else {
-    // Rizos, protuberancia (uṣṇīṣa) y ūrṇā
-    head += '<ellipse cx="150" cy="79" rx="11" ry="9" fill="'+P.hair+'"/>';
-    [[137,90],[144,86],[151,85],[158,86],[164,90],[150,76],[145,79],[155,79]].forEach(([x,y]) => {
-      head += '<circle cx="'+x+'" cy="'+y+'" r="2" fill="#3c3570"/>';
-    });
-    head += '<circle cx="150" cy="99" r="1.7" fill="#a2751f"/>';
+  // Ojos cerrados, sin boca
+  s += trazo('M137,109 Q142,112 147,109 M153,109 Q158,112 163,109', {fill:'none', stroke:c.dark, 'stroke-width':1.5, 'stroke-linecap':'round', opacity:.85});
+  // Peana y fila delantera del loto
+  s += '<rect x="66" y="316" width="168" height="9" rx="3" fill="'+c.plinth+'"/>';
+  for(let i=-3;i<=3;i++) s += trazo(petalo(150+i*24, 364, 326, 12), {fill:c.lotus, stroke:c.lotus2, 'stroke-width':1});
+  return s;
+}
+function figura(tipo){
+  const c = MEDALLON[tipo], id = 'fg'+(++uid);
+  // Cielo de puntos: posiciones fijas para que la figura sea siempre igual
+  let seed = tipo==='krishna' ? 11 : 29, stars = '';
+  const r = () => { seed = (seed*16807)%2147483647; return seed/2147483647; };
+  for(let i=0;i<70;i++){
+    const a = r()*Math.PI*2, d = 40 + r()*150, x = 150+Math.cos(a)*d, y = 186+Math.sin(a)*d*.95, z = r();
+    stars += '<circle class="fig-estrella" cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(z<.75?1+r()*1.6:2.6+r()*2.6).toFixed(1)+
+             '" fill="#fff" style="animation-delay:'+(r()*4).toFixed(2)+'s"/>';
   }
-  // Ojos cerrados y leve sonrisa
-  head += '<path d="M136,109 Q141,113 146,109 M154,109 Q159,113 164,109" fill="none" stroke="'+line+'" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>'+
-          '<path d="M145,122 Q150,125 155,122" fill="none" stroke="'+line+'" stroke-width="1.4" stroke-linecap="round" opacity=".6"/>';
-
-  const leaf = k ? '' :
-    '<g class="fig-hoja"><path d="M150,10 C158,42 205,62 228,110 C248,156 230,206 190,216 C172,220 158,210 150,200 C142,210 128,220 110,216 C70,206 52,156 72,110 C95,62 142,42 150,10 Z" fill="#5fbf8a" fill-opacity=".14" stroke="#5fbf8a" stroke-opacity=".4" stroke-width="1.4"/>'+
-    '<path d="M150,22 L150,196 M150,90 Q120,100 96,128 M150,90 Q180,100 204,128 M150,130 Q122,140 90,170 M150,130 Q178,140 210,170" fill="none" stroke="#5fbf8a" stroke-opacity=".3" stroke-width="1.2"/></g>';
-
-  return '<svg class="figura fig-'+tipo+'" viewBox="0 0 300 340" aria-hidden="true"><defs>'+
-    '<radialGradient id="'+p+'h"><stop offset="0" stop-color="'+P.halo+'" stop-opacity=".9"/><stop offset=".5" stop-color="'+P.halo+'" stop-opacity=".35"/><stop offset="1" stop-color="'+P.halo+'" stop-opacity="0"/></radialGradient>'+
-    '<radialGradient id="'+p+'a" cx="50%" cy="58%"><stop offset="0" stop-color="'+P.aura+'" stop-opacity=".3"/><stop offset="1" stop-color="'+P.aura+'" stop-opacity="0"/></radialGradient>'+
-    '<radialGradient id="'+p+'r" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="80"><stop offset=".5" stop-color="'+mix(P.halo,.4)+'"/><stop offset="1" stop-color="'+P.halo+'"/></radialGradient>'+
-    '<linearGradient id="'+p+'l" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7d3dc"/><stop offset="1" stop-color="#d9788f"/></linearGradient>'+
-    '<linearGradient id="'+p+'s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+P.skin+'"/><stop offset="1" stop-color="'+P.shade+'"/></linearGradient>'+
-    '<linearGradient id="'+p+'c" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+P.cloth+'"/><stop offset="1" stop-color="'+P.clothShade+'"/></linearGradient>'+
-    '<radialGradient id="'+p+'f"><stop offset="0" stop-color="#46c2c9"/><stop offset=".6" stop-color="#2f9e7a"/><stop offset="1" stop-color="#1f6b52"/></radialGradient>'+
-    '</defs>'+
-    '<ellipse class="fig-mandorla" cx="150" cy="196" rx="120" ry="144" fill="'+u('a')+'"/>'+
-    leaf+
-    '<g transform="translate(150 108)"><g class="fig-rays">'+rays+'</g></g>'+
-    '<circle class="fig-halo" cx="150" cy="108" r="50" fill="'+u('h')+'"/>'+
-    '<ellipse cx="150" cy="326" rx="88" ry="6" fill="#000" opacity=".14"/>'+
-    '<g fill="'+u('l')+'" stroke="#b85a72" stroke-opacity=".55" stroke-width="1">'+back+'</g>'+
-    '<g class="fig-body">'+body+head+'</g>'+
-    '<g fill="'+u('l')+'" stroke="#b85a72" stroke-opacity=".55" stroke-width="1">'+front+'</g>'+
-    '<g class="fig-sparks">'+sparks+'</g></svg>';
+  return '<svg class="figura fig-'+tipo+'" viewBox="0 0 300 370" aria-hidden="true">'+
+    '<defs><radialGradient id="'+id+'"><stop offset="0" stop-color="'+c.bg[0]+'"/><stop offset="1" stop-color="'+c.bg[1]+'"/></radialGradient></defs>'+
+    '<circle class="fig-aro" cx="150" cy="186" r="150" fill="'+c.bg[0]+'" opacity=".35"/>'+
+    '<circle cx="150" cy="186" r="138" fill="url(#'+id+')"/>'+
+    '<circle class="fig-halo" cx="150" cy="102" r="40" fill="'+c.bg[0]+'" opacity=".55"/>'+
+    '<circle cx="150" cy="102" r="40" fill="none" stroke="'+c.gold+'" stroke-width="1.2" opacity=".7"/>'+
+    '<ellipse cx="150" cy="214" rx="94" ry="118" fill="none" stroke="'+c.gold+'" stroke-width="1" opacity=".45"/>'+
+    '<g class="fig-body">'+figuraClasica(tipo, c)+'</g>'+
+    '<g class="fig-cielo">'+stars+'</g></svg>';
 }
 
 /* Marca del portal: loto con los colores de raíz a corona */

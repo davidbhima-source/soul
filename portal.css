@@ -144,9 +144,6 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--gold); outline-offs
 @keyframes fadein{from{opacity:0; transform:translateY(8px);}to{opacity:1; transform:none;}}
 @keyframes unfold{from{opacity:0; transform:translateY(-6px);}to{opacity:1; transform:none;}}
 @keyframes respira{0%,100%{transform:scale(1);}50%{transform:scale(1.012,1.022);}}
-@keyframes mece{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
-@keyframes mece-suave{0%,100%{transform:rotate(-1.2deg);}50%{transform:rotate(1.2deg);}}
-@keyframes asciende{0%{opacity:0; transform:translateY(0);}30%{opacity:1;}100%{opacity:0; transform:translateY(-70px);}}
 @keyframes vpulse{0%{transform:scale(.6);opacity:0}35%{opacity:.55}100%{transform:scale(1.6);opacity:0}}
 
 
@@ -304,21 +301,17 @@ a.card:hover .go .arr{transform:translateX(5px);}
 .camino:hover .go,.camino:focus-visible .go{background:color-mix(in srgb,var(--c) 18%,transparent); box-shadow:0 0 24px color-mix(in srgb,var(--c) 30%,transparent);}
 .camino:hover .go .arr,.camino:focus-visible .go .arr{transform:translateX(5px);}
 
-/* Figura: respiración, halo, rayos, pluma, hoja y chispas */
+/* Figura en medallón: respira, el halo late y el cielo de puntos titila y gira */
 .figura{display:block; width:100%; height:auto; overflow:visible;}
 .figura .fig-body{animation:respira 6s ease-in-out infinite; transform-box:fill-box; transform-origin:50% 100%;}
-.figura .fig-halo{animation:pulse 6s ease-in-out infinite; transform-box:fill-box; transform-origin:center; transition:transform .8s cubic-bezier(.2,.8,.2,1);}
-.figura .fig-rays{animation:spin 140s linear infinite; transform-box:fill-box; transform-origin:center; opacity:.75; transition:opacity .6s;}
-.figura .fig-mandorla{opacity:.8; transition:opacity .6s;}
-.figura .fig-pluma{animation:mece 5s ease-in-out infinite; transform-box:view-box; transform-origin:160px 70px;}
-.figura .fig-hoja{animation:mece-suave 9s ease-in-out infinite; transform-box:view-box; transform-origin:150px 200px;}
-.figura .fig-sparks{opacity:.45; transition:opacity .6s;}
-.figura .fig-spark{opacity:0; animation:asciende 6s ease-in-out infinite; transform-box:fill-box;}
-.camino:hover .fig-halo,.camino:focus-visible .fig-halo{transform:scale(1.2);}
-.camino:hover .fig-rays,.camino:focus-visible .fig-rays,
-.camino:hover .fig-mandorla,.camino:focus-visible .fig-mandorla,
-.camino:hover .fig-sparks,.camino:focus-visible .fig-sparks{opacity:1;}
-.m-item .figura .fig-sparks{display:none;}
+.figura .fig-aro{animation:pulse 6s ease-in-out infinite; transform-box:fill-box; transform-origin:center; transition:transform .8s cubic-bezier(.2,.8,.2,1);}
+.figura .fig-halo{transition:opacity .6s;}
+.figura .fig-cielo{transform-box:view-box; transform-origin:150px 186px; animation:spin 240s linear infinite; opacity:.75; transition:opacity .6s;}
+.figura .fig-estrella{animation:tw 4s ease-in-out infinite;}
+.camino:hover .fig-aro,.camino:focus-visible .fig-aro{transform:scale(1.05);}
+.camino:hover .fig-halo,.camino:focus-visible .fig-halo{opacity:.9;}
+.camino:hover .fig-cielo,.camino:focus-visible .fig-cielo{opacity:1;}
+.m-item .figura .fig-cielo{display:none;}
 
 /* 8. Página: portada de Kriya yoga ----------------------------------------- */
 .pg-kriya .e-dot{transition:r .5s cubic-bezier(.2,.8,.2,1);}
