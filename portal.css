@@ -1,0 +1,485 @@
+/* ==========================================================================
+   Soul · hoja de estilos maestra del portal
+   --------------------------------------------------------------------------
+   Todas las páginas cargan este archivo con
+     <link rel="stylesheet" href="portal.css">
+   y declaran su página en la etiqueta <html>:
+     <html lang="es" class="pg-inicio">   (o pg-chakras, pg-yugas…)
+
+   Para cambiar el aspecto de todo el portal basta con editar aquí:
+   las tipografías y los tokens de color (secciones 1 y 2) se aplican a
+   todas las páginas a la vez. Los estilos propios de cada página van en
+   su sección, siempre bajo su clase .pg-*, para que no choquen entre sí.
+
+     1. Tipografías
+     2. Tokens de diseño (tema claro y oscuro)
+     3. Base común
+     4. Componentes compartidos
+     5. Animaciones
+     6. Página: inicio          .pg-inicio
+     7. Página: los siete lotos .pg-chakras
+     8. Página: los yugas       .pg-yugas
+     9. Movimiento reducido
+
+   Para añadir una página nueva: usa los tokens y componentes existentes
+   y, si necesita estilos propios, crea su sección con una clase .pg-nueva.
+   ========================================================================== */
+
+
+/* 1. Tipografías ----------------------------------------------------------- */
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Commissioner:wght@300;400;500&family=Tiro+Devanagari+Sanskrit&display=swap");
+
+
+/* 2. Tokens de diseño ------------------------------------------------------ */
+:root{
+  /* Familias tipográficas */
+  --display:"Cormorant Garamond","Iowan Old Style",Georgia,serif;   /* títulos */
+  --body:"Commissioner",ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif; /* texto */
+  --deva:"Tiro Devanagari Sanskrit","Noto Serif Devanagari","Noto Sans Devanagari","Mangal",serif; /* devanagari */
+
+  /* Paleta (tema claro) */
+  --bg:#ebe8f4; --bg2:#d8d2ec;          /* fondo y su degradado superior */
+  --card:#f8f6fd;                        /* superficies opacas */
+  --panel:rgba(255,255,255,.66);         /* superficies translúcidas */
+  --ink:#1e1a36; --muted:#5f5980;        /* texto principal y secundario */
+  --line:rgba(30,26,54,.14);             /* bordes y separadores */
+  --gold:#a2751f; --gold-soft:rgba(162,117,31,.22); /* acento */
+  --ida:#4c60ad; --pingala:#bd6634;      /* las dos nāḍīs */
+  --chip:color-mix(in srgb,var(--ink) 5%,var(--card));
+  --chip-hover:color-mix(in srgb,var(--ink) 10%,var(--card));
+  --shadow:0 24px 60px -24px rgba(30,26,54,.35);
+  --star:0;                              /* opacidad del cielo estrellado */
+
+  /* Cielo nocturno: superficie que es oscura en ambos temas */
+  --sky:#090b1f; --sky-2:#11143a; --sky-hover:#1a1e4d;
+  --sky-ink:#ece6d6; --sky-muted:#a09bc0; --sky-line:rgba(236,230,214,.14);
+  --sky-accent:#e8c46a;
+
+  box-sizing:border-box;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d0b1c; --bg2:#1c1740; --card:#1b1838; --ink:#ece7f8; --muted:#9d96bb;
+    --panel:rgba(24,20,50,.66); --line:rgba(236,231,248,.13);
+    --gold:#d9b265; --gold-soft:rgba(217,178,101,.26);
+    --ida:#8da0e8; --pingala:#eb9c6e; --star:1;
+    --shadow:0 24px 60px -20px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d0b1c; --bg2:#1c1740; --card:#1b1838; --ink:#ece7f8; --muted:#9d96bb;
+  --panel:rgba(24,20,50,.66); --line:rgba(236,231,248,.13);
+  --gold:#d9b265; --gold-soft:rgba(217,178,101,.26);
+  --ida:#8da0e8; --pingala:#eb9c6e; --star:1;
+  --shadow:0 24px 60px -20px rgba(0,0,0,.7);
+}
+
+
+/* 3. Base común ------------------------------------------------------------ */
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*,*::before,*::after{box-sizing:inherit;}
+html,body{margin:0;}
+body{
+  min-height:100%;
+  background-color:var(--bg);
+  background-image:radial-gradient(ellipse 120% 70% at 50% -10%, var(--bg2), var(--bg) 62%);
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:var(--body);
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;}
+button:focus-visible,a:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+
+
+/* 4. Componentes compartidos ----------------------------------------------- */
+
+/* Cielo estrellado de fondo (visible en tema oscuro) */
+.stars{position:fixed; inset:0; pointer-events:none; opacity:var(--star); z-index:0; overflow:hidden;}
+.stars i{position:absolute; width:2px; height:2px; border-radius:50%; background:#fff; opacity:.4; animation:tw 5s ease-in-out infinite;}
+
+/* Enlace «← Inicio» de las páginas interiores */
+.home-link{display:inline-flex; align-items:center; gap:8px; margin:0 0 14px; font-size:.85rem; color:var(--muted);
+  text-decoration:none; border:1px solid var(--line); border-radius:999px; padding:6px 14px 6px 12px; transition:color .25s, border-color .25s;}
+.home-link:hover{color:var(--ink); border-color:var(--gold);}
+
+/* Botón píldora con borde dorado */
+.btn{font:inherit; font-size:.95rem; color:var(--ink); background:transparent; border:1px solid var(--gold);
+  border-radius:999px; padding:12px 22px; cursor:pointer; display:inline-flex; gap:12px; align-items:center;
+  text-decoration:none; transition:background .5s, box-shadow .5s;}
+.btn .dot{width:9px; height:9px; border-radius:50%; background:var(--gold); box-shadow:0 0 10px var(--gold);}
+.btn:hover{background:var(--gold-soft); box-shadow:0 0 28px var(--gold-soft);}
+.btn.ghost{border-color:var(--line); color:var(--muted);}
+.btn.ghost:hover{color:var(--ink); border-color:var(--gold); box-shadow:none;}
+
+/* Notas al pie en columnas */
+.notes{max-width:1180px; margin:0 auto; padding:22px 20px 60px; position:relative; z-index:1;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:26px;}
+.notes h2{font-family:var(--display); font-weight:500; font-size:1.35rem; margin:0 0 8px;}
+.notes p{margin:0; color:var(--muted); font-size:.9rem; line-height:1.68; max-width:70ch;}
+
+/* Capas animadas de los yantras y lotos SVG */
+.y-petals{animation:spin 90s linear infinite; transform-box:fill-box; transform-origin:center;}
+.y-rev{animation:spin 140s linear infinite reverse; transform-box:fill-box; transform-origin:center;}
+.y-geo{animation:breathe 7s ease-in-out infinite; transform-box:fill-box; transform-origin:center;}
+.y-halo{animation:pulse 7s ease-in-out infinite;}
+.petals-s{animation:spin 50s linear infinite; transform-box:fill-box; transform-origin:center;}
+
+
+/* 5. Animaciones ----------------------------------------------------------- */
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes breathe{0%,100%{transform:scale(1);}50%{transform:scale(1.07);}}
+@keyframes pulse{0%,100%{opacity:.35;}50%{opacity:.75;}}
+@keyframes tw{0%,100%{opacity:.12;}50%{opacity:.8;}}
+@keyframes tw-cielo{0%,100%{opacity:.25;}50%{opacity:1;}}
+@keyframes rise{0%,100%{opacity:.25;}50%{opacity:1;}}
+@keyframes flow{to{stroke-dashoffset:-170;}}
+@keyframes arrive{from{transform:scale(.5) rotate(-70deg); opacity:0;}to{transform:none; opacity:1;}}
+@keyframes fadein{from{opacity:0; transform:translateY(8px);}to{opacity:1; transform:none;}}
+@keyframes unfold{from{opacity:0; transform:translateY(-6px);}to{opacity:1; transform:none;}}
+@keyframes vpulse{0%{transform:scale(.6);opacity:0}35%{opacity:.55}100%{transform:scale(1.6);opacity:0}}
+
+
+/* 6. Página: inicio -------------------------------------------------------- */
+html.pg-inicio{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px);}
+
+/* Barra de navegación */
+.pg-inicio .nav{position:sticky; top:0; z-index:30; padding-top:env(safe-area-inset-top,0px);
+  transition:background .4s, border-color .4s, backdrop-filter .4s; border-bottom:1px solid transparent;}
+.pg-inicio .nav.scrolled,.pg-inicio .nav.open{background:var(--panel); border-bottom-color:var(--line);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);}
+.pg-inicio .nav-inner{max-width:1180px; margin:0 auto; padding:14px 20px; display:flex; align-items:center;
+  justify-content:space-between; gap:16px; position:relative;}
+.pg-inicio .brand{display:inline-flex; align-items:center; gap:10px; text-decoration:none;
+  font-family:var(--display); font-weight:500; font-size:1.55rem; letter-spacing:.01em;}
+.pg-inicio .brand svg{width:34px; height:34px; display:block; overflow:visible;}
+.pg-inicio .nav-links{display:flex; align-items:center; gap:6px; list-style:none; margin:0; padding:0;}
+.pg-inicio .nav-link{font:inherit; font-size:.92rem; color:var(--muted); text-decoration:none; background:transparent;
+  border:1px solid transparent; border-radius:999px; padding:9px 14px; cursor:pointer; transition:color .25s, border-color .25s;}
+.pg-inicio .nav-link:hover,.pg-inicio .nav-link[aria-current="page"]{color:var(--ink);}
+.pg-inicio .nav-link[aria-current="page"]{border-color:var(--line);}
+
+.pg-inicio .menu-btn{font:inherit; font-size:.92rem; color:var(--ink); background:transparent; border:1px solid var(--gold);
+  border-radius:999px; padding:9px 18px 9px 14px; cursor:pointer; display:inline-flex; gap:10px; align-items:center;
+  transition:background .4s, box-shadow .4s;}
+.pg-inicio .menu-btn:hover,.pg-inicio .menu-btn[aria-expanded="true"]{background:var(--gold-soft);}
+.pg-inicio .menu-btn[aria-expanded="true"]{box-shadow:0 0 22px var(--gold-soft);}
+.pg-inicio .burger{width:16px; height:12px; position:relative; display:inline-block;}
+.pg-inicio .burger span{position:absolute; left:0; right:0; height:1.5px; border-radius:2px; background:var(--gold);
+  transition:transform .4s cubic-bezier(.2,.8,.2,1), opacity .3s, top .4s cubic-bezier(.2,.8,.2,1);}
+.pg-inicio .burger span:nth-child(1){top:0;} .pg-inicio .burger span:nth-child(2){top:5px;} .pg-inicio .burger span:nth-child(3){top:10px;}
+.pg-inicio .menu-btn[aria-expanded="true"] .burger span:nth-child(1){top:5px; transform:rotate(45deg);}
+.pg-inicio .menu-btn[aria-expanded="true"] .burger span:nth-child(2){opacity:0;}
+.pg-inicio .menu-btn[aria-expanded="true"] .burger span:nth-child(3){top:5px; transform:rotate(-45deg);}
+
+/* Panel del menú de secciones */
+.pg-inicio .menu{position:absolute; right:20px; top:calc(100% + 8px); width:min(620px, calc(100vw - 32px));
+  max-height:calc(100vh - env(safe-area-inset-top,0px) - 96px); overflow:auto; overscroll-behavior:contain;
+  background:var(--card); border:1px solid var(--line); border-radius:24px; box-shadow:var(--shadow);
+  padding:20px 20px 22px; animation:unfold .4s cubic-bezier(.2,.8,.2,1);}
+.pg-inicio .menu[hidden]{display:none;}
+.pg-inicio .menu-head{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:2px 4px 6px;}
+.pg-inicio .menu-head p{margin:0; font-family:var(--display); font-style:italic; color:var(--muted); font-size:1.08rem;}
+.pg-inicio .menu-head .count{font-size:.78rem; color:var(--muted); white-space:nowrap;}
+.pg-inicio .menu-group h3{font-family:var(--body); font-weight:500; font-size:.82rem; color:var(--muted); margin:18px 4px 8px;
+  display:flex; align-items:center; gap:12px;}
+.pg-inicio .menu-group h3::after{content:""; flex:1; height:1px; background:var(--line);}
+.pg-inicio .menu-list{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:6px;}
+.pg-inicio .m-item{--c:var(--gold); display:grid; grid-template-columns:44px 1fr; gap:12px; align-items:center;
+  padding:10px 12px; border-radius:16px; text-decoration:none; color:var(--ink); border:1px solid transparent;
+  transition:background .25s, border-color .25s;}
+.pg-inicio .m-item .ico{width:44px; height:44px;}
+.pg-inicio .m-item .ico svg{width:100%; height:100%; display:block; overflow:visible;}
+.pg-inicio .m-item .mt{font-family:var(--display); font-size:1.22rem; font-weight:500; line-height:1.1; display:block;}
+.pg-inicio .m-item .ms{font-size:.78rem; color:var(--muted); display:block; margin-top:2px;}
+.pg-inicio a.m-item:hover,.pg-inicio a.m-item:focus-visible{background:color-mix(in srgb,var(--c) 14%,transparent); border-color:color-mix(in srgb,var(--c) 55%,transparent);}
+.pg-inicio a.m-item:hover .petals-s{animation-duration:12s;}
+.pg-inicio .m-item.soon{opacity:.62; cursor:default;}
+.pg-inicio .tag{display:inline-block; margin-left:6px; font-family:var(--body); font-size:.66rem; letter-spacing:.04em;
+  text-transform:uppercase; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:2px 7px; vertical-align:middle;}
+
+/* Portada */
+.pg-inicio .hero{max-width:1180px; margin:0 auto; padding:clamp(26px,6vw,72px) 20px 20px; position:relative; z-index:1;
+  display:grid; grid-template-columns:1.1fr .9fr; gap:clamp(20px,4vw,56px); align-items:center;}
+.pg-inicio .eyebrow{font-family:var(--display); font-style:italic; color:var(--muted); font-size:1.18rem; margin:0 0 14px;}
+.pg-inicio .hero h1{font-family:var(--display); font-weight:500; font-size:clamp(2.6rem,6.4vw,4.8rem); line-height:.98; margin:0 0 20px; letter-spacing:-.01em;}
+.pg-inicio .hero h1 em{font-style:italic; color:var(--gold);}
+.pg-inicio .hero .lead{margin:0; color:var(--muted); max-width:52ch; line-height:1.65; font-size:1.02rem;}
+.pg-inicio .cta{margin-top:30px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;}
+.pg-inicio .emblem{width:100%; max-width:440px; justify-self:center; aspect-ratio:1;}
+.pg-inicio .emblem svg{width:100%; height:100%; display:block; overflow:visible;}
+.pg-inicio .e-dot{transition:r .5s cubic-bezier(.2,.8,.2,1);}
+.pg-inicio .disc{fill:var(--card); stroke:var(--gold); stroke-width:1.4;}
+.pg-inicio .e-line{stroke:var(--gold); stroke-width:1.2; opacity:.7;}
+.pg-inicio .e-om{font-family:var(--deva); font-size:22px; fill:var(--ink);}
+
+/* Tarjetas de secciones */
+.pg-inicio .sections{max-width:1180px; margin:0 auto; padding:30px 20px 10px; position:relative; z-index:1;}
+.pg-inicio .sec-head{display:flex; align-items:center; gap:14px; margin:0 0 20px;}
+.pg-inicio .sec-head h2{font-family:var(--display); font-weight:500; font-size:clamp(1.7rem,3.4vw,2.3rem); margin:0; line-height:1;}
+.pg-inicio .sec-head::after{content:""; flex:1; height:1px; background:var(--line);}
+.pg-inicio .cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:18px;}
+.pg-inicio .card{--c:var(--gold); position:relative; display:flex; flex-direction:column; gap:6px; text-decoration:none; color:var(--ink);
+  background:var(--panel); border:1px solid var(--line); border-radius:24px; padding:26px 26px 22px;
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); overflow:hidden; isolation:isolate;
+  transition:transform .6s cubic-bezier(.2,.8,.2,1), border-color .3s, box-shadow .6s;
+  animation:fadein .7s ease both;}
+.pg-inicio .card::before{content:""; position:absolute; z-index:-1; width:260px; height:260px; right:-90px; top:-110px; border-radius:50%;
+  background:radial-gradient(circle, color-mix(in srgb,var(--c) 32%,transparent), transparent 68%); opacity:.55; transition:opacity .6s;}
+.pg-inicio a.card:hover,.pg-inicio a.card:focus-visible{transform:translateY(-4px); border-color:var(--c);
+  box-shadow:0 18px 44px -22px var(--c);}
+.pg-inicio a.card:hover::before,.pg-inicio a.card:focus-visible::before{opacity:1;}
+.pg-inicio a.card:hover .petals-s{animation-duration:14s;}
+.pg-inicio .card .ico{width:72px; height:72px; margin-bottom:10px;}
+.pg-inicio .card .ico svg{width:100%; height:100%; display:block; overflow:visible;}
+.pg-inicio .card .grp{font-size:.76rem; color:var(--muted);}
+.pg-inicio .card h3{font-family:var(--display); font-weight:500; font-size:1.9rem; margin:0; line-height:1.05;}
+.pg-inicio .card .sub{font-family:var(--display); font-style:italic; color:var(--muted); font-size:1.08rem; margin:0;}
+.pg-inicio .card .desc{margin:10px 0 0; line-height:1.6; font-size:.92rem; flex:1;}
+.pg-inicio .card .go{margin-top:18px; display:inline-flex; align-items:center; gap:10px; font-size:.88rem; color:var(--muted);}
+.pg-inicio .card .go .d{width:6px; height:6px; border-radius:50%; background:var(--c); box-shadow:0 0 8px var(--c);}
+.pg-inicio .card .go .arr{transition:transform .4s cubic-bezier(.2,.8,.2,1);}
+.pg-inicio a.card:hover .go{color:var(--ink);}
+.pg-inicio a.card:hover .go .arr{transform:translateX(5px);}
+.pg-inicio .card.soon{border-style:dashed; background:transparent; backdrop-filter:none; -webkit-backdrop-filter:none;}
+.pg-inicio .card.soon .ico,.pg-inicio .card.soon h3,.pg-inicio .card.soon .desc{opacity:.6;}
+
+.pg-inicio .notes{padding:40px 20px 40px;}
+.pg-inicio .foot{max-width:1180px; margin:0 auto; padding:18px 20px 44px; position:relative; z-index:1;
+  border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:10px 22px; justify-content:space-between;
+  color:var(--muted); font-size:.82rem;}
+.pg-inicio .foot span:last-child{font-family:var(--display); font-style:italic; font-size:1rem;}
+
+@media (max-width:820px){
+  .pg-inicio .hero{grid-template-columns:1fr;}
+  .pg-inicio .emblem{order:-1; max-width:300px;}
+}
+@media (max-width:640px){
+  .pg-inicio .nav-links .nav-link.hide-sm{display:none;}
+  .pg-inicio .menu{right:16px; left:16px; width:auto;}
+  .pg-inicio .menu-list{grid-template-columns:1fr;}
+  .pg-inicio .menu-btn .lbl{display:none;}
+  .pg-inicio .menu-btn{padding:11px 13px;}
+  .pg-inicio .emblem{max-width:240px;}
+}
+
+
+/* 7. Página: los siete lotos ----------------------------------------------- */
+html.pg-chakras{padding-top:env(safe-area-inset-top,0px);}
+
+/* Encabezado */
+.pg-chakras .top{max-width:1180px; margin:0 auto; padding:44px 20px 6px; position:relative; z-index:1;
+  display:flex; flex-wrap:wrap; gap:22px; align-items:flex-end; justify-content:space-between;}
+.pg-chakras .top h1{font-family:var(--display); font-weight:500; font-size:clamp(2.1rem,4.8vw,3.4rem); line-height:1.02; margin:0 0 12px; letter-spacing:-.01em;}
+.pg-chakras .top p{margin:0; color:var(--muted); max-width:58ch; line-height:1.6; font-size:.98rem;}
+.pg-chakras #state{margin-top:8px; font-family:var(--display); font-style:italic; font-size:1.12rem; color:var(--ink); transition:opacity .6s;}
+.pg-chakras .balance-btn:hover{box-shadow:none;}
+.pg-chakras .balanced .balance-btn{background:var(--gold-soft); box-shadow:0 0 28px var(--gold-soft);}
+
+/* Estructura */
+.pg-chakras .wrap{max-width:1180px; margin:0 auto; padding:22px 20px 10px; display:grid;
+  grid-template-columns:minmax(250px,330px) 1fr; gap:30px; position:relative; z-index:1;}
+.pg-chakras .spine-col{position:sticky; top:calc(env(safe-area-inset-top,0px) + 12px); align-self:start;
+  height:calc(100vh - 40px); max-height:880px; min-height:560px;}
+.pg-chakras #spine{width:100%; height:100%; display:block; overflow:visible;}
+
+/* Columna vertebral */
+.pg-chakras .sush{stroke:var(--gold); stroke-width:1.6;}
+.pg-chakras .sush-glow{stroke:var(--gold); stroke-width:10; opacity:.14; transition:opacity 1.6s, stroke-width 1.6s;}
+.pg-chakras .balanced .sush-glow{opacity:.6; stroke-width:20;}
+.pg-chakras .nadi{fill:none; stroke-width:1.3;}
+.pg-chakras .nadi-flow{fill:none; stroke-width:2.2; stroke-dasharray:2 15; stroke-linecap:round; animation:flow 7s linear infinite;}
+.pg-chakras .ida{stroke:var(--ida);} .pg-chakras .pingala{stroke:var(--pingala);}
+.pg-chakras .nadi-lbl{font-family:var(--body); font-size:11px; fill:var(--muted); text-anchor:middle;}
+.pg-chakras .spark-halo{fill:var(--gold); opacity:.3;}
+.pg-chakras .spark-core{fill:#fff;}
+
+.pg-chakras .node{cursor:pointer; outline:none;}
+.pg-chakras .node .scaler{transition:transform .6s cubic-bezier(.2,.8,.2,1); transform-box:fill-box; transform-origin:center;}
+.pg-chakras .node:hover .scaler{transform:scale(1.12);}
+.pg-chakras .node.active .scaler{transform:scale(1.5);}
+.pg-chakras .node .petals{animation:spin 50s linear infinite; transform-box:fill-box; transform-origin:center;}
+.pg-chakras .node .glow{opacity:.2; transition:opacity .6s;}
+.pg-chakras .node.active .glow,.pg-chakras .node.lit .glow{opacity:.85;}
+.pg-chakras .node .lbl{font-family:var(--display); font-size:16px; font-weight:500; fill:var(--ink); transition:fill .3s;}
+.pg-chakras .node .lbl-es{font-family:var(--body); font-size:10.5px; fill:var(--muted);}
+.pg-chakras .node.active .lbl{font-weight:600;}
+.pg-chakras .node:focus-visible .focus{stroke:var(--gold); stroke-width:1.5; stroke-dasharray:3 3;}
+.pg-chakras .node .focus{fill:none; stroke:transparent;}
+
+/* Panel del chakra */
+.pg-chakras .panel{--c:#e0bd45; background:var(--panel); border:1px solid var(--line); border-radius:24px;
+  padding:clamp(18px,3.2vw,36px); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); min-width:0;}
+.pg-chakras .p-head{display:grid; grid-template-columns:clamp(150px,22vw,240px) 1fr; gap:26px; align-items:center;}
+.pg-chakras .big-yantra svg{width:100%; height:auto; display:block; overflow:visible;}
+.pg-chakras .big-yantra.enter svg{animation:arrive 1s cubic-bezier(.2,.8,.2,1);}
+.pg-chakras .p-title h2{font-family:var(--display); font-weight:500; font-size:clamp(2.3rem,5vw,3.6rem); margin:0; line-height:1;}
+.pg-chakras .p-ety{font-family:var(--display); font-style:italic; color:var(--muted); font-size:1.18rem; margin:8px 0 0;}
+.pg-chakras .p-es{margin:14px 0 0; display:inline-flex; align-items:center; gap:8px; font-size:.9rem; color:var(--muted);}
+.pg-chakras .p-es .sw{width:10px; height:10px; border-radius:50%; background:var(--c); box-shadow:0 0 10px var(--c);}
+.pg-chakras .res{font-family:var(--display); font-size:1.28rem; line-height:1.55; margin:26px 0 4px; max-width:62ch;}
+.pg-chakras .fade-in{animation:fadein .7s ease both;}
+
+.pg-chakras .group h3{font-family:var(--body); font-weight:500; font-size:.92rem; color:var(--muted); margin:30px 0 12px;
+  display:flex; align-items:center; gap:12px;}
+.pg-chakras .group h3::after{content:""; flex:1; height:1px; background:var(--line);}
+.pg-chakras .chips{display:flex; flex-wrap:wrap; gap:8px;}
+.pg-chakras .chip{font:inherit; font-size:.88rem; color:var(--ink); background:transparent; border:1px solid var(--line);
+  border-radius:999px; padding:7px 14px; cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+  transition:border-color .25s, background .25s;}
+.pg-chakras .chip .k{color:var(--muted);}
+.pg-chakras .chip .d{width:6px; height:6px; border-radius:50%; background:var(--c);}
+.pg-chakras .chip:hover{border-color:var(--c);}
+.pg-chakras .chip.on{background:color-mix(in srgb, var(--c) 18%, transparent); border-color:var(--c);}
+
+/* Dualidades */
+.pg-chakras .duals{display:flex; flex-direction:column; gap:12px;}
+.pg-chakras .dual{display:grid; grid-template-columns:1fr minmax(108px,auto) 1fr; gap:10px; align-items:stretch; position:relative;}
+.pg-chakras .dual::before{content:""; position:absolute; left:6%; right:6%; top:50%; height:1px;
+  background:linear-gradient(90deg,var(--ida),var(--gold),var(--pingala)); opacity:.55;}
+.pg-chakras .pole,.pg-chakras .center{position:relative; font:inherit; color:var(--ink); background:var(--card); border:1px solid var(--line);
+  border-radius:14px; padding:11px 13px; cursor:pointer; display:flex; flex-direction:column; justify-content:center; gap:3px;
+  transition:transform 1s cubic-bezier(.2,.8,.2,1), opacity 1s, box-shadow .8s, border-color .25s, background .8s;}
+.pg-chakras .pole.a{align-items:flex-end; text-align:right; border-color:color-mix(in srgb,var(--ida) 50%,transparent);}
+.pg-chakras .pole.b{align-items:flex-start; text-align:left; border-color:color-mix(in srgb,var(--pingala) 50%,transparent);}
+.pg-chakras .center{align-items:center; text-align:center; border-color:var(--gold); border-radius:999px; padding:11px 16px;}
+.pg-chakras .pn{font-family:var(--display); font-size:1.2rem; font-weight:500; line-height:1.12;}
+.pg-chakras .pt{font-size:.72rem; color:var(--muted);}
+.pg-chakras .pole.on,.pg-chakras .center.on{box-shadow:0 0 0 2px var(--c);}
+.pg-chakras .balanced .pole{opacity:.38; filter:saturate(.35);}
+.pg-chakras .balanced .pole.a{transform:translateX(16px) scale(.96);}
+.pg-chakras .balanced .pole.b{transform:translateX(-16px) scale(.96);}
+.pg-chakras .balanced .center{background:color-mix(in srgb,var(--gold) 14%,var(--card)); box-shadow:0 0 26px var(--gold-soft);}
+.pg-chakras .balanced .pole.on,.pg-chakras .balanced .center.on{box-shadow:0 0 0 2px var(--c), 0 0 26px var(--gold-soft); opacity:1; filter:none;}
+
+.pg-chakras .inspector{margin-top:12px; border-left:2px solid var(--c); padding:14px 18px 16px;
+  background:color-mix(in srgb,var(--c) 10%,var(--card)); border-radius:0 14px 14px 0; animation:unfold .45s ease;}
+.pg-chakras .inspector .ik{font-size:.78rem; color:var(--muted);}
+.pg-chakras .inspector h4{font-family:var(--display); font-size:1.55rem; font-weight:500; margin:2px 0 6px; line-height:1.15;}
+.pg-chakras .inspector p{margin:0; line-height:1.62; max-width:66ch;}
+.pg-chakras .inspector p + p{margin-top:8px; color:var(--muted); font-size:.9rem;}
+
+/* Yantra grande */
+.pg-chakras .geo-s{stroke:var(--ink); stroke-opacity:.72; stroke-width:1.4; fill:currentColor; fill-opacity:.2; stroke-linejoin:round;}
+.pg-chakras .disc{fill:var(--card); stroke:currentColor; stroke-width:1.6;}
+.pg-chakras .bija{font-family:var(--deva); font-size:38px; fill:var(--ink);}
+.pg-chakras .bindu{fill:var(--ink);}
+
+@media (max-width:820px){
+  .pg-chakras .wrap{grid-template-columns:1fr;}
+  .pg-chakras .spine-col{position:relative; top:0; height:600px; min-height:0;}
+}
+@media (max-width:560px){
+  .pg-chakras .p-head{grid-template-columns:1fr; justify-items:center; text-align:center;}
+  .pg-chakras .big-yantra{width:200px;}
+  .pg-chakras .dual{grid-template-columns:1fr minmax(92px,auto) 1fr; gap:6px;}
+  .pg-chakras .pn{font-size:1.05rem;}
+  .pg-chakras .pole,.pg-chakras .center{padding:9px 10px;}
+}
+
+
+/* 8. Página: los yugas ----------------------------------------------------- */
+html.pg-yugas{padding-top:env(safe-area-inset-top,0px);}
+.pg-yugas body{background:var(--bg); font-size:16px; line-height:1.6;}
+.pg-yugas button{font:inherit; color:inherit;}
+.pg-yugas :focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+
+.pg-yugas header{max-width:1240px; margin:0 auto; padding:32px 20px 18px;}
+.pg-yugas h1{font-family:var(--display); font-weight:600; font-size:clamp(2.3rem,5.4vw,3.6rem); line-height:1.02; letter-spacing:-.01em; margin:0 0 10px;}
+.pg-yugas .lede{max-width:62ch; color:var(--muted); margin:0;}
+
+.pg-yugas main{max-width:1240px; margin:0 auto; padding:0 20px 28px; display:grid; gap:22px;}
+@media (min-width:1000px){.pg-yugas main{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); align-items:start;}}
+
+/* Escena del cielo */
+.pg-yugas .sky{background:var(--sky); color:var(--sky-ink); border-radius:20px; overflow:hidden;}
+.pg-yugas .sky svg{display:block; width:100%; height:auto;}
+.pg-yugas .sky text{font-family:var(--body);}
+.pg-yugas .arcg{cursor:pointer; outline:none;}
+.pg-yugas .arcg .arc{transition:opacity .35s, stroke-width .35s; opacity:.8;}
+.pg-yugas .arcg .halo{opacity:0; transition:opacity .35s;}
+.pg-yugas .arcg:hover .arc,.pg-yugas .arcg:focus-visible .arc{opacity:1;}
+.pg-yugas .arcg:focus-visible .halo{opacity:.3;}
+.pg-yugas .arcs.has-sel .arcg .arc{opacity:.32;}
+.pg-yugas .arcs.has-sel .arcg.sel .arc{opacity:1;}
+.pg-yugas .arcs.has-sel .arcg.sel .halo{opacity:.25;}
+.pg-yugas .ylabel{font-family:var(--display); font-weight:600; font-size:27px; fill:var(--sky-ink); pointer-events:none;}
+.pg-yugas .slabel{font-size:20px; fill:var(--sky-muted);}
+.pg-yugas .obj{cursor:pointer;}
+.pg-yugas .obj:focus-visible{outline:none;}
+.pg-yugas .obj:focus-visible .focusring{opacity:1;}
+.pg-yugas .focusring{opacity:0;}
+.pg-yugas .vpulse{animation:vpulse 4s ease-in-out infinite; transform-box:fill-box; transform-origin:center;}
+.pg-yugas .vpulse.b{animation-delay:1.3s;}
+.pg-yugas .vpulse.c{animation-delay:2.6s;}
+.pg-yugas .tw{animation:tw-cielo 3.2s ease-in-out infinite;}
+
+/* Lectura, línea de tiempo y controles */
+.pg-yugas .readout{display:grid; gap:14px; padding:4px 22px 22px; border-top:1px solid var(--sky-line);}
+.pg-yugas .now{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 18px; padding-top:16px;}
+.pg-yugas .now .year{font-family:var(--display); font-size:2rem; font-weight:600; line-height:1; min-width:6.6em; font-variant-numeric:tabular-nums;}
+.pg-yugas .now .yuga{font-family:var(--display); font-size:1.35rem; font-style:italic;}
+.pg-yugas .now .arcinfo{color:var(--sky-muted); font-size:.95rem;}
+.pg-yugas .pips{display:inline-flex; gap:5px; align-items:center; margin-left:auto; color:var(--sky-muted); font-size:.9rem;}
+.pg-yugas .pip{width:11px; height:11px; border-radius:50%; border:1px solid var(--sky-muted);}
+.pg-yugas .pip.on{background:var(--pc,var(--sky-accent)); border-color:var(--pc,var(--sky-accent));}
+.pg-yugas .controls{display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px;}
+.pg-yugas .sbtn{background:var(--sky-2); border:1px solid var(--sky-line); border-radius:999px; padding:7px 16px; cursor:pointer; color:var(--sky-ink);}
+.pg-yugas .sbtn:hover{background:var(--sky-hover);}
+.pg-yugas .speed{display:flex; align-items:center; gap:10px; color:var(--sky-muted); font-size:.92rem; margin-left:auto;}
+.pg-yugas .speed input{accent-color:var(--sky-accent); width:130px;}
+
+.pg-yugas .tl{position:relative;}
+.pg-yugas .tlbar{display:flex; height:16px; border-radius:4px; overflow:hidden; cursor:pointer;}
+.pg-yugas .tlseg{height:100%; opacity:.75; transition:opacity .3s; border-right:1px solid var(--sky);}
+.pg-yugas .tlseg:last-child{border-right:0;}
+.pg-yugas .tl.has-sel .tlseg{opacity:.3;}
+.pg-yugas .tl.has-sel .tlseg.sel{opacity:1;}
+.pg-yugas .tlmark{position:absolute; top:-5px; width:2px; height:26px; background:#fff6dc; border-radius:1px; transform:translateX(-1px); pointer-events:none; box-shadow:0 0 8px rgba(255,240,200,.7);}
+.pg-yugas .tlticks{display:flex; justify-content:space-between; font-size:.82rem; color:var(--sky-muted); margin-top:6px;}
+
+/* Panel lateral */
+.pg-yugas aside{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:24px 24px 26px;}
+@media (min-width:1000px){.pg-yugas aside{position:sticky; top:calc(16px + env(safe-area-inset-top,0px)); max-height:calc(100vh - 32px); overflow:auto;}}
+.pg-yugas aside h2{font-family:var(--display); font-weight:600; font-size:2.2rem; line-height:1.05; margin:0;}
+.pg-yugas .dev{font-family:var(--deva); font-size:1.35rem; color:var(--muted); margin:4px 0 0;}
+.pg-yugas .gloss{font-family:var(--display); font-style:italic; font-size:1.2rem; color:var(--gold); margin:2px 0 0;}
+.pg-yugas .head{display:grid; grid-template-columns:1fr auto; gap:14px; align-items:center; margin-bottom:14px;}
+.pg-yugas .emblem{width:118px; height:118px;}
+.pg-yugas .emblem .rot{transform-origin:70px 70px; animation:spin 80s linear infinite;}
+.pg-yugas .emcap{font-size:.85rem; color:var(--muted); text-align:center; margin-top:-2px;}
+.pg-yugas aside p{margin:0 0 12px; max-width:62ch;}
+.pg-yugas .muted{color:var(--muted);}
+.pg-yugas .chips{display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 4px;}
+.pg-yugas .chip{background:var(--chip); border:1px solid var(--line); border-radius:999px; padding:5px 14px; cursor:pointer; font-size:.95rem;}
+.pg-yugas .chip:hover{background:var(--chip-hover);}
+.pg-yugas .chip[aria-pressed="true"]{border-color:var(--ac,var(--gold)); box-shadow:inset 0 0 0 1px var(--ac,var(--gold));}
+.pg-yugas .dates{display:grid; gap:8px; margin:14px 0 6px;}
+.pg-yugas .daterow{display:grid; grid-template-columns:auto 1fr; gap:4px 14px; text-align:left; background:transparent; border:1px solid var(--line); border-radius:10px; padding:10px 14px; cursor:pointer;}
+.pg-yugas .daterow:hover{background:var(--chip);}
+.pg-yugas .daterow[aria-pressed="true"]{border-color:var(--ac,var(--gold));}
+.pg-yugas .daterow .k{color:var(--muted); font-size:.9rem;}
+.pg-yugas .daterow .v{font-variant-numeric:tabular-nums;}
+.pg-yugas .daterow .hint{grid-column:1/-1; font-size:.82rem; color:var(--muted);}
+.pg-yugas .insp{margin-top:18px; border-left:3px solid var(--ac,var(--gold)); border-radius:0; padding:2px 0 2px 16px; min-height:5em;}
+.pg-yugas .insp h3{font-family:var(--display); font-weight:600; font-size:1.4rem; margin:0 0 6px;}
+.pg-yugas .insp p{margin:0;}
+.pg-yugas .legend{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:16px 0 4px;}
+.pg-yugas .lgbtn{display:flex; align-items:center; gap:10px; text-align:left; background:var(--chip); border:1px solid var(--line); border-radius:10px; padding:9px 12px; cursor:pointer;}
+.pg-yugas .lgbtn:hover{background:var(--chip-hover);}
+.pg-yugas .sw{width:14px; height:14px; border-radius:3px; flex:none;}
+.pg-yugas .lgbtn small{display:block; color:var(--muted); font-size:.82rem; line-height:1.2;}
+.pg-yugas .back{background:none; border:0; padding:0; color:var(--muted); cursor:pointer; font-size:.92rem; margin-bottom:10px; text-decoration:underline; text-underline-offset:3px;}
+.pg-yugas .fadein{animation:fadein .45s ease-out;}
+
+.pg-yugas footer{max-width:1240px; margin:0 auto; padding:4px 20px 40px;}
+.pg-yugas footer .note{max-width:78ch; border-top:1px solid var(--line); padding-top:18px; color:var(--muted); font-size:.95rem;}
+.pg-yugas footer .note strong{color:var(--ink); font-weight:500;}
+
+
+/* 9. Movimiento reducido --------------------------------------------------- */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important; transition:none !important;}
+}
