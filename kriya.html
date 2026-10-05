@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es" class="pg-kriya">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kriya yoga · Kriya</title>
+<meta name="description" content="Kriya yoga: mapas interactivos del cuerpo sutil y de los ciclos cósmicos: chakras, yugas, nāḍīs y práctica.">
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+<div class="stars" id="stars" aria-hidden="true"></div>
+<nav class="nav" id="nav" data-actual="kriya"></nav>
+
+<header class="hero">
+  <div>
+    <p class="eyebrow">Kriya yoga · mapas del cuerpo sutil</p>
+    <h1>Un mapa interior,<br>de la raíz a la <em>corona</em></h1>
+    <p class="lead">Recorridos interactivos para explorar los chakras, las corrientes de energía, los grandes ciclos del tiempo y las prácticas que los atraviesan. Cada sección es un mapa que se toca: abre lo que te llame y lee a tu ritmo.</p>
+    <div class="cta">
+      <a class="btn" id="ctaMain" href="chakras-interactivo.html"><span class="dot"></span><span>Comenzar con los siete lotos</span></a>
+      <a class="btn ghost" href="#secciones">Ver todas las secciones</a>
+    </div>
+  </div>
+  <div class="emblem" aria-hidden="true"><svg viewBox="-130 -130 260 260" id="emblem"></svg></div>
+</header>
+
+<main class="sections" id="secciones">
+  <div class="sec-head"><h2>Secciones</h2></div>
+  <div class="cards" data-camino="kriya"></div>
+</main>
+
+<section class="notes" id="acerca">
+  <div>
+    <h2>Qué encontrarás aquí</h2>
+    <p>Mapas para mirar el cuerpo sutil sin prisa. No pretenden sustituir a un maestro ni a la práctica, sino acompañarla: ver dónde está cada centro, qué tensiones sostiene y qué queda cuando esas tensiones se aflojan. El espacio irá creciendo con nuevas secciones.</p>
+  </div>
+  <div>
+    <h2>Sobre las fuentes</h2>
+    <p>Los textos tántricos clásicos describen los chakras por sus pétalos, letras, elementos y yantras. Buena parte de lo que hoy se asocia a ellos, como las emociones o los colores del arcoíris, es una síntesis moderna. Aquí se distingue una cosa de la otra: la tradición como referencia, la interpretación como herramienta de práctica.</p>
+  </div>
+</section>
+
+<footer class="foot" id="foot"></footer>
+
+<script src="portal.js"></script>
+<script>
+/* Emblema de la portada: loto con los siete colores de raíz a corona */
+(function(){
+  const {ring, RAINBOW} = Portal;
+  let stops = '';
+  RAINBOW.forEach((c,i) => { stops += '<stop offset="'+(.28 + i*.12).toFixed(2)+'" stop-color="'+c+'"/>'; });
+  let dots = '';
+  RAINBOW.forEach((c,i) => {
+    const y = 27 - i*9;
+    dots += '<circle class="e-dot" cx="0" cy="'+y+'" r="3.2" fill="'+c+'" style="animation:rise 4.2s ease-in-out '+(i*.6).toFixed(1)+'s infinite"/>';
+  });
+  document.getElementById('emblem').innerHTML =
+    '<defs><radialGradient id="eg" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="124">'+stops+'</radialGradient>'+
+    '<radialGradient id="eh"><stop offset="0" stop-color="var(--gold)" stop-opacity=".45"/><stop offset="1" stop-color="var(--gold)" stop-opacity="0"/></radialGradient></defs>'+
+    '<circle class="y-halo" r="128" fill="url(#eh)"/>'+
+    '<g class="y-rev">'+ring(28,38,86,'url(#eg)','url(#eg)',0,.28)+'</g>'+
+    '<g class="y-petals">'+ring(14,38,68,'url(#eg)','url(#eg)',6.4,.5)+'</g>'+
+    '<g class="y-rev">'+ring(7,38,46,'url(#eg)','url(#eg)',0,.85)+'</g>'+
+    '<circle class="disc" r="38"/>'+
+    '<g class="y-geo"><line class="e-line" x1="0" y1="33" x2="0" y2="-33"/>'+dots+'</g>';
+})();
+</script>
+</body>
+</html>
