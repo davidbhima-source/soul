@@ -482,7 +482,7 @@ const zona = (id, inner) => '<g class="zona" data-n="'+id+'" tabindex="0" role="
 
 /* ================= Dibujo de la rueda ================= */
 function dibujar(){
-  let s = '<defs><radialGradient id="cieloG" cx="50%" cy="45%"><stop offset="0" stop-color="#1c2150"/><stop offset="1" stop-color="#090b1f"/></radialGradient>'+
+  let s = '<defs><radialGradient id="cieloG" cx="50%" cy="45%"><stop offset="0" stop-color="#13285a"/><stop offset="1" stop-color="#060b1c"/></radialGradient>'+
     '<radialGradient id="halo"><stop offset="0" stop-color="#f6e7b8" stop-opacity=".55"/><stop offset="1" stop-color="#f6e7b8" stop-opacity="0"/></radialGradient></defs>';
   s += '<rect width="800" height="860" fill="url(#cieloG)"/>';
   let seed = 7; const rnd = () => (seed = (seed*16807)%2147483647)/2147483647;

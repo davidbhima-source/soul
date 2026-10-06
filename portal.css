@@ -12,7 +12,7 @@
    su sección, siempre bajo su clase .pg-*, para que no choquen entre sí.
 
      1. Tipografías
-     2. Tokens de diseño (tema claro y oscuro)
+     2. Tokens de diseño (tema claro y oscuro; la portada tiene su propia paleta)
      3. Base común
      4. Componentes compartidos
      5. Animaciones
@@ -45,41 +45,62 @@
   --body:"Commissioner",ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif; /* texto */
   --deva:"Tiro Devanagari Sanskrit","Noto Serif Devanagari","Noto Sans Devanagari","Mangal",serif; /* devanagari */
 
-  /* Paleta (tema claro) */
-  --bg:#ebe8f4; --bg2:#d8d2ec;          /* fondo y su degradado superior */
-  --card:#f8f6fd;                        /* superficies opacas */
+  /* Paleta de las secciones: «lapislázuli de Seti I» (tema claro) */
+  --bg:#e5ebf5; --bg2:#c9d6ec;          /* fondo y su degradado superior */
+  --card:#f6f9fd;                        /* superficies opacas */
   --panel:rgba(255,255,255,.66);         /* superficies translúcidas */
-  --ink:#1e1a36; --muted:#5f5980;        /* texto principal y secundario */
-  --line:rgba(30,26,54,.14);             /* bordes y separadores */
+  --ink:#0f1c36; --muted:#506385;        /* texto principal y secundario */
+  --line:rgba(15,28,54,.14);             /* bordes y separadores */
   --gold:#a2751f; --gold-soft:rgba(162,117,31,.22); /* acento */
   --ida:#4c60ad; --pingala:#bd6634;      /* las dos nāḍīs */
   --chip:color-mix(in srgb,var(--ink) 5%,var(--card));
   --chip-hover:color-mix(in srgb,var(--ink) 10%,var(--card));
-  --shadow:0 24px 60px -24px rgba(30,26,54,.35);
+  --shadow:0 24px 60px -24px rgba(15,28,54,.35);
   --star:0;                              /* opacidad del cielo estrellado */
 
-  /* Cielo nocturno: superficie que es oscura en ambos temas */
-  --sky:#090b1f; --sky-2:#11143a; --sky-hover:#1a1e4d;
-  --sky-ink:#ece6d6; --sky-muted:#a09bc0; --sky-line:rgba(236,230,214,.14);
+  /* Cielo nocturno: superficie que es oscura en ambos temas (lienzos de los mapas) */
+  --sky:#060b1c; --sky-2:#0f1d3f; --sky-hover:#17295a;
+  --sky-ink:#ece6d6; --sky-muted:#98a7c8; --sky-line:rgba(232,238,249,.14);
   --sky-accent:#e8c46a;
 
   box-sizing:border-box;
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
+/* Tema oscuro de las secciones: lapislázuli profundo, como las bóvedas estrelladas */
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0d0b1c; --bg2:#1c1740; --card:#1b1838; --ink:#ece7f8; --muted:#9d96bb;
-    --panel:rgba(24,20,50,.66); --line:rgba(236,231,248,.13);
+    --bg:#070d1f; --bg2:#13285a; --card:#0f1a36; --ink:#e8eef9; --muted:#93a3c4;
+    --panel:rgba(14,26,56,.66); --line:rgba(232,238,249,.13);
     --gold:#d9b265; --gold-soft:rgba(217,178,101,.26);
     --ida:#8da0e8; --pingala:#eb9c6e; --star:1;
     --shadow:0 24px 60px -20px rgba(0,0,0,.7);
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0d0b1c; --bg2:#1c1740; --card:#1b1838; --ink:#ece7f8; --muted:#9d96bb;
-  --panel:rgba(24,20,50,.66); --line:rgba(236,231,248,.13);
+  --bg:#070d1f; --bg2:#13285a; --card:#0f1a36; --ink:#e8eef9; --muted:#93a3c4;
+  --panel:rgba(14,26,56,.66); --line:rgba(232,238,249,.13);
   --gold:#d9b265; --gold-soft:rgba(217,178,101,.26);
   --ida:#8da0e8; --pingala:#eb9c6e; --star:1;
+  --shadow:0 24px 60px -20px rgba(0,0,0,.7);
+}
+
+/* Portada del portal: «azul egipcio», el de la fayenza turquesa */
+:root.pg-inicio{
+  --bg:#e2eef2; --bg2:#bfdbe5; --card:#f4fafc; --ink:#08202c; --muted:#44687a;
+  --panel:rgba(255,255,255,.64); --line:rgba(8,32,44,.14);
+  --shadow:0 24px 60px -24px rgba(8,32,44,.35);
+  --sky:#040f19; --sky-2:#0a283a; --sky-hover:#10364d; --sky-muted:#93b2c0; --sky-line:rgba(230,241,245,.14);
+}
+@media (prefers-color-scheme: dark){
+  :root.pg-inicio:not([data-theme="light"]){
+    --bg:#04111b; --bg2:#0f4a66; --card:#0a2133; --ink:#e6f1f5; --muted:#8fb0bf;
+    --panel:rgba(10,33,51,.66); --line:rgba(230,241,245,.13);
+    --shadow:0 24px 60px -20px rgba(0,0,0,.7);
+  }
+}
+:root.pg-inicio[data-theme="dark"]{
+  --bg:#04111b; --bg2:#0f4a66; --card:#0a2133; --ink:#e6f1f5; --muted:#8fb0bf;
+  --panel:rgba(10,33,51,.66); --line:rgba(230,241,245,.13);
   --shadow:0 24px 60px -20px rgba(0,0,0,.7);
 }
 
@@ -671,7 +692,7 @@ html:is(.pg-rueda,.pg-vedanas,.pg-esoterismo){padding-top:env(safe-area-inset-to
 .pg-vedanas .zona{cursor:pointer; transition:opacity .4s, filter .3s; outline:none;}
 .pg-vedanas .zona:hover{filter:brightness(1.15);}
 .pg-vedanas .zona:focus-visible{filter:drop-shadow(0 0 6px #fff6dc) brightness(1.1);}
-.pg-vedanas .seg{stroke:#090b1f; stroke-width:1.2;}
+.pg-vedanas .seg{stroke:var(--sky); stroke-width:1.2;}
 .pg-vedanas #mandala.has-sel .zona{opacity:.26;}
 .pg-vedanas #mandala.has-sel .zona.sel,.pg-vedanas #mandala.has-sel .zona[data-n="vedana"]{opacity:1;}
 .pg-vedanas #mandala .zona.sel .seg{stroke:#fff6dc; stroke-width:1.6;}
@@ -730,14 +751,14 @@ html:is(.pg-rueda,.pg-vedanas,.pg-esoterismo){padding-top:env(safe-area-inset-to
 .pg-esoterismo .nodo.elegido .aro-sel{opacity:1; animation:late-r 2.4s ease-in-out infinite;}
 .pg-esoterismo .nodo:focus-visible .aro-sel{opacity:1;}
 .pg-esoterismo .etiqueta{font-family:var(--display); font-size:19px; font-weight:600; fill:var(--sky-ink);
-  paint-order:stroke; stroke:#090b1f; stroke-width:4px; stroke-linejoin:round; pointer-events:none;}
+  paint-order:stroke; stroke:var(--sky); stroke-width:4px; stroke-linejoin:round; pointer-events:none;}
 .pg-esoterismo .arista,.pg-esoterismo .pulso{transition:opacity .4s;}
 .pg-esoterismo #red.has-sel .nodo:not(.on) .nodo-i{opacity:.2;}
 .pg-esoterismo #red.has-sel .arista:not(.on),.pg-esoterismo #red.has-sel .pulso:not(.on){opacity:.06;}
 .pg-esoterismo #red.has-sel .arista.on{stroke-width:2.4;}
 .pg-esoterismo .oculto{display:none;}
 .pg-esoterismo .etq{font-family:var(--body); font-size:11px; font-weight:500; fill:var(--sky-ink);
-  paint-order:stroke; stroke:#090b1f; stroke-width:3.5px; stroke-linejoin:round; pointer-events:none;}
+  paint-order:stroke; stroke:var(--sky); stroke-width:3.5px; stroke-linejoin:round; pointer-events:none;}
 .pg-esoterismo .constelacion{stroke:#e8c46a; stroke-width:1.6; stroke-dasharray:3 5; opacity:.85; animation:senda 2.4s linear infinite;}
 .pg-esoterismo .capa-t{font-family:var(--display); font-style:italic; font-size:15px; fill:var(--sky-muted);}
 .pg-esoterismo .anio-t{font-family:var(--body); font-size:10.5px; fill:var(--sky-muted);}

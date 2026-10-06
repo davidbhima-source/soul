@@ -150,9 +150,9 @@ function vedanas(s, p){
         for(let l=0;l<3;l++){ const e = c+l*10/3; d += '<path d="'+sec(94,106,e,e+10/3)+'" fill="'+VED.k[l]+'"/>'; } } } }
   return '<svg viewBox="-125 -125 250 250" aria-hidden="true"><defs><radialGradient id="'+id+'-h"><stop offset="0" stop-color="'+s.color+'" stop-opacity=".5"/>'+
     '<stop offset="1" stop-color="'+s.color+'" stop-opacity="0"/></radialGradient></defs>'+
-    '<circle r="124" fill="url(#'+id+'-h)"/><circle r="110" fill="#11143a"/>'+
-    '<g class="petals-s"><g stroke="#11143a" stroke-width=".8">'+d+'</g></g>'+
-    '<circle r="32" fill="#efd99a" stroke="#11143a" stroke-width="2"/>'+
+    '<circle r="124" fill="url(#'+id+'-h)"/><circle r="110" fill="#0f1d3f"/>'+
+    '<g class="petals-s"><g stroke="#0f1d3f" stroke-width=".8">'+d+'</g></g>'+
+    '<circle r="32" fill="#efd99a" stroke="#0f1d3f" stroke-width="2"/>'+
     '<text y="8" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="24" font-weight="600" fill="#17122b">108</text></svg>';
 }
 
@@ -165,11 +165,11 @@ function red(s, p){
   const E = [[0,3],[0,1],[1,3],[2,5],[1,4],[3,6],[4,6],[6,7],[6,8],[8,9],[9,10],[3,9],[4,9],[5,8],[7,10],[2,10]];
   let lin = '', nod = '';
   E.forEach(([a,b]) => { lin += '<path d="M'+N[a][0].toFixed(1)+','+N[a][1].toFixed(1)+' L'+N[b][0].toFixed(1)+','+N[b][1].toFixed(1)+'" stroke="#efe7d2" stroke-opacity="'+(.25+.3*(N[a][2]+N[b][2]+2)/4).toFixed(2)+'" stroke-width="1.6"/>'; });
-  N.slice().sort((a,b) => a[2]-b[2]).forEach(([x,y,z,c]) => { nod += '<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(6+4*(z+1)/2).toFixed(1)+'" fill="'+c+'" stroke="#11143a" stroke-width="1.4" opacity="'+(.55+.45*(z+1)/2).toFixed(2)+'"/>'; });
+  N.slice().sort((a,b) => a[2]-b[2]).forEach(([x,y,z,c]) => { nod += '<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(6+4*(z+1)/2).toFixed(1)+'" fill="'+c+'" stroke="#0f1d3f" stroke-width="1.4" opacity="'+(.55+.45*(z+1)/2).toFixed(2)+'"/>'; });
   return '<svg viewBox="-125 -125 250 250" aria-hidden="true"><defs><radialGradient id="'+id+'-h"><stop offset="0" stop-color="'+s.color+'" stop-opacity=".5"/>'+
     '<stop offset="1" stop-color="'+s.color+'" stop-opacity="0"/></radialGradient></defs>'+
-    '<circle r="124" fill="url(#'+id+'-h)"/><circle r="104" fill="#11143a"/>'+
-    '<ellipse rx="96" ry="30" fill="none" stroke="#a09bc0" stroke-opacity=".3"/><ellipse rx="30" ry="96" fill="none" stroke="#a09bc0" stroke-opacity=".3"/>'+
+    '<circle r="124" fill="url(#'+id+'-h)"/><circle r="104" fill="#0f1d3f"/>'+
+    '<ellipse rx="96" ry="30" fill="none" stroke="#98a7c8" stroke-opacity=".3"/><ellipse rx="30" ry="96" fill="none" stroke="#98a7c8" stroke-opacity=".3"/>'+
     '<circle r="96" fill="none" stroke="#e8c46a" stroke-opacity=".45"/>'+lin+nod+'</svg>';
 }
 

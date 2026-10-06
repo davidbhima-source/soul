@@ -57,7 +57,7 @@ const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const CX = 400, CY = 400;
 /* Radios de cada anillo: centro, sentidos, tonos, direcciones, tiempos y objetos */
 const R = {hub:64, s0:68, s1:150, t0:150, t1:212, c0:212, c1:262, k0:262, k1:306, obj:340};
-const ORO = '#d9b265', INK = '#17122b', NOCHE = '#090b1f';
+const ORO = '#d9b265', INK = '#17122b', NOCHE = '#060b1c';
 
 /* ================= Las cuatro dimensiones ================= */
 const SENT = [
@@ -430,7 +430,7 @@ function zona(id, i, inner, foco){
 
 /* ================= Dibujo del mandala ================= */
 function dibujar(){
-  let s = '<defs><radialGradient id="cieloV" cx="50%" cy="50%"><stop offset="0" stop-color="#1c2150"/><stop offset="1" stop-color="'+NOCHE+'"/></radialGradient>'+
+  let s = '<defs><radialGradient id="cieloV" cx="50%" cy="50%"><stop offset="0" stop-color="#13285a"/><stop offset="1" stop-color="'+NOCHE+'"/></radialGradient>'+
     '<radialGradient id="hubG"><stop offset="0" stop-color="#fff6dc"/><stop offset=".7" stop-color="#ecd28c"/><stop offset="1" stop-color="'+ORO+'"/></radialGradient>'+
     '<radialGradient id="haloV"><stop offset="0" stop-color="#f6e7b8" stop-opacity=".5"/><stop offset="1" stop-color="#f6e7b8" stop-opacity="0"/></radialGradient>'+
     '<filter id="brilloV" x="-1" y="-1" width="3" height="3"><feGaussianBlur stdDeviation="4"/></filter></defs>';
