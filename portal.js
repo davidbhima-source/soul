@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Kriya · estructura y piezas compartidas del portal
+   Bhima · estructura y piezas compartidas del portal
    --------------------------------------------------------------------------
    Este archivo define el mapa del portal (sus caminos y las secciones de
    cada uno) y dibuja lo que comparten las páginas de inicio y de portada:
@@ -34,7 +34,7 @@
                 (mandala de los 108) o 'red' (esfera de tradiciones) en lugar de un loto
 */
 const PORTAL = {
-  nombre: 'Kriya',
+  nombre: 'Bhima',
   lema: 'mapas de las tradiciones contemplativas',
   caminos: [
     {id:'kriya', titulo:'Kriya', subtitulo:'Kriya yoga', href:'kriya.html', color:'#6f8fe0', figura:'krishna',
