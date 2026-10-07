@@ -21,11 +21,12 @@
      8. Página: portada de Kriya yoga  .pg-kriya
      9. Página: los siete lotos        .pg-chakras
     10. Página: los yugas              .pg-yugas
-    11. Exploradores: lienzo y panel  (compartido por .pg-rueda, .pg-vedanas y .pg-esoterismo)
+    11. Exploradores: lienzo y panel  (compartido por .pg-rueda, .pg-vedanas, .pg-esoterismo y .pg-arbol)
     12. Página: la rueda de la vida   .pg-rueda
     13. Página: los 108 sentimientos  .pg-vedanas
     14. Página: la red del esoterismo .pg-esoterismo
-    15. Movimiento reducido
+    15. Página: el Árbol de la Vida   .pg-arbol
+    16. Movimiento reducido
 
    La estructura del portal (caminos, secciones, menú) vive en portal.js.
 
@@ -35,7 +36,7 @@
 
 
 /* 1. Tipografías ----------------------------------------------------------- */
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Commissioner:wght@300;400;500&family=Tiro+Devanagari+Sanskrit&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Commissioner:wght@300;400;500&family=Tiro+Devanagari+Sanskrit&family=Frank+Ruhl+Libre:wght@400;500;700&display=swap");
 
 
 /* 2. Tokens de diseño ------------------------------------------------------ */
@@ -44,6 +45,7 @@
   --display:"Cormorant Garamond","Iowan Old Style",Georgia,serif;   /* títulos */
   --body:"Commissioner",ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif; /* texto */
   --deva:"Tiro Devanagari Sanskrit","Noto Serif Devanagari","Noto Sans Devanagari","Mangal",serif; /* devanagari */
+  --hebreo:"Frank Ruhl Libre","David Libre","Noto Serif Hebrew","Times New Roman",serif; /* hebreo */
 
   /* Paleta de las secciones: «lapislázuli de Seti I» (tema claro) */
   --bg:#e5ebf5; --bg2:#c9d6ec;          /* fondo y su degradado superior */
@@ -239,6 +241,7 @@ a.m-item:hover .petals-s{animation-duration:12s;}
 .hero h1{font-family:var(--display); font-weight:500; font-size:clamp(2.6rem,6.4vw,4.8rem); line-height:.98; margin:0 0 20px; letter-spacing:-.01em;}
 .hero h1 em{font-style:italic; color:var(--gold);}
 .hero .lead{margin:0; color:var(--muted); max-width:52ch; line-height:1.65; font-size:1.02rem;}
+.hero .lead + .lead{margin-top:14px; font-size:.93rem;}
 .cta{margin-top:30px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;}
 .hero .emblem{width:100%; max-width:440px; justify-self:center; aspect-ratio:1;}
 .hero .emblem svg{width:100%; height:100%; display:block; overflow:visible;}
@@ -303,7 +306,7 @@ a.card:hover .go .arr{transform:translateX(5px);}
 
 /* 7. Figuras de entrada a los caminos -------------------------------------- */
 .caminos{max-width:1180px; margin:0 auto; padding:10px 20px 20px; position:relative; z-index:1;
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:22px;}
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:22px;}
 .camino{--c:var(--gold); --rx:0deg; --ry:0deg; position:relative; display:flex; flex-direction:column; align-items:center;
   text-align:center; gap:4px; padding:18px 26px 30px; border-radius:28px; text-decoration:none; color:var(--ink);
   background:var(--panel); border:1px solid var(--line); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
@@ -317,7 +320,7 @@ a.card:hover .go .arr{transform:translateX(5px);}
   transition:transform .6s cubic-bezier(.2,.8,.2,1);}
 .camino:hover .fig-wrap,.camino:focus-visible .fig-wrap{transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-8px);}
 .camino .cam-sub{font-family:var(--display); font-style:italic; color:var(--muted); font-size:1.15rem; margin-top:4px;}
-.camino h2{font-family:var(--display); font-weight:500; font-size:clamp(2.6rem,5vw,3.6rem); margin:0; line-height:1;}
+.camino h2{font-family:var(--display); font-weight:500; font-size:clamp(2.4rem,4vw,3.2rem); margin:0; line-height:1;}
 .camino p{margin:10px 0 0; color:var(--muted); max-width:40ch; line-height:1.6; font-size:.95rem;}
 .camino .cam-estado{margin-top:10px; font-size:.78rem; color:var(--muted);}
 .camino .go{margin-top:14px; display:inline-flex; align-items:center; gap:10px; font-size:.92rem;
@@ -333,6 +336,12 @@ a.card:hover .go .arr{transform:translateX(5px);}
 .figura .fig-halo{transition:opacity .6s;}
 .figura .fig-cielo{transform-box:view-box; transform-origin:150px 186px; animation:spin 240s linear infinite; opacity:.75; transition:opacity .6s;}
 .figura .fig-estrella{animation:tw 4s ease-in-out infinite;}
+/* Jamsa: el iris late, salen ondas del ojo y gira el anillo de las 22 letras */
+.figura .fig-iris{transform-box:fill-box; transform-origin:center; animation:breathe 5s ease-in-out infinite;}
+.figura .fig-onda{transform-box:fill-box; transform-origin:center; opacity:0; animation:fig-onda 6s ease-out infinite;}
+.figura .fig-letras{transform-box:view-box; transform-origin:150px 186px; animation:spin 180s linear infinite;}
+.figura .fig-sefira{animation:pulse 3s ease-in-out infinite;}
+@keyframes fig-onda{0%{transform:scale(.5); opacity:.6;}100%{transform:scale(2.6); opacity:0;}}
 .figura .fig-rayos{transform-box:view-box; transform-origin:150px 102px; animation:spin 40s linear infinite; opacity:.8;}
 .camino:hover .fig-aro,.camino:focus-visible .fig-aro{transform:scale(1.05);}
 .camino:hover .fig-halo,.camino:focus-visible .fig-halo{opacity:.9;}
@@ -559,73 +568,73 @@ html.pg-yugas{padding-top:env(safe-area-inset-top,0px);}
 .pg-yugas footer .note strong{color:var(--ink); font-weight:500;}
 
 
-/* 11. Exploradores: lienzo y panel (.pg-rueda, .pg-vedanas, .pg-esoterismo) - */
+/* 11. Exploradores: lienzo y panel (rueda, vedanas, esoterismo, árbol) ------- */
 /* Diseño común de las páginas «mapa + explicación»: un lienzo SVG oscuro con su
    lectura y botones, y un panel con migas, cabecera, listas, ejemplos y chips. */
 /* Cabecera y retícula */
-html:is(.pg-rueda,.pg-vedanas,.pg-esoterismo){padding-top:env(safe-area-inset-top,0px);}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .top{max-width:1240px; margin:0 auto; padding:32px 20px 18px; position:relative; z-index:1;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .top h1{font-family:var(--display); font-weight:500; font-size:clamp(2.2rem,5vw,3.4rem); line-height:1.02; margin:0 0 10px; letter-spacing:-.01em;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lede{max-width:66ch; color:var(--muted); margin:0; line-height:1.6;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) main{max-width:1240px; margin:0 auto; padding:0 20px 28px; display:grid; gap:22px; position:relative; z-index:1;}
-@media (min-width:1000px){:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) main{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); align-items:start;}}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lienzo{background:var(--sky); color:var(--sky-ink); border-radius:22px; overflow:hidden;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lienzo svg{display:block; width:100%; height:auto;}
+html:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol){padding-top:env(safe-area-inset-top,0px);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .top{max-width:1240px; margin:0 auto; padding:32px 20px 18px; position:relative; z-index:1;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .top h1{font-family:var(--display); font-weight:500; font-size:clamp(2.2rem,5vw,3.4rem); line-height:1.02; margin:0 0 10px; letter-spacing:-.01em;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .lede{max-width:66ch; color:var(--muted); margin:0; line-height:1.6;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) main{max-width:1240px; margin:0 auto; padding:0 20px 28px; display:grid; gap:22px; position:relative; z-index:1;}
+@media (min-width:1000px){:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) main{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); align-items:start;}}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .lienzo{background:var(--sky); color:var(--sky-ink); border-radius:22px; overflow:hidden;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .lienzo svg{display:block; width:100%; height:auto;}
 /* Lectura y botones bajo la rueda */
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .mando{display:grid; gap:12px; padding:14px 20px 20px; border-top:1px solid var(--sky-line);}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lectura{display:flex; gap:12px; align-items:baseline; min-height:2.6em; color:var(--sky-muted); font-size:.95rem; line-height:1.45;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lectura strong{color:var(--sky-ink); font-family:var(--display); font-size:1.15rem; font-weight:600;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .paso-n{font-family:var(--display); font-size:1.8rem; line-height:1; color:var(--sky-accent); min-width:1.2em;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .botones{display:flex; flex-wrap:wrap; gap:10px;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .sbtn{font:inherit; font-size:.9rem; background:var(--sky-2); border:1px solid var(--sky-line); border-radius:999px; padding:8px 16px; cursor:pointer; color:var(--sky-ink);}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .sbtn:hover{background:var(--sky-hover);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .mando{display:grid; gap:12px; padding:14px 20px 20px; border-top:1px solid var(--sky-line);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .lectura{display:flex; gap:12px; align-items:baseline; min-height:2.6em; color:var(--sky-muted); font-size:.95rem; line-height:1.45;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .lectura strong{color:var(--sky-ink); font-family:var(--display); font-size:1.15rem; font-weight:600;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .paso-n{font-family:var(--display); font-size:1.8rem; line-height:1; color:var(--sky-accent); min-width:1.2em;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .botones{display:flex; flex-wrap:wrap; gap:10px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .sbtn{font:inherit; font-size:.9rem; background:var(--sky-2); border:1px solid var(--sky-line); border-radius:999px; padding:8px 16px; cursor:pointer; color:var(--sky-ink);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .sbtn:hover{background:var(--sky-hover);}
 /* Panel de explicación */
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .panel-r{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:20px 22px 24px;}
-@media (min-width:1000px){:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .panel-r{position:sticky; top:calc(16px + env(safe-area-inset-top,0px)); max-height:calc(100vh - 32px); overflow:auto;}}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .migas{display:flex; flex-wrap:wrap; align-items:center; gap:4px 6px; font-size:.8rem; color:var(--muted); margin-bottom:12px;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .migas button{font:inherit; background:none; border:0; padding:0; color:var(--muted); cursor:pointer; text-decoration:underline; text-underline-offset:3px;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .migas button:hover{color:var(--ink);}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .migas [aria-current]{color:var(--ink);}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .cab{display:grid; grid-template-columns:96px 1fr; gap:16px; align-items:center; margin-bottom:10px;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .visor{width:96px; height:96px; display:block; overflow:visible;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .visor-n{font-family:var(--display); font-size:22px; font-weight:600; fill:var(--ink);}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .cab h2{font-family:var(--display); font-weight:500; font-size:clamp(1.6rem,3vw,2.1rem); line-height:1.08; margin:0;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .num-g{display:inline-grid; place-items:center; width:1.4em; height:1.4em; margin-right:8px; border-radius:50%;
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .panel-r{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:20px 22px 24px;}
+@media (min-width:1000px){:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .panel-r{position:sticky; top:calc(16px + env(safe-area-inset-top,0px)); max-height:calc(100vh - 32px); overflow:auto;}}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .migas{display:flex; flex-wrap:wrap; align-items:center; gap:4px 6px; font-size:.8rem; color:var(--muted); margin-bottom:12px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .migas button{font:inherit; background:none; border:0; padding:0; color:var(--muted); cursor:pointer; text-decoration:underline; text-underline-offset:3px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .migas button:hover{color:var(--ink);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .migas [aria-current]{color:var(--ink);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .cab{display:grid; grid-template-columns:96px 1fr; gap:16px; align-items:center; margin-bottom:10px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .visor{width:96px; height:96px; display:block; overflow:visible;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .visor-n{font-family:var(--display); font-size:22px; font-weight:600; fill:var(--ink);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .cab h2{font-family:var(--display); font-weight:500; font-size:clamp(1.6rem,3vw,2.1rem); line-height:1.08; margin:0;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .num-g{display:inline-grid; place-items:center; width:1.4em; height:1.4em; margin-right:8px; border-radius:50%;
   background:color-mix(in srgb,var(--ac) 30%,transparent); font-size:.75em; vertical-align:.12em;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .san{font-family:var(--display); font-style:italic; color:var(--gold); font-size:1.1rem; margin:4px 0 0;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .gloss{color:var(--muted); font-size:.92rem; margin:2px 0 0;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .panel-r p{line-height:1.62; margin:0 0 12px;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .fila{border-left:2px solid color-mix(in srgb,var(--ac) 70%,transparent); padding:2px 0 2px 14px; margin:14px 0;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .fila p{margin:2px 0 0;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .k{font-size:.74rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); display:inline-flex; align-items:center; gap:7px;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lista{margin:12px 0 16px; display:grid; gap:8px;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lista div{display:grid; grid-template-columns:minmax(110px,30%) 1fr; gap:10px; padding:9px 12px; border-radius:10px; background:var(--chip);}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lista dt{font-family:var(--display); font-weight:600; font-size:1.02rem; line-height:1.25;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lista dd{margin:0; font-size:.92rem; line-height:1.5;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .ejemplo{margin:16px 0; padding:12px 16px; border-radius:12px; background:color-mix(in srgb,var(--ac) 12%,var(--card)); border:1px solid color-mix(in srgb,var(--ac) 35%,transparent);}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .ejemplo p{margin:4px 0 0; font-family:var(--display); font-size:1.12rem; line-height:1.45;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .ejemplo.cotidiano{border-style:dashed;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .panel-r h3{font-family:var(--body); font-weight:500; font-size:.85rem; color:var(--muted); margin:22px 0 10px; display:flex; align-items:center; gap:12px;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .panel-r h3::after{content:""; flex:1; height:1px; background:var(--line);}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .chips{display:flex; flex-wrap:wrap; gap:8px;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .chip{font:inherit; font-size:.88rem; color:var(--ink); background:var(--chip); border:1px solid var(--line); border-radius:999px;
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .san{font-family:var(--display); font-style:italic; color:var(--gold); font-size:1.1rem; margin:4px 0 0;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .gloss{color:var(--muted); font-size:.92rem; margin:2px 0 0;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .panel-r p{line-height:1.62; margin:0 0 12px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .fila{border-left:2px solid color-mix(in srgb,var(--ac) 70%,transparent); padding:2px 0 2px 14px; margin:14px 0;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .fila p{margin:2px 0 0;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .k{font-size:.74rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); display:inline-flex; align-items:center; gap:7px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .lista{margin:12px 0 16px; display:grid; gap:8px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .lista div{display:grid; grid-template-columns:minmax(110px,30%) 1fr; gap:10px; padding:9px 12px; border-radius:10px; background:var(--chip);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .lista dt{font-family:var(--display); font-weight:600; font-size:1.02rem; line-height:1.25;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .lista dd{margin:0; font-size:.92rem; line-height:1.5;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .ejemplo{margin:16px 0; padding:12px 16px; border-radius:12px; background:color-mix(in srgb,var(--ac) 12%,var(--card)); border:1px solid color-mix(in srgb,var(--ac) 35%,transparent);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .ejemplo p{margin:4px 0 0; font-family:var(--display); font-size:1.12rem; line-height:1.45;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .ejemplo.cotidiano{border-style:dashed;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .panel-r h3{font-family:var(--body); font-weight:500; font-size:.85rem; color:var(--muted); margin:22px 0 10px; display:flex; align-items:center; gap:12px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .panel-r h3::after{content:""; flex:1; height:1px; background:var(--line);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .chips{display:flex; flex-wrap:wrap; gap:8px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .chip{font:inherit; font-size:.88rem; color:var(--ink); background:var(--chip); border:1px solid var(--line); border-radius:999px;
   padding:6px 14px; cursor:pointer; display:inline-flex; align-items:center; gap:8px; transition:border-color .25s, background .25s;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .chip .d{width:8px; height:8px; border-radius:50%; background:var(--ac);}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .chip:hover{border-color:var(--ac); background:var(--chip-hover);}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) a.chip{text-decoration:none;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .pasar{display:flex; justify-content:space-between; gap:10px; margin-top:20px; padding-top:14px; border-top:1px solid var(--line);}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .sbtn-c{font:inherit; font-size:.85rem; color:var(--ink); background:var(--chip); border:1px solid var(--line); border-radius:999px; padding:7px 14px; cursor:pointer;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .sbtn-c:hover{border-color:var(--gold); background:var(--chip-hover);}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .botones-p{display:flex; flex-wrap:wrap; gap:8px; margin:6px 0 12px;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .ns{color:var(--muted); font-size:.85rem;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .fadein{animation:fadein .45s ease-out;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .pie{max-width:1240px; margin:0 auto; padding:4px 20px 40px; position:relative; z-index:1;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .nota{max-width:80ch; border-top:1px solid var(--line); padding-top:18px; color:var(--muted); font-size:.93rem; line-height:1.65;}
-:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .nota strong{color:var(--ink); font-weight:500;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .chip .d{width:8px; height:8px; border-radius:50%; background:var(--ac);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .chip:hover{border-color:var(--ac); background:var(--chip-hover);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) a.chip{text-decoration:none;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .pasar{display:flex; justify-content:space-between; gap:10px; margin-top:20px; padding-top:14px; border-top:1px solid var(--line);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .sbtn-c{font:inherit; font-size:.85rem; color:var(--ink); background:var(--chip); border:1px solid var(--line); border-radius:999px; padding:7px 14px; cursor:pointer;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .sbtn-c:hover{border-color:var(--gold); background:var(--chip-hover);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .botones-p{display:flex; flex-wrap:wrap; gap:8px; margin:6px 0 12px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .ns{color:var(--muted); font-size:.85rem;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .fadein{animation:fadein .45s ease-out;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .pie{max-width:1240px; margin:0 auto; padding:4px 20px 40px; position:relative; z-index:1;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .nota{max-width:80ch; border-top:1px solid var(--line); padding-top:18px; color:var(--muted); font-size:.93rem; line-height:1.65;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .nota strong{color:var(--ink); font-weight:500;}
 @media (max-width:560px){
-  :is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .cab{grid-template-columns:72px 1fr;}
-  :is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .visor{width:72px; height:72px;}
-  :is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lista div{grid-template-columns:1fr; gap:2px;}
+  :is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .cab{grid-template-columns:72px 1fr;}
+  :is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .visor{width:72px; height:72px;}
+  :is(.pg-rueda,.pg-vedanas,.pg-esoterismo,.pg-arbol) .lista div{grid-template-columns:1fr; gap:2px;}
 }
 
 
@@ -803,7 +812,74 @@ html:is(.pg-rueda,.pg-vedanas,.pg-esoterismo){padding-top:env(safe-area-inset-to
 }
 
 
-/* 15. Movimiento reducido -------------------------------------------------- */
+/* 15. Página: el Árbol de la Vida ------------------------------------------ */
+.pg-arbol .heb{font-family:var(--hebreo);}
+.pg-arbol .estrella{animation:tw 4s ease-in-out infinite;}
+.pg-arbol .zona{cursor:pointer; outline:none; transition:opacity .45s, filter .3s;}
+.pg-arbol .zona:hover{filter:brightness(1.15);}
+.pg-arbol .zona:focus-visible{filter:drop-shadow(0 0 6px #fff6dc) brightness(1.1);}
+.pg-arbol #arbol.has-sel .zona{opacity:.22;}
+.pg-arbol #arbol.has-sel .zona.sel,.pg-arbol #arbol .zona.encendida{opacity:1;}
+.pg-arbol .canal{stroke:#0f1d3f; stroke-width:12; stroke-linecap:round;}
+.pg-arbol .hilo{stroke-width:2; stroke-opacity:.75; stroke-linecap:round; transition:stroke-width .3s, stroke-opacity .3s;}
+.pg-arbol .zona.sel .hilo,.pg-arbol .zona.encendida .hilo{stroke-width:3.4; stroke-opacity:1;}
+.pg-arbol .letra-c{fill:#0f1d3f; stroke-width:1.4;}
+.pg-arbol .letra-t{font-size:16px; fill:#fff6dc;}
+.pg-arbol .esfera-borde{stroke:none;}
+.pg-arbol .aura{opacity:.28; animation:late-r 5s ease-in-out infinite;}
+.pg-arbol .zona.encendida .aura{opacity:.9; animation:none;}
+.pg-arbol .sef-he{font-family:var(--hebreo); font-size:19px; font-weight:500;}
+.pg-arbol .sef-es{font-family:var(--display); font-size:13.5px; font-weight:600; letter-spacing:.02em;}
+.pg-arbol .sef-n{font-family:var(--display); font-size:15px; fill:var(--sky-muted);}
+.pg-arbol .daat-c{fill:none; stroke:#c9c2e8; stroke-width:1.6; stroke-dasharray:5 5;}
+.pg-arbol .velo{pointer-events:none; animation:late-r 7s ease-in-out infinite;}
+.pg-arbol .ein-t{font-size:20px; fill:#f3d27c;}
+.pg-arbol .banda{opacity:0; transition:opacity .6s; pointer-events:none;}
+.pg-arbol .banda.on{opacity:1;}
+.pg-arbol .banda-t{font-family:var(--display); font-style:italic; font-size:17px; fill:var(--sky-muted);}
+.pg-arbol .flujo{pointer-events:none;}
+.pg-arbol #arbol.animando .flujo{opacity:.25;}
+.pg-arbol #rayo{pointer-events:none; filter:drop-shadow(0 0 6px #fff6dc);}
+
+/* La creación según Luria: luz, vacío, rayo, ruptura y reparación */
+.pg-arbol .luria{pointer-events:none;}
+.pg-arbol #lzLuz{opacity:0; transition:opacity 1.6s;}
+.pg-arbol .l-luz #lzLuz{opacity:.97;}
+.pg-arbol .l-kav #lzLuz{opacity:.3;}
+.pg-arbol #lzVacio{opacity:0; transform-box:fill-box; transform-origin:center; transform:scale(0); transition:transform 2.6s cubic-bezier(.3,.7,.3,1), opacity 1.6s;}
+.pg-arbol .l-vacio #lzVacio{opacity:1; transform:scale(1);}
+.pg-arbol .l-kav #lzVacio{opacity:0; transition:opacity 2.4s 1.2s;}
+.pg-arbol #lzKav{stroke-dasharray:770; stroke-dashoffset:770; opacity:0; transition:stroke-dashoffset 2.4s ease-in-out, opacity .6s; filter:drop-shadow(0 0 5px #fff6dc);}
+.pg-arbol .l-kav #lzKav{stroke-dashoffset:0; opacity:.9;}
+.pg-arbol .frag{opacity:0; transform-box:fill-box; transform-origin:center; transition:transform 2.6s ease-in-out, opacity .8s;}
+.pg-arbol .l-rota .frag{opacity:1; transform:translate(var(--dx),var(--dy)) rotate(var(--rot)); transition:transform 2.2s cubic-bezier(.2,.7,.3,1), opacity .2s;}
+.pg-arbol .l-tikun .frag{opacity:1; transform:none;}
+.pg-arbol .chispa{opacity:0; transition:transform 3s ease-out, opacity 3s;}
+.pg-arbol .l-rota .chispa{opacity:1; transform:translate(var(--dx),var(--dy)); transition:transform 3s cubic-bezier(.3,0,.7,1), opacity .3s;}
+.pg-arbol .l-tikun .chispa{opacity:0; transform:none;}
+.pg-arbol .l-rota .zona[data-inferior],.pg-arbol .l-tikun .zona[data-inferior]{opacity:0 !important;}
+
+/* Panel */
+.pg-arbol .he{font-family:var(--hebreo); font-size:1.5rem; color:var(--gold); margin:2px 0 0; line-height:1.2; text-align:left; unicode-bidi:isolate;}
+.pg-arbol .heb-chip,.pg-arbol .heb-in{font-family:var(--hebreo); font-size:1.08em;}
+.pg-arbol .visor .flota{animation:flota 6s ease-in-out infinite;}
+.pg-arbol .visor .late{animation:late-r 3s ease-in-out infinite;}
+.pg-arbol .visor .gira-lento{animation:spin 60s linear infinite; transform-box:fill-box; transform-origin:center;}
+.pg-arbol .visor .sube{animation:arriba 3s ease-in-out infinite;}
+.pg-arbol .visor-he{font-family:var(--hebreo); font-size:24px; font-weight:500;}
+.pg-arbol .visor-letra{font-family:var(--hebreo); font-size:48px; font-weight:500;}
+.pg-arbol .omer{display:grid; gap:4px; margin:10px 0 8px; font-size:.72rem; color:var(--muted);}
+.pg-arbol .omer-cab,.pg-arbol .omer-fila{display:grid; grid-template-columns:64px repeat(7,1fr); gap:4px; align-items:center;}
+.pg-arbol .omer-cab span{text-align:center;}
+.pg-arbol .omer-sem{font-family:var(--display); font-size:.9rem; color:var(--ink);}
+.pg-arbol .omer-dia{font:inherit; font-size:.72rem; aspect-ratio:1; border-radius:6px; border:1px solid var(--line); cursor:pointer; color:var(--ink);
+  background:color-mix(in srgb,var(--c) 30%,var(--card)); transition:transform .2s, box-shadow .2s;}
+.pg-arbol .omer-dia:hover{transform:scale(1.08);}
+.pg-arbol .omer-dia.on{background:var(--c); color:#17122b; box-shadow:0 0 0 2px var(--gold);}
+.pg-arbol .omer-t{font-size:.92rem; line-height:1.55; min-height:3em;}
+
+
+/* 16. Movimiento reducido -------------------------------------------------- */
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none !important; transition:none !important;}
 }

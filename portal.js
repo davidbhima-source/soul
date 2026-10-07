@@ -31,7 +31,8 @@
     color       color de acento (hex)
     petalos     número de pétalos del icono de loto
     icono       opcional: 'rueda' (rueda de los yugas), 'bhava' (rueda de la vida), 'vedanas'
-                (mandala de los 108) o 'red' (esfera de tradiciones) en lugar de un loto
+                (mandala de los 108), 'red' (esfera de tradiciones) o 'arbol' (Árbol de la Vida)
+                en lugar de un loto
 */
 const PORTAL = {
   nombre: 'Bhima',
@@ -69,6 +70,13 @@ const PORTAL = {
       {id:'esoterismo', titulo:'La red del esoterismo', subtitulo:'Raíces y vínculos de las tradiciones', grupo:'Mapa general',
        descripcion:'Una esfera que gira con quince corrientes y cuarenta vínculos, del Egipto helenístico a la Teosofía. Toca cada una para ver su historia, sus conceptos, sus figuras y textos, y cómo se conecta con las demás.',
        href:'esoterismo.html', color:'#d39b2c', icono:'red'}
+     ]},
+    {id:'kabbalah', titulo:'Kabbalah', subtitulo:'Mística judía', href:'kabbalah.html', color:'#3fa9b5', figura:'jamsa',
+     descripcion:'La mística judía y sus mapas: las diez sefirot, los veintidós senderos de las letras hebreas y el Árbol de la Vida.',
+     secciones:[
+      {id:'arbol', titulo:'El Árbol de la Vida', subtitulo:'Las diez sefirot y los 22 senderos', grupo:'Fundamentos',
+       descripcion:'Toca cada sefirá y cada sendero para descubrir su nombre, su letra y su sentido; recorre el descenso de la luz, el ascenso por los senderos y la creación según Luria.',
+       href:'arbol-de-la-vida.html', color:'#3fa9b5', icono:'arbol'}
      ]}
   ]
 };
@@ -173,12 +181,26 @@ function red(s, p){
     '<circle r="96" fill="none" stroke="#e8c46a" stroke-opacity=".45"/>'+lin+nod+'</svg>';
 }
 
+/* Árbol de la Vida: diez sefirot de colores unidas por sus senderos */
+const ARBOL_ICONO = [[0,-82,'#f4f1e6'],[42,-58,'#9aa3ad'],[-42,-58,'#3a3550'],[42,-10,'#3f73c9'],[-42,-10,'#c8463d'],[0,12,'#e8c04a'],[42,40,'#45a86a'],[-42,40,'#e48a3c'],[0,62,'#8a5fc4'],[0,92,'#a9973a']];
+const ARBOL_SENDAS = [[0,1],[0,2],[0,5],[1,2],[1,5],[1,3],[2,5],[2,4],[3,4],[3,5],[3,6],[4,5],[4,7],[5,6],[5,8],[5,7],[6,7],[6,8],[6,9],[7,8],[7,9],[8,9]];
+function arbol(s, p){
+  const id = p+'-'+s.id;
+  let d = ARBOL_SENDAS.map(([a,b]) => '<path d="M'+ARBOL_ICONO[a][0]+','+ARBOL_ICONO[a][1]+' L'+ARBOL_ICONO[b][0]+','+ARBOL_ICONO[b][1]+'" stroke="#e8c46a" stroke-width="3" stroke-opacity=".55"/>').join('');
+  d += ARBOL_ICONO.map(([x,y,c]) => '<circle cx="'+x+'" cy="'+y+'" r="13" fill="'+c+'" stroke="#e8c46a" stroke-width="2"/>').join('');
+  return '<svg viewBox="-125 -125 250 250" aria-hidden="true"><defs><radialGradient id="'+id+'-h"><stop offset="0" stop-color="'+s.color+'" stop-opacity=".5"/>'+
+    '<stop offset="1" stop-color="'+s.color+'" stop-opacity="0"/></radialGradient></defs>'+
+    '<circle r="124" fill="url(#'+id+'-h)"/><circle r="110" fill="#0f1d3f"/><circle r="110" fill="none" stroke="#e8c46a" stroke-opacity=".4"/>'+
+    '<g transform="translate(0 -4)">'+d+'</g></svg>';
+}
+
 /* Loto con el número de pétalos de la sección */
 function icon(s, p){
   if(s.icono==='rueda') return wheel(s, p);
   if(s.icono==='bhava') return bhava(s, p);
   if(s.icono==='vedanas') return vedanas(s, p);
   if(s.icono==='red') return red(s, p);
+  if(s.icono==='arbol') return arbol(s, p);
   const id = p+'-'+s.id;
   const petals = s.petalos===2
     ? '<path d="'+petal(38,72,36)+'" transform="rotate(90)" fill="url(#'+id+')" fill-opacity=".9" stroke="'+s.color+'"/>'+
@@ -206,7 +228,9 @@ const MEDALLON = {
   buda:   {bg:['#e2654a','#9c2c1d'], skin:'#f2b53c', skin2:'#b77d17', robeFill:'#7a2214', robe2:'#52160c', hair:'#3a1a10',
            gold:'#f2b53c', lotus:'#f39a7f', lotus2:'#c4472f', dark:'#5a2a08', plinth:'#f2b53c'},
   egipto: {bg:['#f6dc93','#c8892a'], skin:'#b5602e', skin2:'#8a4520', gold:'#f2c14e', lapis:'#24479e', turq:'#2fa79a',
-           kilt:'#f5ecd4', throne:'#7c4f1c', throne2:'#5c3812', dark:'#1d1408', plinth:'#24479e', water:'#24479e'}
+           kilt:'#f5ecd4', throne:'#7c4f1c', throne2:'#5c3812', dark:'#1d1408', plinth:'#24479e', water:'#24479e'},
+  jamsa:  {bg:['#d8f0ee','#3b9aa6'], gold:'#e2b552', hand:'#f4f7f6', hand2:'#c9dcdc', blue:'#1f4f9a', blue2:'#5fb2d9', turq:'#2fa79a', dark:'#0d1a33',
+           halo:[150,214,52]}
 };
 const attrs = o => Object.entries(o).filter(([,v]) => v!=null).map(([k,v]) => k+'="'+v+'"').join(' ');
 const trazo = (d,o) => '<path d="'+d+'" '+attrs(o)+'/>';
@@ -332,10 +356,53 @@ function figuraEgipto(c){
   s += '<rect x="66" y="334" width="168" height="10" rx="3" fill="'+c.plinth+'"/>';
   return s;
 }
+/* Jamsa: la mano protectora con el ojo en la palma, la letra He (5) y un pequeño
+   Árbol de la Vida; alrededor gira el anillo de las 22 letras hebreas */
+const LETRAS = 'אבגדהוזחטיכלמנסעפצקרשת';
+function figuraJamsa(c){
+  let s = '';
+  // Silueta: tres dedos centrales, dos exteriores que se abren hacia fuera y la muñeca
+  const mano = 'M150,316 C176,316 196,312 206,300 C222,296 238,282 240,262 C241,246 232,236 222,240 C214,244 210,250 204,254 '+
+    'C202,222 198,190 196,160 C196,128 195,104 186,98 C178,92 170,98 168,108 L167,150 '+
+    'C166,112 165,90 158,82 C153,76 147,76 142,82 C135,90 134,112 133,150 '+
+    'L132,108 C130,98 122,92 114,98 C105,104 104,128 104,160 '+
+    'C102,190 98,222 96,254 C90,250 86,244 78,240 C68,236 59,246 60,262 C62,282 78,296 94,300 C104,312 124,316 150,316 Z';
+  s += trazo(mano, {fill:c.hand, stroke:c.gold, 'stroke-width':2.4, 'stroke-linejoin':'round'});
+  s += '<path d="'+mano+'" transform="translate(150 206) scale(.9) translate(-150 -206)" fill="none" stroke="'+c.gold+'" stroke-width="1" stroke-dasharray="1.5 4" stroke-linecap="round" opacity=".8"/>';
+  // Separación de los dedos y cuentas turquesa en cada uno
+  s += trazo('M133,112 L133,150 M167,112 L167,150', {stroke:c.hand2, 'stroke-width':1.4});
+  [[118,118],[150,104],[182,118]].forEach(([x,y]) => { for(let k=0;k<3;k++) s += '<circle cx="'+x+'" cy="'+(y+k*13)+'" r="'+(k?2.4:3)+'" fill="'+(k===1?c.blue:c.turq)+'"/>'; });
+  [[78,262],[222,262]].forEach(([x,y]) => { s += '<circle cx="'+x+'" cy="'+y+'" r="3" fill="'+c.turq+'"/><circle cx="'+(x+(x<150?10:-10))+'" cy="'+(y+12)+'" r="2.2" fill="'+c.blue+'"/>'; });
+  // La letra He, cinco, sobre la palma
+  s += '<text x="150" y="176" text-anchor="middle" font-family="Frank Ruhl Libre, David Libre, Noto Serif Hebrew, serif" font-size="22" font-weight="700" fill="'+c.gold+'">ה</text>';
+  // El ojo: almendra, iris y pupila; la luz late en el iris
+  s += trazo('M114,214 Q150,186 186,214 Q150,242 114,214 Z', {fill:'#ffffff', stroke:c.blue, 'stroke-width':2.2});
+  s += '<circle class="fig-iris" cx="150" cy="214" r="13" fill="'+c.blue+'"/><circle cx="150" cy="214" r="8" fill="'+c.blue2+'"/>'+
+       '<circle cx="150" cy="214" r="4" fill="'+c.dark+'"/><circle cx="146.5" cy="210.5" r="1.6" fill="#fff"/>';
+  // Pequeño Árbol de la Vida bajo el ojo
+  const P = [[150,246],[158,252],[142,252],[158,264],[142,264],[150,270],[158,282],[142,282],[150,288],[150,298]];
+  const L = [[0,1],[0,2],[1,2],[0,5],[1,3],[2,4],[3,4],[3,5],[4,5],[3,6],[4,7],[5,8],[6,7],[6,8],[7,8],[8,9],[6,9],[7,9]];
+  s += L.map(([a,b]) => '<path d="M'+P[a]+' L'+P[b]+'" stroke="'+c.gold+'" stroke-width=".8" opacity=".75"/>').join('');
+  s += P.map(([x,y],i) => '<circle class="fig-sefira" style="animation-delay:'+(i*.3).toFixed(1)+'s" cx="'+x+'" cy="'+y+'" r="2" fill="'+c.blue+'"/>').join('');
+  // Festón de la muñeca
+  for(let i=-3;i<=3;i++) s += '<path d="M'+(150+i*12-6)+',308 Q'+(150+i*12)+',301 '+(150+i*12+6)+',308" fill="none" stroke="'+c.gold+'" stroke-width="1.2"/>';
+  return s;
+}
+/* Ondas de luz que salen del ojo y anillo de las 22 letras (detrás de la mano) */
+function jamsaFondo(c){
+  let letras = '';
+  for(let i=0;i<22;i++){
+    const a = i*2*Math.PI/22 - Math.PI/2, x = 150+Math.cos(a)*124, y = 186+Math.sin(a)*124;
+    letras += '<text x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" transform="rotate('+(i*360/22).toFixed(1)+' '+x.toFixed(1)+' '+y.toFixed(1)+')" text-anchor="middle" dominant-baseline="central" '+
+              'font-family="Frank Ruhl Libre, David Libre, Noto Serif Hebrew, serif" font-size="15" font-weight="500" fill="'+c.gold+'">'+LETRAS[i]+'</text>';
+  }
+  return '<g class="fig-letras" opacity=".85">'+letras+'</g>'+
+    [0,1,2].map(i => '<circle class="fig-onda" style="animation-delay:'+(i*2)+'s" cx="150" cy="214" r="30" fill="none" stroke="#ffffff" stroke-width="1.4"/>').join('');
+}
 function figura(tipo){
-  const c = MEDALLON[tipo], id = 'fg'+(++uid);
+  const c = MEDALLON[tipo], id = 'fg'+(++uid), h = c.halo || [150,102,40];
   // Cielo de puntos: posiciones fijas para que la figura sea siempre igual
-  let seed = {krishna:11, buda:29, egipto:47}[tipo] || 7, stars = '';
+  let seed = {krishna:11, buda:29, egipto:47, jamsa:61}[tipo] || 7, stars = '';
   const r = () => { seed = (seed*16807)%2147483647; return seed/2147483647; };
   for(let i=0;i<70;i++){
     const a = r()*Math.PI*2, d = 40 + r()*150, x = 150+Math.cos(a)*d, y = 186+Math.sin(a)*d*.95, z = r();
@@ -346,10 +413,11 @@ function figura(tipo){
     '<defs><radialGradient id="'+id+'"><stop offset="0" stop-color="'+c.bg[0]+'"/><stop offset="1" stop-color="'+c.bg[1]+'"/></radialGradient></defs>'+
     '<circle class="fig-aro" cx="150" cy="186" r="150" fill="'+c.bg[0]+'" opacity=".35"/>'+
     '<circle cx="150" cy="186" r="138" fill="url(#'+id+')"/>'+
-    '<circle class="fig-halo" cx="150" cy="102" r="40" fill="'+c.bg[0]+'" opacity=".55"/>'+
-    '<circle cx="150" cy="102" r="40" fill="none" stroke="'+c.gold+'" stroke-width="1.2" opacity=".7"/>'+
+    '<circle class="fig-halo" cx="'+h[0]+'" cy="'+h[1]+'" r="'+h[2]+'" fill="'+c.bg[0]+'" opacity=".55"/>'+
+    '<circle cx="'+h[0]+'" cy="'+h[1]+'" r="'+h[2]+'" fill="none" stroke="'+c.gold+'" stroke-width="1.2" opacity=".7"/>'+
     '<ellipse cx="150" cy="214" rx="94" ry="118" fill="none" stroke="'+c.gold+'" stroke-width="1" opacity=".45"/>'+
-    '<g class="fig-body">'+(tipo==='egipto' ? figuraEgipto(c) : figuraClasica(tipo, c))+'</g>'+
+    (tipo==='jamsa' ? jamsaFondo(c) : '')+
+    '<g class="fig-body">'+(tipo==='egipto' ? figuraEgipto(c) : tipo==='jamsa' ? figuraJamsa(c) : figuraClasica(tipo, c))+'</g>'+
     '<g class="fig-cielo">'+stars+'</g></svg>';
 }
 
