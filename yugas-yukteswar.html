@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es" class="pg-yugas">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La rueda de los yugas · Bhima</title>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<header>
+  <a class="home-link" href="kriya.html"><span aria-hidden="true">←</span>Kriya yoga</a>
+  <h1>La rueda de los yugas</h1>
+  <p class="lede">Los ciclos cósmicos de <em>La ciencia sagrada</em> de Sri Yukteswar: el Sol gira alrededor de una estrella dual en 24.000 años, y al acercarse o alejarse de un gran centro, la inteligencia humana se expande o se contrae.</p>
+</header>
+
+<main>
+  <section class="sky" aria-label="Animación de la órbita del Sol">
+    <svg id="scene" viewBox="0 0 1000 870" role="img" aria-labelledby="sceneTitle">
+      <title id="sceneTitle">Órbita del Sol alrededor de su estrella dual, dividida en las ocho eras del ciclo de 24.000 años, con Vishnunabhi en la parte superior</title>
+      <defs>
+        <radialGradient id="sunGlowGrad">
+          <stop offset="0%" stop-color="#ffe7a8" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#ffb35a" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="vGrad">
+          <stop offset="0%" stop-color="#f4eeff" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#b9a6ff" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <g id="stars"></g>
+      <g id="field" fill="none" stroke="#c9b8ff">
+        <circle cx="500" cy="92" r="190" stroke-opacity=".07"/>
+        <circle cx="500" cy="92" r="320" stroke-opacity=".055"/>
+        <circle cx="500" cy="92" r="470" stroke-opacity=".04"/>
+        <circle cx="500" cy="92" r="640" stroke-opacity=".03"/>
+      </g>
+      <ellipse cx="500" cy="500" rx="360" ry="250" fill="none" stroke="rgba(236,230,214,.18)" stroke-width="1"/>
+      <g id="arcs" class="arcs"></g>
+      <g id="labels"></g>
+
+      <text class="slabel" x="500" y="304" text-anchor="middle">punto más cercano</text>
+      <text class="slabel" x="820" y="506" text-anchor="end">Arco descendente ↓</text>
+      <text class="slabel" x="180" y="506" text-anchor="start">↑ Arco ascendente</text>
+      <text class="slabel" x="500" y="848" text-anchor="middle">499 d.C., punto más lejano</text>
+
+      <line id="tether" x1="500" y1="92" x2="500" y2="250" stroke="#d8c9ff" stroke-width="1.2" stroke-dasharray="3 7"/>
+
+      <g id="vish" class="obj" tabindex="0" role="button" aria-label="Vishnunabhi, el gran centro">
+        <circle class="focusring" cx="500" cy="92" r="52" fill="none" stroke="#e8c46a" stroke-width="2"/>
+        <circle cx="500" cy="92" r="60" fill="url(#vGrad)" opacity=".55"/>
+        <circle class="vpulse" cx="500" cy="92" r="30" fill="none" stroke="#e3d8ff" stroke-width="1.2"/>
+        <circle class="vpulse b" cx="500" cy="92" r="30" fill="none" stroke="#e3d8ff" stroke-width="1.2"/>
+        <circle class="vpulse c" cx="500" cy="92" r="30" fill="none" stroke="#e3d8ff" stroke-width="1.2"/>
+        <circle cx="500" cy="92" r="9" fill="#f6f1ff"/>
+        <circle cx="500" cy="92" r="44" fill="transparent"/>
+        <text x="556" y="92" font-size="28" font-weight="600" fill="#ece6d6">Vishnunabhi</text>
+        <text class="slabel" x="556" y="118">el gran centro</text>
+      </g>
+
+      <g id="dual" class="obj" tabindex="0" role="button" aria-label="La estrella dual">
+        <circle class="focusring" cx="500" cy="500" r="22" fill="none" stroke="#e8c46a" stroke-width="2"/>
+        <circle cx="500" cy="500" r="16" fill="#9fc2ff" opacity=".18"/>
+        <circle cx="500" cy="500" r="6.5" fill="#dbe8ff"/>
+        <circle cx="500" cy="500" r="26" fill="transparent"/>
+        <text class="slabel" x="500" y="540" text-anchor="middle">estrella dual</text>
+      </g>
+
+      <g id="today" class="obj" tabindex="0" role="button" aria-label="Hoy, 2026">
+        <rect id="todayMark" x="-7" y="-7" width="14" height="14" fill="none" stroke="#fff3d0" stroke-width="2" transform="rotate(45)"/>
+        <text id="todayText" class="slabel" x="16" y="7" fill="#fff3d0" style="fill:#fff3d0">Hoy, 2026</text>
+        <circle r="20" fill="transparent"/>
+      </g>
+
+      <g id="sun" class="obj" tabindex="0" role="button" aria-label="El Sol">
+        <circle id="sunGlow" r="44" fill="url(#sunGlowGrad)"/>
+        <circle class="focusring" r="22" fill="none" stroke="#e8c46a" stroke-width="2"/>
+        <circle cx="0" cy="0" r="30" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1"/>
+        <circle id="sunCore" r="13" fill="#ffd27a"/>
+        <circle id="earth" r="4" fill="#8fbaff"/>
+        <circle r="34" fill="transparent"/>
+      </g>
+    </svg>
+
+    <div class="readout">
+      <div class="now" aria-live="off">
+        <span class="year" id="rdYear">2026 d.C.</span>
+        <span class="yuga" id="rdYuga">Dwapara Yuga</span>
+        <span class="arcinfo" id="rdArc">arco ascendente</span>
+        <span class="pips" id="rdPips" aria-label="Dharma"></span>
+      </div>
+      <div class="tl" id="tl">
+        <div class="tlbar" id="tlbar" role="slider" tabindex="0" aria-label="Línea del ciclo de 24.000 años" aria-valuemin="-11501" aria-valuemax="12499" aria-valuenow="2026"></div>
+        <div class="tlmark" id="tlmark"></div>
+        <div class="tlticks"><span>11.501 a.C.</span><span>499 d.C.</span><span>12.499 d.C.</span></div>
+      </div>
+      <div class="controls">
+        <button class="sbtn" id="btnPlay" type="button">Pausar</button>
+        <button class="sbtn" id="btnToday" type="button">Ir a 2026</button>
+        <label class="speed"><span id="speedLbl">Una vuelta en 60 s</span>
+          <input id="speed" type="range" min="20" max="240" step="10" value="60" aria-label="Duración de una vuelta completa en segundos">
+        </label>
+      </div>
+    </div>
+  </section>
+
+  <aside id="panel" aria-live="polite"></aside>
+</main>
+
+<footer>
+  <div class="note">
+    <p><strong>Sobre la escala.</strong> 24.000 años no es lo que tarda el Sol en dar la vuelta a la galaxia: esa vuelta, el llamado año galáctico, dura entre 225 y 250 millones de años. La cifra de Yukteswar corresponde a la precesión de los equinoccios, que la astronomía mide en unos 25.772 años y explica por el bamboleo del eje de la Tierra bajo la atracción del Sol y la Luna, no por una órbita del Sol. No se ha encontrado la estrella dual, y el libro no identifica a Vishnunabhi con el centro de la galaxia; esa lectura es posterior. La animación muestra el modelo tal como lo describe el texto, no el cielo observado.</p>
+    <p>Las fechas son aproximadas y se calculan desde el punto más bajo del ciclo, que Yukteswar sitúa hacia el año 499 d.C. La imagen del toro del dharma y el origen de los nombres en el juego de dados provienen de la tradición puránica, no de <em>La ciencia sagrada</em>.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+const NS='http://www.w3.org/2000/svg';
+const CX=500,CY=500,RX=360,RY=250,VX=500,VY=92,RAD=Math.PI/180;
+const LOW=499;
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const Y={
+  satya:{name:'Satya Yuga',dev:'सत्य युग',gloss:'La edad de la verdad',dharma:4,years:4800,core:4000,s:400,hex:'#e8c46a',legs:'cuatro patas',
+    summary:'El Sol recorre la parte de su órbita más próxima a Vishnunabhi y la inteligencia humana alcanza su desarrollo completo. Es la única era en la que, según Yukteswar, el intelecto puede comprenderlo todo, incluido lo que está más allá de lo manifestado.',
+    comp:'Según Yukteswar, en esta era el intelecto puede comprenderlo todo, incluso a Dios, el Espíritu más allá del mundo visible. No se trata de conocer más cosas, sino de que el conocimiento ya no se detiene en ninguna capa de la creación.',
+    nombre:'Satya significa verdad. Los textos también la llaman Krita, la cumplida, que era el nombre de la tirada ganadora, la del cuatro, en el juego de dados védico.'},
+  treta:{name:'Treta Yuga',dev:'त्रेता युग',gloss:'La edad del tres',dharma:3,years:3600,core:3000,s:300,hex:'#b9c5de',legs:'tres patas',
+    summary:'La inteligencia conserva tres cuartas partes de su alcance. Ya no capta directamente al Espíritu, pero sí la fuerza que, según el libro, sostiene toda la creación: el magnetismo divino.',
+    comp:'El intelecto comprende el magnetismo divino, que Yukteswar describe como la fuente de todas las fuerzas eléctricas de las que depende la creación. Es una percepción de la causa de las fuerzas, no solo de sus efectos.',
+    nombre:'Tretā alude al número tres: era la tirada del tres en los dados, y es la era con tres cuartos de dharma.'},
+  dwapara:{name:'Dwapara Yuga',dev:'द्वापर युग',gloss:'La edad del dos',dharma:2,years:2400,core:2000,s:200,hex:'#c4824f',legs:'dos patas',
+    summary:'La inteligencia comprende la materia sutil: las fuerzas eléctricas y sus atributos, que Yukteswar consideraba los principios creadores del mundo externo. Según su cronología, es la era en la que vivimos.',
+    comp:'El intelecto comprende las electricidades y la materia fina. Yukteswar, escribiendo en 1894, veía en el auge de la ciencia eléctrica de su época la señal de esta era: el descubrimiento de que la materia sólida es, en el fondo, energía.',
+    nombre:'Dvāpara alude al dos: era la tirada del dos en los dados, y es la era con dos cuartos de dharma.',
+    now:'El Dwapara ascendente empezó hacia 1699 y su transición terminó hacia 1899. En 2026 llevaríamos unos 327 años de esta era, contando el sandhi. Yukteswar escribía en 1894 que el mundo estaba entonces en el año 194 de Dwapara.'},
+  kali:{name:'Kali Yuga',dev:'कलि युग',gloss:'La edad oscura',dharma:1,years:1200,core:1000,s:100,hex:'#7a8095',legs:'una sola pata',
+    summary:'El Sol está en la parte de su órbita más alejada del gran centro y la inteligencia solo concibe la materia burda. El punto más bajo de todo el ciclo cayó hacia el año 499 d.C., entre el Kali descendente y el ascendente.',
+    comp:'El intelecto solo concibe la creación material burda, el mundo de las formas sólidas. Lo que no puede tocarse o medirse queda fuera de su alcance, y por eso se le llama la edad oscura.',
+    nombre:'Kali era el nombre de la tirada perdedora, la del uno, en el juego de dados védico. No tiene relación con la diosa Kālī, que se escribe con vocales largas.'}
+};
+const ORDER=['satya','treta','dwapara','kali'];
+
+const SEG=[
+  {y:'satya',arc:'desc',d0:-12000,d1:-7200},
+  {y:'treta',arc:'desc',d0:-7200,d1:-3600},
+  {y:'dwapara',arc:'desc',d0:-3600,d1:-1200},
+  {y:'kali',arc:'desc',d0:-1200,d1:0},
+  {y:'kali',arc:'asc',d0:0,d1:1200},
+  {y:'dwapara',arc:'asc',d0:1200,d1:3600},
+  {y:'treta',arc:'asc',d0:3600,d1:7200},
+  {y:'satya',arc:'asc',d0:7200,d1:12000}
+];
+const RANGE={kali:[0,1200],dwapara:[1200,3600],treta:[3600,7200],satya:[7200,12000]};
+
+const OBJ={
+  sun:{title:'El Sol',hex:'#ffd27a',text:'Según La ciencia sagrada, el Sol toma alguna estrella como su dual y gira a su alrededor, con sus planetas y sus lunas, en unos 24.000 años terrestres. En la animación su brillo y su color cambian con la distancia al gran centro: más blanco y luminoso cerca de Vishnunabhi, más rojizo y apagado lejos de él.'},
+  dual:{title:'La estrella dual',hex:'#9fc2ff',text:'La compañera alrededor de la cual, según Yukteswar, gira el Sol. El libro no dice cuál es. Las búsquedas astronómicas de una compañera estelar del Sol no han encontrado ninguna hasta ahora, de modo que en el modelo funciona como un eje necesario más que como un objeto identificado.'},
+  vish:{title:'Vishnunabhi',hex:'#d8c9ff',text:'Su nombre significa el ombligo de Vishnu. Yukteswar lo describe como el gran centro, sede del poder creador, Brahma, el magnetismo universal. Brahma regula el dharma, la virtud mental del mundo interno: cuanto más cerca pasa el Sol de este centro, más se desarrolla la inteligencia humana, y cuanto más se aleja, más se contrae.'},
+  earth:{title:'La Tierra',hex:'#8fbaff',text:'Desde la Tierra, la órbita del Sol alrededor de su dual se percibiría como la precesión de los equinoccios: el lento retroceso de los puntos equinocciales a lo largo del zodiaco. Yukteswar sitúa hacia 499 d.C. el equinoccio de otoño en el primer punto de Aries, coincidiendo con el punto más bajo del ciclo.'},
+  today:{title:'Hoy, 2026',hex:'#fff3d0',text:'Según esta cronología, estamos en el Dwapara ascendente, a unos 327 años de su comienzo en 1699. El Sol se está acercando al gran centro: la siguiente era, Treta, empezaría hacia el año 4099.'}
+};
+
+/* utilidades */
+const P=(deg,dr=0,dy=dr)=>[CX+(RX+dr)*Math.cos(deg*RAD),CY+(RY+dy)*Math.sin(deg*RAD)];
+const thetaOf=d=>90+d*0.015;
+const fmtN=n=>n>=10000?String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.'):String(n);
+function fmtYear(y){y=Math.round(y);return y<=0?fmtN(Math.max(1,-y))+' a.C.':fmtN(y)+' d.C.';}
+const yugaAt=d=>{const a=Math.abs(d);return a<1200?'kali':a<3600?'dwapara':a<7200?'treta':'satya';};
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e;}
+function hexToRgb(h){const n=parseInt(h.slice(1),16);return[n>>16&255,n>>8&255,n&255];}
+function lerpHex(a,b,t){const A=hexToRgb(a),B=hexToRgb(b);return 'rgb('+A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(',')+')';}
+function arcPath(a0,a1){let s='';for(let a=a0;a<=a1+1e-6;a+=0.5){const[x,y]=P(Math.min(a,a1));s+=(s?'L':'M')+x.toFixed(1)+' '+y.toFixed(1);}return s;}
+function segDates(k,arc){const s=SEG.find(x=>x.y===k&&x.arc===arc);return[LOW+s.d0,LOW+s.d1,s];}
+
+/* estrellas */
+(function stars(){
+  let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  const g=document.getElementById('stars');
+  for(let i=0;i<170;i++){
+    const r=rnd()<.9?rnd()*1.1+.3:rnd()*1.4+1;
+    const c=el('circle',{cx:(rnd()*1000).toFixed(1),cy:(rnd()*870).toFixed(1),r:r.toFixed(2),fill:'#fff',opacity:(.15+rnd()*.55).toFixed(2)},g);
+    if(rnd()<.12){c.setAttribute('class','tw');c.style.animationDelay=(rnd()*3).toFixed(2)+'s';}
+  }
+})();
+
+/* arcos de la órbita */
+const arcsG=document.getElementById('arcs'),labelsG=document.getElementById('labels');
+SEG.forEach(s=>{
+  const a0=thetaOf(s.d0)+0.6,a1=thetaOf(s.d1)-0.6,d=arcPath(a0,a1),y=Y[s.y];
+  const g=el('g',{class:'arcg','data-y':s.y,tabindex:'0',role:'button','aria-label':y.name+', arco '+(s.arc==='asc'?'ascendente':'descendente')},arcsG);
+  el('path',{class:'halo',d,fill:'none',stroke:y.hex,'stroke-width':'56','stroke-linecap':'round'},g);
+  el('path',{class:'arc',d,fill:'none',stroke:y.hex,'stroke-width':'30'},g);
+  el('path',{class:'hit',d,fill:'none',stroke:'transparent','stroke-width':'70','pointer-events':'stroke'},g);
+  g.addEventListener('click',()=>openYuga(s.y));
+  g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openYuga(s.y);}});
+  const mid=(thetaOf(s.d0)+thetaOf(s.d1))/2,[lx,ly]=P(mid,62,50);
+  const t=el('text',{class:'ylabel',x:lx.toFixed(1),y:ly.toFixed(1),'text-anchor':'middle','dominant-baseline':'middle'},labelsG);
+  t.textContent=y.name.split(' ')[0];
+});
+
+/* marcador de hoy */
+(function(){
+  const th=thetaOf(2026-LOW),[x,y]=P(th,-50,-42);
+  document.getElementById('today').setAttribute('transform','translate('+x.toFixed(1)+' '+y.toFixed(1)+')');
+})();
+
+/* línea de tiempo */
+const tl=document.getElementById('tl'),tlbar=document.getElementById('tlbar'),tlmark=document.getElementById('tlmark');
+SEG.forEach(s=>{
+  const d=document.createElement('div');d.className='tlseg';d.dataset.y=s.y;
+  d.style.width=((s.d1-s.d0)/240)+'%';d.style.background=Y[s.y].hex;tlbar.appendChild(d);
+});
+function scrubTo(clientX){
+  const r=tlbar.getBoundingClientRect(),f=Math.min(.9999,Math.max(0,(clientX-r.left)/r.width));
+  state.d=-12000+f*24000;setPlaying(false);openYuga(yugaAt(state.d));
+}
+let dragging=false;
+tlbar.addEventListener('pointerdown',e=>{dragging=true;tlbar.setPointerCapture(e.pointerId);scrubTo(e.clientX);});
+tlbar.addEventListener('pointermove',e=>{if(dragging)scrubTo(e.clientX);});
+tlbar.addEventListener('pointerup',()=>{dragging=false;});
+tlbar.addEventListener('keydown',e=>{
+  const step=e.shiftKey?1200:300;
+  if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();state.d+=e.key==='ArrowRight'?step:-step;
+    if(state.d>=12000)state.d-=24000;if(state.d<-12000)state.d+=24000;setPlaying(false);openYuga(yugaAt(state.d));}
+});
+
+/* estado y animación */
+const state={d:2026-LOW,playing:!reduce,cycle:60,earth:0,sel:null};
+const $=id=>document.getElementById(id);
+const sun=$('sun'),sunGlow=$('sunGlow'),sunCore=$('sunCore'),earth=$('earth'),tether=$('tether');
+const btnPlay=$('btnPlay');
+function setPlaying(p){state.playing=p;btnPlay.textContent=p?'Pausar':'Reanudar';}
+setPlaying(state.playing);
+btnPlay.addEventListener('click',()=>setPlaying(!state.playing));
+$('btnToday').addEventListener('click',()=>{state.d=2026-LOW;setPlaying(false);openYuga('dwapara');showInfo(OBJ.today);});
+$('speed').addEventListener('input',e=>{state.cycle=+e.target.value;$('speedLbl').textContent='Una vuelta en '+state.cycle+' s';});
+
+let lastY=null,lastYuga=null,lastArc=null,lastSandhi=null;
+function render(){
+  const th=thetaOf(state.d),[x,y]=P(th);
+  sun.setAttribute('transform','translate('+x.toFixed(1)+' '+y.toFixed(1)+')');
+  const near=(1-Math.sin(th*RAD))/2;
+  sunGlow.setAttribute('r',(30+46*near).toFixed(1));
+  sunGlow.setAttribute('opacity',(.35+.6*near).toFixed(2));
+  sunCore.setAttribute('fill',lerpHex('#e0683a','#fff4d2',near));
+  const ex=30*Math.cos(state.earth*RAD),ey=30*Math.sin(state.earth*RAD);
+  earth.setAttribute('cx',ex.toFixed(1));earth.setAttribute('cy',ey.toFixed(1));
+  tether.setAttribute('x2',x.toFixed(1));tether.setAttribute('y2',y.toFixed(1));
+  tether.setAttribute('stroke-opacity',(.15+.45*near).toFixed(2));
+
+  tlmark.style.left=((state.d+12000)/240)+'%';
+  const yr=Math.round(LOW+state.d);
+  if(yr!==lastY){lastY=yr;$('rdYear').textContent=fmtYear(yr);tlbar.setAttribute('aria-valuenow',yr);tlbar.setAttribute('aria-valuetext',fmtYear(yr));}
+  const k=yugaAt(state.d),arc=state.d>=0?'asc':'desc';
+  const a=Math.abs(state.d),[r0,r1]=RANGE[k],sd=(a-r0<Y[k].s)||(r1-a<Y[k].s);
+  if(k!==lastYuga||arc!==lastArc||sd!==lastSandhi){
+    lastYuga=k;lastArc=arc;lastSandhi=sd;
+    $('rdYuga').textContent=Y[k].name;
+    $('rdArc').textContent='arco '+(arc==='asc'?'ascendente':'descendente')+(sd?', en transición (sandhi)':'');
+    const pips=$('rdPips');pips.innerHTML='<span>dharma</span>';
+    for(let i=0;i<4;i++){const p=document.createElement('span');p.className='pip'+(i<Y[k].dharma?' on':'');p.style.setProperty('--pc',Y[k].hex);pips.appendChild(p);}
+    pips.setAttribute('aria-label','Dharma '+Y[k].dharma+' de 4');
+  }
+}
+let last=null;
+function frame(t){
+  if(last===null)last=t;const dt=Math.min((t-last)/1000,.1);last=t;
+  if(state.playing){state.d+=dt*24000/state.cycle;if(state.d>=12000)state.d-=24000;state.earth+=dt*240;}
+  render();requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* objetos de la escena */
+function bindObj(id,key){const n=$(id);const go=e=>{e.stopPropagation();showInfo(OBJ[key]);};
+  n.addEventListener('click',go);n.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go(e);}});}
+bindObj('vish','vish');bindObj('dual','dual');bindObj('today','today');
+sun.addEventListener('click',e=>{
+  const r=earth.getBoundingClientRect();const hitEarth=Math.hypot(e.clientX-(r.left+r.width/2),e.clientY-(r.top+r.height/2))<14;
+  showInfo(hitEarth?OBJ.earth:OBJ.sun);
+});
+sun.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();showInfo(OBJ.sun);}});
+
+/* panel */
+const panel=$('panel');
+function setSel(k){
+  state.sel=k;
+  arcsG.classList.toggle('has-sel',!!k);tl.classList.toggle('has-sel',!!k);
+  arcsG.querySelectorAll('.arcg').forEach(g=>g.classList.toggle('sel',g.dataset.y===k));
+  tlbar.querySelectorAll('.tlseg').forEach(g=>g.classList.toggle('sel',g.dataset.y===k));
+}
+function emblem(y){
+  let paths='';
+  for(let i=0;i<4;i++){
+    const a0=(-90+90*i+3)*RAD,a1=(-90+90*(i+1)-3)*RAD,r=54;
+    const x0=70+r*Math.cos(a0),y0=70+r*Math.sin(a0),x1=70+r*Math.cos(a1),y1=70+r*Math.sin(a1);
+    const lit=i<y.dharma;
+    paths+='<path d="M70 70 L'+x0.toFixed(1)+' '+y0.toFixed(1)+' A'+r+' '+r+' 0 0 1 '+x1.toFixed(1)+' '+y1.toFixed(1)+' Z" fill="'+(lit?y.hex:'none')+'" fill-opacity="'+(lit?'.85':'0')+'" stroke="'+y.hex+'" stroke-width="1.2" stroke-dasharray="'+(lit?'0':'3 4')+'"/>';
+  }
+  return '<svg class="emblem" viewBox="0 0 140 140" aria-hidden="true"><circle cx="70" cy="70" r="64" fill="none" stroke="'+y.hex+'" stroke-opacity=".5"/><g class="rot">'+paths+'</g><circle cx="70" cy="70" r="5" fill="'+y.hex+'"/></svg>';
+}
+function showInfo(o){
+  const box=panel.querySelector('.insp');
+  if(!box){openIntro();return showInfo(o);}
+  box.style.setProperty('--ac',o.hex||'var(--gold-ink)');
+  box.innerHTML='<h3>'+o.title+'</h3><p>'+o.text+'</p>';
+  box.classList.remove('fadein');void box.offsetWidth;box.classList.add('fadein');
+  panel.querySelectorAll('[aria-pressed]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.key===o.key?'true':'false'));
+}
+function openIntro(){
+  setSel(null);
+  let lg='';
+  ORDER.forEach(k=>{const y=Y[k];lg+='<button type="button" class="lgbtn" data-open="'+k+'"><span class="sw" style="background:'+y.hex+'"></span><span>'+y.name+'<small>'+fmtN(y.years).replace(/^(\d)(\d{3})$/,'$1.$2')+' años, dharma '+y.dharma+'/4</small></span></button>';});
+  panel.innerHTML='<div class="fadein"><h2>Cuatro eras, dos veces</h2>'+
+    '<p class="gloss">Un ciclo de 24.000 años</p><p style="margin-top:12px">En el modelo de Yukteswar, el Sol tarda 24.000 años en rodear a su estrella dual. En ese recorrido se acerca y se aleja de Vishnunabhi, el gran centro de magnetismo universal, y con esa distancia sube o baja el alcance de la inteligencia humana.</p>'+
+    '<p>La mitad en que se aleja es el arco descendente; la mitad en que se acerca, el ascendente. Ambos atraviesan las mismas cuatro eras, en orden inverso, y cada era dura un múltiplo de 1.200 años.</p>'+
+    '<div class="legend">'+lg+'</div>'+
+    '<div class="insp"><h3>Cómo explorar</h3><p class="muted">Toca una era en la órbita o en la línea del tiempo para ver lo que representa. El Sol, la Tierra, la estrella dual, Vishnunabhi y el marcador de hoy también se pueden tocar.</p></div></div>';
+  panel.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>openYuga(b.dataset.open)));
+}
+function chipInfo(k,key){
+  const y=Y[k];
+  const [d0,d1]=segDates(k,'desc'),[a0,a1]=segDates(k,'asc');
+  const yrs=fmtN(y.years).replace(/^(\d)(\d{3})$/,'$1.$2'),core=fmtN(y.core).replace(/^(\d)(\d{3})$/,'$1.$2');
+  const M={
+    nombre:['El nombre',y.nombre],
+    duracion:['Duración',yrs+' años: '+core+' de la era propiamente dicha y dos sandhis de '+y.s+' años, uno al principio y otro al final. Yukteswar deriva todas las duraciones de la unidad de 1.200 años del Kali Yuga: Dwapara dura el doble, Treta el triple y Satya el cuádruple.'],
+    sandhi:['Sandhis','Sandhi significa juntura o unión. Es el periodo de transición al inicio y al final de cada era, en el que su carácter se mezcla con el de la era vecina. En '+y.name+' cada sandhi dura '+y.s+' años, una décima parte de la era propiamente dicha.'],
+    dharma:['Dharma, '+y.dharma+' de 4','Aquí dharma no significa solo deber o ley. Yukteswar lo llama la virtud mental del mundo interno: la capacidad del intelecto para captar la verdad. En esta era está desarrollado en '+y.dharma+' de sus 4 partes. Lo regula Brahma, el magnetismo universal que irradia desde Vishnunabhi.'],
+    comp:['Lo que comprende el intelecto',y.comp],
+    toro:['El toro del dharma','En textos como el Bhagavata Purana, el dharma aparece como un toro que en el Satya Yuga se sostiene sobre cuatro patas y pierde una en cada era. En '+y.name+' se apoya sobre '+y.legs+'. Yukteswar conserva esa proporción de 4, 3, 2 y 1, pero la aplica a duraciones mucho más cortas que las tradicionales.'],
+    desc:['Arco descendente','De '+fmtYear(d0)+' a '+fmtYear(d1)+'. En este tramo el Sol se aleja del gran centro y el dharma decrece. El Sol se ha movido a ese punto de la órbita.'],
+    asc:['Arco ascendente','De '+fmtYear(a0)+' a '+fmtYear(a1)+'. En este tramo el Sol se acerca al gran centro y el dharma crece. El Sol se ha movido a ese punto de la órbita.'],
+    ahora:['La era presente',y.now||'']
+  };
+  return {key,title:M[key][0],text:M[key][1],hex:y.hex};
+}
+function openYuga(k){
+  const y=Y[k];setSel(k);
+  const [d0,d1]=segDates(k,'desc'),[a0,a1]=segDates(k,'asc');
+  const chips=[['nombre','El nombre'],['duracion','Duración'],['sandhi','Sandhis'],['dharma','Dharma'],['comp','Lo que comprende el intelecto'],['toro','El toro del dharma']];
+  if(y.now)chips.push(['ahora','La era presente']);
+  panel.innerHTML='<div class="fadein" style="--ac:'+y.hex+'">'+
+    '<button type="button" class="back" id="back">Ver las cuatro eras</button>'+
+    '<div class="head"><div><h2>'+y.name+'</h2><p class="dev" lang="sa">'+y.dev+'</p><p class="gloss">'+y.gloss+'</p></div>'+
+    '<div>'+emblem(y)+'<div class="emcap">'+y.dharma+' de 4 cuartos de dharma</div></div></div>'+
+    '<p>'+y.summary+'</p>'+
+    '<div class="chips">'+chips.map(c=>'<button type="button" class="chip" aria-pressed="false" data-key="'+c[0]+'">'+c[1]+'</button>').join('')+'</div>'+
+    '<div class="dates">'+
+      '<button type="button" class="daterow" aria-pressed="false" data-key="desc"><span class="k">Descendente</span><span class="v">'+fmtYear(d0)+' a '+fmtYear(d1)+'</span><span class="hint">Mover el Sol a este tramo</span></button>'+
+      '<button type="button" class="daterow" aria-pressed="false" data-key="asc"><span class="k">Ascendente</span><span class="v">'+fmtYear(a0)+' a '+fmtYear(a1)+'</span><span class="hint">Mover el Sol a este tramo</span></button>'+
+    '</div>'+
+    '<div class="insp"></div></div>';
+  $('back').addEventListener('click',openIntro);
+  panel.querySelectorAll('[data-key]').forEach(b=>b.addEventListener('click',()=>{
+    const key=b.dataset.key;
+    if(key==='desc'||key==='asc'){const s=segDates(k,key)[2];state.d=(s.d0+s.d1)/2;setPlaying(false);}
+    showInfo(chipInfo(k,key));
+  }));
+  showInfo(chipInfo(k,'comp'));
+}
+openIntro();
+})();
+</script>
+</body>
+</html>

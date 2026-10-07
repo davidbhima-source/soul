@@ -1,0 +1,809 @@
+/* ==========================================================================
+   Bhima · hoja de estilos maestra del portal
+   --------------------------------------------------------------------------
+   Todas las páginas cargan este archivo con
+     <link rel="stylesheet" href="portal.css">
+   y declaran su página en la etiqueta <html>:
+     <html lang="es" class="pg-inicio">   (o pg-kriya, pg-buda, pg-chakras…)
+
+   Para cambiar el aspecto de todo el portal basta con editar aquí:
+   las tipografías y los tokens de color (secciones 1 y 2) se aplican a
+   todas las páginas a la vez. Los estilos propios de cada página van en
+   su sección, siempre bajo su clase .pg-*, para que no choquen entre sí.
+
+     1. Tipografías
+     2. Tokens de diseño (tema claro y oscuro; la portada tiene su propia paleta)
+     3. Base común
+     4. Componentes compartidos
+     5. Animaciones
+     6. Navegación, portadas y tarjetas (inicio y portada de cada camino)
+     7. Figuras de entrada a los caminos
+     8. Página: portada de Kriya yoga  .pg-kriya
+     9. Página: los siete lotos        .pg-chakras
+    10. Página: los yugas              .pg-yugas
+    11. Exploradores: lienzo y panel  (compartido por .pg-rueda, .pg-vedanas y .pg-esoterismo)
+    12. Página: la rueda de la vida   .pg-rueda
+    13. Página: los 108 sentimientos  .pg-vedanas
+    14. Página: la red del esoterismo .pg-esoterismo
+    15. Movimiento reducido
+
+   La estructura del portal (caminos, secciones, menú) vive en portal.js.
+
+   Para añadir una página nueva: usa los tokens y componentes existentes
+   y, si necesita estilos propios, crea su sección con una clase .pg-nueva.
+   ========================================================================== */
+
+
+/* 1. Tipografías ----------------------------------------------------------- */
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Commissioner:wght@300;400;500&family=Tiro+Devanagari+Sanskrit&display=swap");
+
+
+/* 2. Tokens de diseño ------------------------------------------------------ */
+:root{
+  /* Familias tipográficas */
+  --display:"Cormorant Garamond","Iowan Old Style",Georgia,serif;   /* títulos */
+  --body:"Commissioner",ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif; /* texto */
+  --deva:"Tiro Devanagari Sanskrit","Noto Serif Devanagari","Noto Sans Devanagari","Mangal",serif; /* devanagari */
+
+  /* Paleta de las secciones: «lapislázuli de Seti I» (tema claro) */
+  --bg:#e5ebf5; --bg2:#c9d6ec;          /* fondo y su degradado superior */
+  --card:#f6f9fd;                        /* superficies opacas */
+  --panel:rgba(255,255,255,.66);         /* superficies translúcidas */
+  --ink:#0f1c36; --muted:#506385;        /* texto principal y secundario */
+  --line:rgba(15,28,54,.14);             /* bordes y separadores */
+  --gold:#a2751f; --gold-soft:rgba(162,117,31,.22); /* acento */
+  --ida:#4c60ad; --pingala:#bd6634;      /* las dos nāḍīs */
+  --chip:color-mix(in srgb,var(--ink) 5%,var(--card));
+  --chip-hover:color-mix(in srgb,var(--ink) 10%,var(--card));
+  --shadow:0 24px 60px -24px rgba(15,28,54,.35);
+  --star:0;                              /* opacidad del cielo estrellado */
+
+  /* Cielo nocturno: superficie que es oscura en ambos temas (lienzos de los mapas) */
+  --sky:#060b1c; --sky-2:#0f1d3f; --sky-hover:#17295a;
+  --sky-ink:#ece6d6; --sky-muted:#98a7c8; --sky-line:rgba(232,238,249,.14);
+  --sky-accent:#e8c46a;
+
+  box-sizing:border-box;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+/* Tema oscuro de las secciones: lapislázuli profundo, como las bóvedas estrelladas */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#070d1f; --bg2:#13285a; --card:#0f1a36; --ink:#e8eef9; --muted:#93a3c4;
+    --panel:rgba(14,26,56,.66); --line:rgba(232,238,249,.13);
+    --gold:#d9b265; --gold-soft:rgba(217,178,101,.26);
+    --ida:#8da0e8; --pingala:#eb9c6e; --star:1;
+    --shadow:0 24px 60px -20px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#070d1f; --bg2:#13285a; --card:#0f1a36; --ink:#e8eef9; --muted:#93a3c4;
+  --panel:rgba(14,26,56,.66); --line:rgba(232,238,249,.13);
+  --gold:#d9b265; --gold-soft:rgba(217,178,101,.26);
+  --ida:#8da0e8; --pingala:#eb9c6e; --star:1;
+  --shadow:0 24px 60px -20px rgba(0,0,0,.7);
+}
+
+/* Portada del portal: «azul egipcio», el de la fayenza turquesa */
+:root.pg-inicio{
+  --bg:#e2eef2; --bg2:#bfdbe5; --card:#f4fafc; --ink:#08202c; --muted:#44687a;
+  --panel:rgba(255,255,255,.64); --line:rgba(8,32,44,.14);
+  --shadow:0 24px 60px -24px rgba(8,32,44,.35);
+  --sky:#040f19; --sky-2:#0a283a; --sky-hover:#10364d; --sky-muted:#93b2c0; --sky-line:rgba(230,241,245,.14);
+}
+@media (prefers-color-scheme: dark){
+  :root.pg-inicio:not([data-theme="light"]){
+    --bg:#04111b; --bg2:#0f4a66; --card:#0a2133; --ink:#e6f1f5; --muted:#8fb0bf;
+    --panel:rgba(10,33,51,.66); --line:rgba(230,241,245,.13);
+    --shadow:0 24px 60px -20px rgba(0,0,0,.7);
+  }
+}
+:root.pg-inicio[data-theme="dark"]{
+  --bg:#04111b; --bg2:#0f4a66; --card:#0a2133; --ink:#e6f1f5; --muted:#8fb0bf;
+  --panel:rgba(10,33,51,.66); --line:rgba(230,241,245,.13);
+  --shadow:0 24px 60px -20px rgba(0,0,0,.7);
+}
+
+
+/* 3. Base común ------------------------------------------------------------ */
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*,*::before,*::after{box-sizing:inherit;}
+html,body{margin:0;}
+body{
+  min-height:100%;
+  background-color:var(--bg);
+  background-image:radial-gradient(ellipse 120% 70% at 50% -10%, var(--bg2), var(--bg) 62%);
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:var(--body);
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;}
+button:focus-visible,a:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
+
+
+/* 4. Componentes compartidos ----------------------------------------------- */
+
+/* Cielo estrellado de fondo (visible en tema oscuro) */
+.stars{position:fixed; inset:0; pointer-events:none; opacity:var(--star); z-index:0; overflow:hidden;}
+.stars i{position:absolute; width:2px; height:2px; border-radius:50%; background:#fff; opacity:.4; animation:tw 5s ease-in-out infinite;}
+
+/* Enlace «← Inicio» de las páginas interiores */
+.home-link{display:inline-flex; align-items:center; gap:8px; margin:0 0 14px; font-size:.85rem; color:var(--muted);
+  text-decoration:none; border:1px solid var(--line); border-radius:999px; padding:6px 14px 6px 12px; transition:color .25s, border-color .25s;}
+.home-link:hover{color:var(--ink); border-color:var(--gold);}
+
+/* Botón píldora con borde dorado */
+.btn{font:inherit; font-size:.95rem; color:var(--ink); background:transparent; border:1px solid var(--gold);
+  border-radius:999px; padding:12px 22px; cursor:pointer; display:inline-flex; gap:12px; align-items:center;
+  text-decoration:none; transition:background .5s, box-shadow .5s;}
+.btn .dot{width:9px; height:9px; border-radius:50%; background:var(--gold); box-shadow:0 0 10px var(--gold);}
+.btn:hover{background:var(--gold-soft); box-shadow:0 0 28px var(--gold-soft);}
+.btn.ghost{border-color:var(--line); color:var(--muted);}
+.btn.ghost:hover{color:var(--ink); border-color:var(--gold); box-shadow:none;}
+
+/* Notas al pie en columnas */
+.notes{max-width:1180px; margin:0 auto; padding:22px 20px 60px; position:relative; z-index:1;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:26px;}
+.notes h2{font-family:var(--display); font-weight:500; font-size:1.35rem; margin:0 0 8px;}
+.notes p{margin:0; color:var(--muted); font-size:.9rem; line-height:1.68; max-width:70ch;}
+
+/* Capas animadas de los yantras y lotos SVG */
+.y-petals{animation:spin 90s linear infinite; transform-box:fill-box; transform-origin:center;}
+.y-rev{animation:spin 140s linear infinite reverse; transform-box:fill-box; transform-origin:center;}
+.y-geo{animation:breathe 7s ease-in-out infinite; transform-box:fill-box; transform-origin:center;}
+.y-halo{animation:pulse 7s ease-in-out infinite;}
+.petals-s{animation:spin 50s linear infinite; transform-box:fill-box; transform-origin:center;}
+
+
+/* 5. Animaciones ----------------------------------------------------------- */
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes breathe{0%,100%{transform:scale(1);}50%{transform:scale(1.07);}}
+@keyframes pulse{0%,100%{opacity:.35;}50%{opacity:.75;}}
+@keyframes tw{0%,100%{opacity:.12;}50%{opacity:.8;}}
+@keyframes tw-cielo{0%,100%{opacity:.25;}50%{opacity:1;}}
+@keyframes rise{0%,100%{opacity:.25;}50%{opacity:1;}}
+@keyframes flow{to{stroke-dashoffset:-170;}}
+@keyframes arrive{from{transform:scale(.5) rotate(-70deg); opacity:0;}to{transform:none; opacity:1;}}
+@keyframes fadein{from{opacity:0; transform:translateY(8px);}to{opacity:1; transform:none;}}
+@keyframes unfold{from{opacity:0; transform:translateY(-6px);}to{opacity:1; transform:none;}}
+@keyframes respira{0%,100%{transform:scale(1);}50%{transform:scale(1.012,1.022);}}
+@keyframes vpulse{0%{transform:scale(.6);opacity:0}35%{opacity:.55}100%{transform:scale(1.6);opacity:0}}
+
+
+/* 6. Navegación, portadas y tarjetas ---------------------------------------- */
+html.con-nav{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 84px);}
+
+/* Barra de navegación */
+.nav{position:sticky; top:0; z-index:30; padding-top:env(safe-area-inset-top,0px);
+  transition:background .4s, border-color .4s, backdrop-filter .4s; border-bottom:1px solid transparent;}
+.nav.scrolled,.nav.open{background:var(--panel); border-bottom-color:var(--line);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);}
+.nav-inner{max-width:1180px; margin:0 auto; padding:14px 20px; display:flex; align-items:center;
+  justify-content:space-between; gap:16px; position:relative;}
+.brand{display:inline-flex; align-items:center; gap:10px; text-decoration:none;
+  font-family:var(--display); font-weight:500; font-size:1.55rem; letter-spacing:.01em;}
+.brand svg{width:34px; height:34px; display:block; overflow:visible;}
+.nav-links{display:flex; align-items:center; gap:6px; list-style:none; margin:0; padding:0;}
+.nav-link{font:inherit; font-size:.92rem; color:var(--muted); text-decoration:none; background:transparent;
+  border:1px solid transparent; border-radius:999px; padding:9px 14px; cursor:pointer; transition:color .25s, border-color .25s;}
+.nav-link:hover,.nav-link[aria-current="page"]{color:var(--ink);}
+.nav-link[aria-current="page"]{border-color:var(--line);}
+
+.menu-btn{font:inherit; font-size:.92rem; color:var(--ink); background:transparent; border:1px solid var(--gold);
+  border-radius:999px; padding:9px 18px 9px 14px; cursor:pointer; display:inline-flex; gap:10px; align-items:center;
+  transition:background .4s, box-shadow .4s;}
+.menu-btn:hover,.menu-btn[aria-expanded="true"]{background:var(--gold-soft);}
+.menu-btn[aria-expanded="true"]{box-shadow:0 0 22px var(--gold-soft);}
+.burger{width:16px; height:12px; position:relative; display:inline-block;}
+.burger span{position:absolute; left:0; right:0; height:1.5px; border-radius:2px; background:var(--gold);
+  transition:transform .4s cubic-bezier(.2,.8,.2,1), opacity .3s, top .4s cubic-bezier(.2,.8,.2,1);}
+.burger span:nth-child(1){top:0;} .burger span:nth-child(2){top:5px;} .burger span:nth-child(3){top:10px;}
+.menu-btn[aria-expanded="true"] .burger span:nth-child(1){top:5px; transform:rotate(45deg);}
+.menu-btn[aria-expanded="true"] .burger span:nth-child(2){opacity:0;}
+.menu-btn[aria-expanded="true"] .burger span:nth-child(3){top:5px; transform:rotate(-45deg);}
+
+/* Panel del menú de secciones */
+.menu{position:absolute; right:20px; top:calc(100% + 8px); width:min(620px, calc(100vw - 32px));
+  max-height:calc(100vh - env(safe-area-inset-top,0px) - 96px); overflow:auto; overscroll-behavior:contain;
+  background:var(--card); border:1px solid var(--line); border-radius:24px; box-shadow:var(--shadow);
+  padding:20px 20px 22px; animation:unfold .4s cubic-bezier(.2,.8,.2,1);}
+.menu[hidden]{display:none;}
+.menu-head{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin:2px 4px 6px;}
+.menu-head p{margin:0; font-family:var(--display); font-style:italic; color:var(--muted); font-size:1.08rem;}
+.menu-head .count{font-size:.78rem; color:var(--muted); white-space:nowrap;}
+.menu-group h3{font-family:var(--body); font-weight:500; font-size:.82rem; color:var(--muted); margin:18px 4px 8px;
+  display:flex; align-items:center; gap:12px;}
+.menu-group h3::after{content:""; flex:1; height:1px; background:var(--line);}
+.menu-list{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:6px;}
+.m-item{--c:var(--gold); display:grid; grid-template-columns:44px 1fr; gap:12px; align-items:center;
+  padding:10px 12px; border-radius:16px; text-decoration:none; color:var(--ink); border:1px solid transparent;
+  transition:background .25s, border-color .25s;}
+.m-item .ico{width:44px; height:44px;}
+.m-item .ico svg{width:100%; height:100%; display:block; overflow:visible;}
+.m-item .mt{font-family:var(--display); font-size:1.22rem; font-weight:500; line-height:1.1; display:block;}
+.m-item .ms{font-size:.78rem; color:var(--muted); display:block; margin-top:2px;}
+a.m-item:hover,a.m-item:focus-visible{background:color-mix(in srgb,var(--c) 14%,transparent); border-color:color-mix(in srgb,var(--c) 55%,transparent);}
+a.m-item:hover .petals-s{animation-duration:12s;}
+.m-item.soon{opacity:.62; cursor:default;}
+.m-empty{font-size:.85rem; color:var(--muted); padding:6px 14px 4px; font-style:italic;}
+.m-camino .mt{font-size:1.4rem;}
+.tag{display:inline-block; margin-left:6px; font-family:var(--body); font-size:.66rem; letter-spacing:.04em;
+  text-transform:uppercase; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:2px 7px; vertical-align:middle;}
+
+/* Portada */
+.hero{max-width:1180px; margin:0 auto; padding:clamp(26px,6vw,72px) 20px 20px; position:relative; z-index:1;
+  display:grid; grid-template-columns:1.1fr .9fr; gap:clamp(20px,4vw,56px); align-items:center;}
+.eyebrow{font-family:var(--display); font-style:italic; color:var(--muted); font-size:1.18rem; margin:0 0 14px;}
+.hero h1{font-family:var(--display); font-weight:500; font-size:clamp(2.6rem,6.4vw,4.8rem); line-height:.98; margin:0 0 20px; letter-spacing:-.01em;}
+.hero h1 em{font-style:italic; color:var(--gold);}
+.hero .lead{margin:0; color:var(--muted); max-width:52ch; line-height:1.65; font-size:1.02rem;}
+.cta{margin-top:30px; display:flex; flex-wrap:wrap; gap:12px; align-items:center;}
+.hero .emblem{width:100%; max-width:440px; justify-self:center; aspect-ratio:1;}
+.hero .emblem svg{width:100%; height:100%; display:block; overflow:visible;}
+.hero .emblem[data-figura]{aspect-ratio:auto; max-width:380px;}
+.hero-centro{grid-template-columns:1fr; text-align:center; justify-items:center; padding-bottom:8px;}
+.hero-centro .lead{margin:0 auto;}
+
+/* Tarjetas de secciones */
+.sections{max-width:1180px; margin:0 auto; padding:30px 20px 10px; position:relative; z-index:1;}
+.sec-head{display:flex; align-items:center; gap:14px; margin:0 0 20px;}
+.sec-head h2{font-family:var(--display); font-weight:500; font-size:clamp(1.7rem,3.4vw,2.3rem); margin:0; line-height:1;}
+.sec-head::after{content:""; flex:1; height:1px; background:var(--line);}
+.cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:18px;}
+.card{--c:var(--gold); position:relative; display:flex; flex-direction:column; gap:6px; text-decoration:none; color:var(--ink);
+  background:var(--panel); border:1px solid var(--line); border-radius:24px; padding:26px 26px 22px;
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); overflow:hidden; isolation:isolate;
+  transition:transform .6s cubic-bezier(.2,.8,.2,1), border-color .3s, box-shadow .6s;
+  animation:fadein .7s ease both;}
+.card::before{content:""; position:absolute; z-index:-1; width:260px; height:260px; right:-90px; top:-110px; border-radius:50%;
+  background:radial-gradient(circle, color-mix(in srgb,var(--c) 32%,transparent), transparent 68%); opacity:.55; transition:opacity .6s;}
+a.card:hover,a.card:focus-visible{transform:translateY(-4px); border-color:var(--c);
+  box-shadow:0 18px 44px -22px var(--c);}
+a.card:hover::before,a.card:focus-visible::before{opacity:1;}
+a.card:hover .petals-s{animation-duration:14s;}
+.card .ico{width:72px; height:72px; margin-bottom:10px;}
+.card .ico svg{width:100%; height:100%; display:block; overflow:visible;}
+.card .grp{font-size:.76rem; color:var(--muted);}
+.card h3{font-family:var(--display); font-weight:500; font-size:1.9rem; margin:0; line-height:1.05;}
+.card .sub{font-family:var(--display); font-style:italic; color:var(--muted); font-size:1.08rem; margin:0;}
+.card .desc{margin:10px 0 0; line-height:1.6; font-size:.92rem; flex:1;}
+.card .go{margin-top:18px; display:inline-flex; align-items:center; gap:10px; font-size:.88rem; color:var(--muted);}
+.card .go .d{width:6px; height:6px; border-radius:50%; background:var(--c); box-shadow:0 0 8px var(--c);}
+.card .go .arr{transition:transform .4s cubic-bezier(.2,.8,.2,1);}
+a.card:hover .go{color:var(--ink);}
+a.card:hover .go .arr{transform:translateX(5px);}
+.card.soon{border-style:dashed; background:transparent; backdrop-filter:none; -webkit-backdrop-filter:none;}
+.card.soon .ico,.card.soon h3,.card.soon .desc{opacity:.6;}
+.vacio{grid-column:1/-1; border:1px dashed var(--line); border-radius:24px; padding:34px 28px; text-align:center; color:var(--muted);}
+.vacio .sub{font-family:var(--display); font-style:italic; font-size:1.5rem; color:var(--ink); margin:0 0 6px;}
+.vacio p{margin:0; line-height:1.6;}
+
+.con-nav .notes{padding:40px 20px 40px;}
+.foot{max-width:1180px; margin:0 auto; padding:18px 20px 44px; position:relative; z-index:1;
+  border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:10px 22px; justify-content:space-between;
+  color:var(--muted); font-size:.82rem;}
+.foot span:last-child{font-family:var(--display); font-style:italic; font-size:1rem;}
+
+@media (max-width:820px){
+  .hero{grid-template-columns:1fr;}
+  .hero .emblem{order:-1; max-width:300px;}
+}
+@media (max-width:640px){
+  .nav-links .nav-link.hide-sm{display:none;}
+  .menu{right:16px; left:16px; width:auto;}
+  .menu-list{grid-template-columns:1fr;}
+  .menu-btn .lbl{display:none;}
+  .menu-btn{padding:11px 13px;}
+  .hero .emblem{max-width:240px;}
+}
+
+
+
+/* 7. Figuras de entrada a los caminos -------------------------------------- */
+.caminos{max-width:1180px; margin:0 auto; padding:10px 20px 20px; position:relative; z-index:1;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:22px;}
+.camino{--c:var(--gold); --rx:0deg; --ry:0deg; position:relative; display:flex; flex-direction:column; align-items:center;
+  text-align:center; gap:4px; padding:18px 26px 30px; border-radius:28px; text-decoration:none; color:var(--ink);
+  background:var(--panel); border:1px solid var(--line); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  overflow:hidden; isolation:isolate; transition:border-color .4s, box-shadow .6s; animation:fadein .8s ease both;}
+.camino::before{content:""; position:absolute; z-index:-1; left:50%; top:34%; width:520px; height:520px; transform:translate(-50%,-50%);
+  border-radius:50%; background:radial-gradient(circle, color-mix(in srgb,var(--c) 26%,transparent), transparent 62%);
+  opacity:.55; transition:opacity .6s;}
+.camino:hover,.camino:focus-visible{border-color:var(--c); box-shadow:0 26px 60px -30px var(--c);}
+.camino:hover::before,.camino:focus-visible::before{opacity:1;}
+.camino .fig-wrap{width:min(100%,330px); transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition:transform .6s cubic-bezier(.2,.8,.2,1);}
+.camino:hover .fig-wrap,.camino:focus-visible .fig-wrap{transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-8px);}
+.camino .cam-sub{font-family:var(--display); font-style:italic; color:var(--muted); font-size:1.15rem; margin-top:4px;}
+.camino h2{font-family:var(--display); font-weight:500; font-size:clamp(2.6rem,5vw,3.6rem); margin:0; line-height:1;}
+.camino p{margin:10px 0 0; color:var(--muted); max-width:40ch; line-height:1.6; font-size:.95rem;}
+.camino .cam-estado{margin-top:10px; font-size:.78rem; color:var(--muted);}
+.camino .go{margin-top:14px; display:inline-flex; align-items:center; gap:10px; font-size:.92rem;
+  border:1px solid var(--c); border-radius:999px; padding:9px 20px; transition:background .4s, box-shadow .4s;}
+.camino .go .arr{transition:transform .4s cubic-bezier(.2,.8,.2,1);}
+.camino:hover .go,.camino:focus-visible .go{background:color-mix(in srgb,var(--c) 18%,transparent); box-shadow:0 0 24px color-mix(in srgb,var(--c) 30%,transparent);}
+.camino:hover .go .arr,.camino:focus-visible .go .arr{transform:translateX(5px);}
+
+/* Figura en medallón: respira, el halo late y el cielo de puntos titila y gira */
+.figura{display:block; width:100%; height:auto; overflow:visible;}
+.figura .fig-body{animation:respira 6s ease-in-out infinite; transform-box:fill-box; transform-origin:50% 100%;}
+.figura .fig-aro{animation:pulse 6s ease-in-out infinite; transform-box:fill-box; transform-origin:center; transition:transform .8s cubic-bezier(.2,.8,.2,1);}
+.figura .fig-halo{transition:opacity .6s;}
+.figura .fig-cielo{transform-box:view-box; transform-origin:150px 186px; animation:spin 240s linear infinite; opacity:.75; transition:opacity .6s;}
+.figura .fig-estrella{animation:tw 4s ease-in-out infinite;}
+.figura .fig-rayos{transform-box:view-box; transform-origin:150px 102px; animation:spin 40s linear infinite; opacity:.8;}
+.camino:hover .fig-aro,.camino:focus-visible .fig-aro{transform:scale(1.05);}
+.camino:hover .fig-halo,.camino:focus-visible .fig-halo{opacity:.9;}
+.camino:hover .fig-cielo,.camino:focus-visible .fig-cielo{opacity:1;}
+.m-item .figura .fig-cielo{display:none;}
+
+/* 8. Página: portada de Kriya yoga ----------------------------------------- */
+.pg-kriya .e-dot{transition:r .5s cubic-bezier(.2,.8,.2,1);}
+.pg-kriya .disc{fill:var(--card); stroke:var(--gold); stroke-width:1.4;}
+.pg-kriya .e-line{stroke:var(--gold); stroke-width:1.2; opacity:.7;}
+.pg-kriya .e-om{font-family:var(--deva); font-size:22px; fill:var(--ink);}
+
+
+/* 9. Página: los siete lotos ----------------------------------------------- */
+html.pg-chakras{padding-top:env(safe-area-inset-top,0px);}
+
+/* Encabezado */
+.pg-chakras .top{max-width:1180px; margin:0 auto; padding:44px 20px 6px; position:relative; z-index:1;
+  display:flex; flex-wrap:wrap; gap:22px; align-items:flex-end; justify-content:space-between;}
+.pg-chakras .top h1{font-family:var(--display); font-weight:500; font-size:clamp(2.1rem,4.8vw,3.4rem); line-height:1.02; margin:0 0 12px; letter-spacing:-.01em;}
+.pg-chakras .top p{margin:0; color:var(--muted); max-width:58ch; line-height:1.6; font-size:.98rem;}
+.pg-chakras #state{margin-top:8px; font-family:var(--display); font-style:italic; font-size:1.12rem; color:var(--ink); transition:opacity .6s;}
+.pg-chakras .balance-btn:hover{box-shadow:none;}
+.pg-chakras .balanced .balance-btn{background:var(--gold-soft); box-shadow:0 0 28px var(--gold-soft);}
+
+/* Estructura */
+.pg-chakras .wrap{max-width:1180px; margin:0 auto; padding:22px 20px 10px; display:grid;
+  grid-template-columns:minmax(250px,330px) 1fr; gap:30px; position:relative; z-index:1;}
+.pg-chakras .spine-col{position:sticky; top:calc(env(safe-area-inset-top,0px) + 12px); align-self:start;
+  height:calc(100vh - 40px); max-height:880px; min-height:560px;}
+.pg-chakras #spine{width:100%; height:100%; display:block; overflow:visible;}
+
+/* Columna vertebral */
+.pg-chakras .sush{stroke:var(--gold); stroke-width:1.6;}
+.pg-chakras .sush-glow{stroke:var(--gold); stroke-width:10; opacity:.14; transition:opacity 1.6s, stroke-width 1.6s;}
+.pg-chakras .balanced .sush-glow{opacity:.6; stroke-width:20;}
+.pg-chakras .nadi{fill:none; stroke-width:1.3;}
+.pg-chakras .nadi-flow{fill:none; stroke-width:2.2; stroke-dasharray:2 15; stroke-linecap:round; animation:flow 7s linear infinite;}
+.pg-chakras .ida{stroke:var(--ida);} .pg-chakras .pingala{stroke:var(--pingala);}
+.pg-chakras .nadi-lbl{font-family:var(--body); font-size:11px; fill:var(--muted); text-anchor:middle;}
+.pg-chakras .spark-halo{fill:var(--gold); opacity:.3;}
+.pg-chakras .spark-core{fill:#fff;}
+
+.pg-chakras .node{cursor:pointer; outline:none;}
+.pg-chakras .node .scaler{transition:transform .6s cubic-bezier(.2,.8,.2,1); transform-box:fill-box; transform-origin:center;}
+.pg-chakras .node:hover .scaler{transform:scale(1.12);}
+.pg-chakras .node.active .scaler{transform:scale(1.5);}
+.pg-chakras .node .petals{animation:spin 50s linear infinite; transform-box:fill-box; transform-origin:center;}
+.pg-chakras .node .glow{opacity:.2; transition:opacity .6s;}
+.pg-chakras .node.active .glow,.pg-chakras .node.lit .glow{opacity:.85;}
+.pg-chakras .node .lbl{font-family:var(--display); font-size:16px; font-weight:500; fill:var(--ink); transition:fill .3s;}
+.pg-chakras .node .lbl-es{font-family:var(--body); font-size:10.5px; fill:var(--muted);}
+.pg-chakras .node.active .lbl{font-weight:600;}
+.pg-chakras .node:focus-visible .focus{stroke:var(--gold); stroke-width:1.5; stroke-dasharray:3 3;}
+.pg-chakras .node .focus{fill:none; stroke:transparent;}
+
+/* Panel del chakra */
+.pg-chakras .panel{--c:#e0bd45; background:var(--panel); border:1px solid var(--line); border-radius:24px;
+  padding:clamp(18px,3.2vw,36px); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); min-width:0;}
+.pg-chakras .p-head{display:grid; grid-template-columns:clamp(150px,22vw,240px) 1fr; gap:26px; align-items:center;}
+.pg-chakras .big-yantra svg{width:100%; height:auto; display:block; overflow:visible;}
+.pg-chakras .big-yantra.enter svg{animation:arrive 1s cubic-bezier(.2,.8,.2,1);}
+.pg-chakras .p-title h2{font-family:var(--display); font-weight:500; font-size:clamp(2.3rem,5vw,3.6rem); margin:0; line-height:1;}
+.pg-chakras .p-ety{font-family:var(--display); font-style:italic; color:var(--muted); font-size:1.18rem; margin:8px 0 0;}
+.pg-chakras .p-es{margin:14px 0 0; display:inline-flex; align-items:center; gap:8px; font-size:.9rem; color:var(--muted);}
+.pg-chakras .p-es .sw{width:10px; height:10px; border-radius:50%; background:var(--c); box-shadow:0 0 10px var(--c);}
+.pg-chakras .res{font-family:var(--display); font-size:1.28rem; line-height:1.55; margin:26px 0 4px; max-width:62ch;}
+.pg-chakras .fade-in{animation:fadein .7s ease both;}
+
+.pg-chakras .group h3{font-family:var(--body); font-weight:500; font-size:.92rem; color:var(--muted); margin:30px 0 12px;
+  display:flex; align-items:center; gap:12px;}
+.pg-chakras .group h3::after{content:""; flex:1; height:1px; background:var(--line);}
+.pg-chakras .chips{display:flex; flex-wrap:wrap; gap:8px;}
+.pg-chakras .chip{font:inherit; font-size:.88rem; color:var(--ink); background:transparent; border:1px solid var(--line);
+  border-radius:999px; padding:7px 14px; cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+  transition:border-color .25s, background .25s;}
+.pg-chakras .chip .k{color:var(--muted);}
+.pg-chakras .chip .d{width:6px; height:6px; border-radius:50%; background:var(--c);}
+.pg-chakras .chip:hover{border-color:var(--c);}
+.pg-chakras .chip.on{background:color-mix(in srgb, var(--c) 18%, transparent); border-color:var(--c);}
+
+/* Dualidades */
+.pg-chakras .duals{display:flex; flex-direction:column; gap:12px;}
+.pg-chakras .dual{display:grid; grid-template-columns:1fr minmax(108px,auto) 1fr; gap:10px; align-items:stretch; position:relative;}
+.pg-chakras .dual::before{content:""; position:absolute; left:6%; right:6%; top:50%; height:1px;
+  background:linear-gradient(90deg,var(--ida),var(--gold),var(--pingala)); opacity:.55;}
+.pg-chakras .pole,.pg-chakras .center{position:relative; font:inherit; color:var(--ink); background:var(--card); border:1px solid var(--line);
+  border-radius:14px; padding:11px 13px; cursor:pointer; display:flex; flex-direction:column; justify-content:center; gap:3px;
+  transition:transform 1s cubic-bezier(.2,.8,.2,1), opacity 1s, box-shadow .8s, border-color .25s, background .8s;}
+.pg-chakras .pole.a{align-items:flex-end; text-align:right; border-color:color-mix(in srgb,var(--ida) 50%,transparent);}
+.pg-chakras .pole.b{align-items:flex-start; text-align:left; border-color:color-mix(in srgb,var(--pingala) 50%,transparent);}
+.pg-chakras .center{align-items:center; text-align:center; border-color:var(--gold); border-radius:999px; padding:11px 16px;}
+.pg-chakras .pn{font-family:var(--display); font-size:1.2rem; font-weight:500; line-height:1.12;}
+.pg-chakras .pt{font-size:.72rem; color:var(--muted);}
+.pg-chakras .pole.on,.pg-chakras .center.on{box-shadow:0 0 0 2px var(--c);}
+.pg-chakras .balanced .pole{opacity:.38; filter:saturate(.35);}
+.pg-chakras .balanced .pole.a{transform:translateX(16px) scale(.96);}
+.pg-chakras .balanced .pole.b{transform:translateX(-16px) scale(.96);}
+.pg-chakras .balanced .center{background:color-mix(in srgb,var(--gold) 14%,var(--card)); box-shadow:0 0 26px var(--gold-soft);}
+.pg-chakras .balanced .pole.on,.pg-chakras .balanced .center.on{box-shadow:0 0 0 2px var(--c), 0 0 26px var(--gold-soft); opacity:1; filter:none;}
+
+.pg-chakras .inspector{margin-top:12px; border-left:2px solid var(--c); padding:14px 18px 16px;
+  background:color-mix(in srgb,var(--c) 10%,var(--card)); border-radius:0 14px 14px 0; animation:unfold .45s ease;}
+.pg-chakras .inspector .ik{font-size:.78rem; color:var(--muted);}
+.pg-chakras .inspector h4{font-family:var(--display); font-size:1.55rem; font-weight:500; margin:2px 0 6px; line-height:1.15;}
+.pg-chakras .inspector p{margin:0; line-height:1.62; max-width:66ch;}
+.pg-chakras .inspector p + p{margin-top:8px; color:var(--muted); font-size:.9rem;}
+
+/* Yantra grande */
+.pg-chakras .geo-s{stroke:var(--ink); stroke-opacity:.72; stroke-width:1.4; fill:currentColor; fill-opacity:.2; stroke-linejoin:round;}
+.pg-chakras .disc{fill:var(--card); stroke:currentColor; stroke-width:1.6;}
+.pg-chakras .bija{font-family:var(--deva); font-size:38px; fill:var(--ink);}
+.pg-chakras .bindu{fill:var(--ink);}
+
+@media (max-width:820px){
+  .pg-chakras .wrap{grid-template-columns:1fr;}
+  .pg-chakras .spine-col{position:relative; top:0; height:600px; min-height:0;}
+}
+@media (max-width:560px){
+  .pg-chakras .p-head{grid-template-columns:1fr; justify-items:center; text-align:center;}
+  .pg-chakras .big-yantra{width:200px;}
+  .pg-chakras .dual{grid-template-columns:1fr minmax(92px,auto) 1fr; gap:6px;}
+  .pg-chakras .pn{font-size:1.05rem;}
+  .pg-chakras .pole,.pg-chakras .center{padding:9px 10px;}
+}
+
+
+/* 10. Página: los yugas ---------------------------------------------------- */
+html.pg-yugas{padding-top:env(safe-area-inset-top,0px);}
+.pg-yugas body{background:var(--bg); font-size:16px; line-height:1.6;}
+.pg-yugas button{font:inherit; color:inherit;}
+.pg-yugas :focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+
+.pg-yugas header{max-width:1240px; margin:0 auto; padding:32px 20px 18px;}
+.pg-yugas h1{font-family:var(--display); font-weight:600; font-size:clamp(2.3rem,5.4vw,3.6rem); line-height:1.02; letter-spacing:-.01em; margin:0 0 10px;}
+.pg-yugas .lede{max-width:62ch; color:var(--muted); margin:0;}
+
+.pg-yugas main{max-width:1240px; margin:0 auto; padding:0 20px 28px; display:grid; gap:22px;}
+@media (min-width:1000px){.pg-yugas main{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); align-items:start;}}
+
+/* Escena del cielo */
+.pg-yugas .sky{background:var(--sky); color:var(--sky-ink); border-radius:20px; overflow:hidden;}
+.pg-yugas .sky svg{display:block; width:100%; height:auto;}
+.pg-yugas .sky text{font-family:var(--body);}
+.pg-yugas .arcg{cursor:pointer; outline:none;}
+.pg-yugas .arcg .arc{transition:opacity .35s, stroke-width .35s; opacity:.8;}
+.pg-yugas .arcg .halo{opacity:0; transition:opacity .35s;}
+.pg-yugas .arcg:hover .arc,.pg-yugas .arcg:focus-visible .arc{opacity:1;}
+.pg-yugas .arcg:focus-visible .halo{opacity:.3;}
+.pg-yugas .arcs.has-sel .arcg .arc{opacity:.32;}
+.pg-yugas .arcs.has-sel .arcg.sel .arc{opacity:1;}
+.pg-yugas .arcs.has-sel .arcg.sel .halo{opacity:.25;}
+.pg-yugas .ylabel{font-family:var(--display); font-weight:600; font-size:27px; fill:var(--sky-ink); pointer-events:none;}
+.pg-yugas .slabel{font-size:20px; fill:var(--sky-muted);}
+.pg-yugas .obj{cursor:pointer;}
+.pg-yugas .obj:focus-visible{outline:none;}
+.pg-yugas .obj:focus-visible .focusring{opacity:1;}
+.pg-yugas .focusring{opacity:0;}
+.pg-yugas .vpulse{animation:vpulse 4s ease-in-out infinite; transform-box:fill-box; transform-origin:center;}
+.pg-yugas .vpulse.b{animation-delay:1.3s;}
+.pg-yugas .vpulse.c{animation-delay:2.6s;}
+.pg-yugas .tw{animation:tw-cielo 3.2s ease-in-out infinite;}
+
+/* Lectura, línea de tiempo y controles */
+.pg-yugas .readout{display:grid; gap:14px; padding:4px 22px 22px; border-top:1px solid var(--sky-line);}
+.pg-yugas .now{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 18px; padding-top:16px;}
+.pg-yugas .now .year{font-family:var(--display); font-size:2rem; font-weight:600; line-height:1; min-width:6.6em; font-variant-numeric:tabular-nums;}
+.pg-yugas .now .yuga{font-family:var(--display); font-size:1.35rem; font-style:italic;}
+.pg-yugas .now .arcinfo{color:var(--sky-muted); font-size:.95rem;}
+.pg-yugas .pips{display:inline-flex; gap:5px; align-items:center; margin-left:auto; color:var(--sky-muted); font-size:.9rem;}
+.pg-yugas .pip{width:11px; height:11px; border-radius:50%; border:1px solid var(--sky-muted);}
+.pg-yugas .pip.on{background:var(--pc,var(--sky-accent)); border-color:var(--pc,var(--sky-accent));}
+.pg-yugas .controls{display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px;}
+.pg-yugas .sbtn{background:var(--sky-2); border:1px solid var(--sky-line); border-radius:999px; padding:7px 16px; cursor:pointer; color:var(--sky-ink);}
+.pg-yugas .sbtn:hover{background:var(--sky-hover);}
+.pg-yugas .speed{display:flex; align-items:center; gap:10px; color:var(--sky-muted); font-size:.92rem; margin-left:auto;}
+.pg-yugas .speed input{accent-color:var(--sky-accent); width:130px;}
+
+.pg-yugas .tl{position:relative;}
+.pg-yugas .tlbar{display:flex; height:16px; border-radius:4px; overflow:hidden; cursor:pointer;}
+.pg-yugas .tlseg{height:100%; opacity:.75; transition:opacity .3s; border-right:1px solid var(--sky);}
+.pg-yugas .tlseg:last-child{border-right:0;}
+.pg-yugas .tl.has-sel .tlseg{opacity:.3;}
+.pg-yugas .tl.has-sel .tlseg.sel{opacity:1;}
+.pg-yugas .tlmark{position:absolute; top:-5px; width:2px; height:26px; background:#fff6dc; border-radius:1px; transform:translateX(-1px); pointer-events:none; box-shadow:0 0 8px rgba(255,240,200,.7);}
+.pg-yugas .tlticks{display:flex; justify-content:space-between; font-size:.82rem; color:var(--sky-muted); margin-top:6px;}
+
+/* Panel lateral */
+.pg-yugas aside{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:24px 24px 26px;}
+@media (min-width:1000px){.pg-yugas aside{position:sticky; top:calc(16px + env(safe-area-inset-top,0px)); max-height:calc(100vh - 32px); overflow:auto;}}
+.pg-yugas aside h2{font-family:var(--display); font-weight:600; font-size:2.2rem; line-height:1.05; margin:0;}
+.pg-yugas .dev{font-family:var(--deva); font-size:1.35rem; color:var(--muted); margin:4px 0 0;}
+.pg-yugas .gloss{font-family:var(--display); font-style:italic; font-size:1.2rem; color:var(--gold); margin:2px 0 0;}
+.pg-yugas .head{display:grid; grid-template-columns:1fr auto; gap:14px; align-items:center; margin-bottom:14px;}
+.pg-yugas .emblem{width:118px; height:118px;}
+.pg-yugas .emblem .rot{transform-origin:70px 70px; animation:spin 80s linear infinite;}
+.pg-yugas .emcap{font-size:.85rem; color:var(--muted); text-align:center; margin-top:-2px;}
+.pg-yugas aside p{margin:0 0 12px; max-width:62ch;}
+.pg-yugas .muted{color:var(--muted);}
+.pg-yugas .chips{display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 4px;}
+.pg-yugas .chip{background:var(--chip); border:1px solid var(--line); border-radius:999px; padding:5px 14px; cursor:pointer; font-size:.95rem;}
+.pg-yugas .chip:hover{background:var(--chip-hover);}
+.pg-yugas .chip[aria-pressed="true"]{border-color:var(--ac,var(--gold)); box-shadow:inset 0 0 0 1px var(--ac,var(--gold));}
+.pg-yugas .dates{display:grid; gap:8px; margin:14px 0 6px;}
+.pg-yugas .daterow{display:grid; grid-template-columns:auto 1fr; gap:4px 14px; text-align:left; background:transparent; border:1px solid var(--line); border-radius:10px; padding:10px 14px; cursor:pointer;}
+.pg-yugas .daterow:hover{background:var(--chip);}
+.pg-yugas .daterow[aria-pressed="true"]{border-color:var(--ac,var(--gold));}
+.pg-yugas .daterow .k{color:var(--muted); font-size:.9rem;}
+.pg-yugas .daterow .v{font-variant-numeric:tabular-nums;}
+.pg-yugas .daterow .hint{grid-column:1/-1; font-size:.82rem; color:var(--muted);}
+.pg-yugas .insp{margin-top:18px; border-left:3px solid var(--ac,var(--gold)); border-radius:0; padding:2px 0 2px 16px; min-height:5em;}
+.pg-yugas .insp h3{font-family:var(--display); font-weight:600; font-size:1.4rem; margin:0 0 6px;}
+.pg-yugas .insp p{margin:0;}
+.pg-yugas .legend{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:16px 0 4px;}
+.pg-yugas .lgbtn{display:flex; align-items:center; gap:10px; text-align:left; background:var(--chip); border:1px solid var(--line); border-radius:10px; padding:9px 12px; cursor:pointer;}
+.pg-yugas .lgbtn:hover{background:var(--chip-hover);}
+.pg-yugas .sw{width:14px; height:14px; border-radius:3px; flex:none;}
+.pg-yugas .lgbtn small{display:block; color:var(--muted); font-size:.82rem; line-height:1.2;}
+.pg-yugas .back{background:none; border:0; padding:0; color:var(--muted); cursor:pointer; font-size:.92rem; margin-bottom:10px; text-decoration:underline; text-underline-offset:3px;}
+.pg-yugas .fadein{animation:fadein .45s ease-out;}
+
+.pg-yugas footer{max-width:1240px; margin:0 auto; padding:4px 20px 40px;}
+.pg-yugas footer .note{max-width:78ch; border-top:1px solid var(--line); padding-top:18px; color:var(--muted); font-size:.95rem;}
+.pg-yugas footer .note strong{color:var(--ink); font-weight:500;}
+
+
+/* 11. Exploradores: lienzo y panel (.pg-rueda, .pg-vedanas, .pg-esoterismo) - */
+/* Diseño común de las páginas «mapa + explicación»: un lienzo SVG oscuro con su
+   lectura y botones, y un panel con migas, cabecera, listas, ejemplos y chips. */
+/* Cabecera y retícula */
+html:is(.pg-rueda,.pg-vedanas,.pg-esoterismo){padding-top:env(safe-area-inset-top,0px);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .top{max-width:1240px; margin:0 auto; padding:32px 20px 18px; position:relative; z-index:1;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .top h1{font-family:var(--display); font-weight:500; font-size:clamp(2.2rem,5vw,3.4rem); line-height:1.02; margin:0 0 10px; letter-spacing:-.01em;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lede{max-width:66ch; color:var(--muted); margin:0; line-height:1.6;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) main{max-width:1240px; margin:0 auto; padding:0 20px 28px; display:grid; gap:22px; position:relative; z-index:1;}
+@media (min-width:1000px){:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) main{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); align-items:start;}}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lienzo{background:var(--sky); color:var(--sky-ink); border-radius:22px; overflow:hidden;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lienzo svg{display:block; width:100%; height:auto;}
+/* Lectura y botones bajo la rueda */
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .mando{display:grid; gap:12px; padding:14px 20px 20px; border-top:1px solid var(--sky-line);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lectura{display:flex; gap:12px; align-items:baseline; min-height:2.6em; color:var(--sky-muted); font-size:.95rem; line-height:1.45;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lectura strong{color:var(--sky-ink); font-family:var(--display); font-size:1.15rem; font-weight:600;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .paso-n{font-family:var(--display); font-size:1.8rem; line-height:1; color:var(--sky-accent); min-width:1.2em;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .botones{display:flex; flex-wrap:wrap; gap:10px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .sbtn{font:inherit; font-size:.9rem; background:var(--sky-2); border:1px solid var(--sky-line); border-radius:999px; padding:8px 16px; cursor:pointer; color:var(--sky-ink);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .sbtn:hover{background:var(--sky-hover);}
+/* Panel de explicación */
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .panel-r{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:20px 22px 24px;}
+@media (min-width:1000px){:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .panel-r{position:sticky; top:calc(16px + env(safe-area-inset-top,0px)); max-height:calc(100vh - 32px); overflow:auto;}}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .migas{display:flex; flex-wrap:wrap; align-items:center; gap:4px 6px; font-size:.8rem; color:var(--muted); margin-bottom:12px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .migas button{font:inherit; background:none; border:0; padding:0; color:var(--muted); cursor:pointer; text-decoration:underline; text-underline-offset:3px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .migas button:hover{color:var(--ink);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .migas [aria-current]{color:var(--ink);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .cab{display:grid; grid-template-columns:96px 1fr; gap:16px; align-items:center; margin-bottom:10px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .visor{width:96px; height:96px; display:block; overflow:visible;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .visor-n{font-family:var(--display); font-size:22px; font-weight:600; fill:var(--ink);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .cab h2{font-family:var(--display); font-weight:500; font-size:clamp(1.6rem,3vw,2.1rem); line-height:1.08; margin:0;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .num-g{display:inline-grid; place-items:center; width:1.4em; height:1.4em; margin-right:8px; border-radius:50%;
+  background:color-mix(in srgb,var(--ac) 30%,transparent); font-size:.75em; vertical-align:.12em;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .san{font-family:var(--display); font-style:italic; color:var(--gold); font-size:1.1rem; margin:4px 0 0;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .gloss{color:var(--muted); font-size:.92rem; margin:2px 0 0;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .panel-r p{line-height:1.62; margin:0 0 12px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .fila{border-left:2px solid color-mix(in srgb,var(--ac) 70%,transparent); padding:2px 0 2px 14px; margin:14px 0;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .fila p{margin:2px 0 0;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .k{font-size:.74rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); display:inline-flex; align-items:center; gap:7px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lista{margin:12px 0 16px; display:grid; gap:8px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lista div{display:grid; grid-template-columns:minmax(110px,30%) 1fr; gap:10px; padding:9px 12px; border-radius:10px; background:var(--chip);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lista dt{font-family:var(--display); font-weight:600; font-size:1.02rem; line-height:1.25;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lista dd{margin:0; font-size:.92rem; line-height:1.5;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .ejemplo{margin:16px 0; padding:12px 16px; border-radius:12px; background:color-mix(in srgb,var(--ac) 12%,var(--card)); border:1px solid color-mix(in srgb,var(--ac) 35%,transparent);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .ejemplo p{margin:4px 0 0; font-family:var(--display); font-size:1.12rem; line-height:1.45;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .ejemplo.cotidiano{border-style:dashed;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .panel-r h3{font-family:var(--body); font-weight:500; font-size:.85rem; color:var(--muted); margin:22px 0 10px; display:flex; align-items:center; gap:12px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .panel-r h3::after{content:""; flex:1; height:1px; background:var(--line);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .chips{display:flex; flex-wrap:wrap; gap:8px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .chip{font:inherit; font-size:.88rem; color:var(--ink); background:var(--chip); border:1px solid var(--line); border-radius:999px;
+  padding:6px 14px; cursor:pointer; display:inline-flex; align-items:center; gap:8px; transition:border-color .25s, background .25s;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .chip .d{width:8px; height:8px; border-radius:50%; background:var(--ac);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .chip:hover{border-color:var(--ac); background:var(--chip-hover);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) a.chip{text-decoration:none;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .pasar{display:flex; justify-content:space-between; gap:10px; margin-top:20px; padding-top:14px; border-top:1px solid var(--line);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .sbtn-c{font:inherit; font-size:.85rem; color:var(--ink); background:var(--chip); border:1px solid var(--line); border-radius:999px; padding:7px 14px; cursor:pointer;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .sbtn-c:hover{border-color:var(--gold); background:var(--chip-hover);}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .botones-p{display:flex; flex-wrap:wrap; gap:8px; margin:6px 0 12px;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .ns{color:var(--muted); font-size:.85rem;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .fadein{animation:fadein .45s ease-out;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .pie{max-width:1240px; margin:0 auto; padding:4px 20px 40px; position:relative; z-index:1;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .nota{max-width:80ch; border-top:1px solid var(--line); padding-top:18px; color:var(--muted); font-size:.93rem; line-height:1.65;}
+:is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .nota strong{color:var(--ink); font-weight:500;}
+@media (max-width:560px){
+  :is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .cab{grid-template-columns:72px 1fr;}
+  :is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .visor{width:72px; height:72px;}
+  :is(.pg-rueda,.pg-vedanas,.pg-esoterismo) .lista div{grid-template-columns:1fr; gap:2px;}
+}
+
+
+/* 12. Página: la rueda de la vida ------------------------------------------- */
+
+/* Lienzo con la rueda */
+.pg-rueda .zona{cursor:pointer; transition:opacity .4s, filter .3s; outline:none;}
+.pg-rueda .zona:hover{filter:brightness(1.12);}
+.pg-rueda .zona:focus-visible{filter:drop-shadow(0 0 6px #fff6dc) brightness(1.1);}
+.pg-rueda #rueda.has-sel .zona{opacity:.35;}
+.pg-rueda #rueda.has-sel .zona.sel{opacity:1;}
+.pg-rueda #rueda .zona.sel .seg{stroke:#fff6dc; stroke-width:2.5;}
+.pg-rueda .zona.vida .seg{fill:var(--vida); fill-opacity:.9;}
+.pg-rueda .zona.apagado{opacity:.18 !important;}
+.pg-rueda .num{font-family:var(--body); font-size:11px; font-weight:500; fill:#7a5a2a;}
+.pg-rueda .nombre{font-family:var(--display); font-size:17px; font-weight:600; letter-spacing:.02em;}
+.pg-rueda .rotulo{font-family:var(--display); font-style:italic; font-size:17px; fill:var(--sky-muted);}
+.pg-rueda .estrella{animation:tw 4s ease-in-out infinite;}
+.pg-rueda .animales{transform-box:view-box; transform-origin:400px 440px; animation:spin 48s linear infinite;}
+.pg-rueda .ojos{animation:late-r 3.6s ease-in-out infinite;}
+.pg-rueda .late{animation:late-r 4s ease-in-out infinite;}
+.pg-rueda .senda{animation:senda 3s linear infinite;}
+
+
+.pg-rueda .bdot{width:11px; height:11px; border-radius:50%; background:var(--bc); box-shadow:0 0 0 1.5px var(--gold);}
+.pg-rueda .vidas{display:grid; gap:8px; margin:12px 0;}
+.pg-rueda .vida-f{display:grid; grid-template-columns:14px 1fr; gap:10px; align-items:start;}
+.pg-rueda .vida-f .sw{width:14px; height:14px; border-radius:4px; background:var(--vc); margin-top:4px;}
+.pg-rueda .vida-f p{margin:2px 0 0; font-size:.9rem; color:var(--muted);}
+.pg-rueda .pasos{list-style:none; margin:0; padding:0; display:grid; gap:6px;}
+.pg-rueda .pasos li{display:grid; grid-template-columns:28px 1fr; gap:10px; align-items:start; padding:8px 10px; border-radius:10px; border:1px solid transparent; transition:background .3s, border-color .3s; font-size:.92rem; line-height:1.45;}
+.pg-rueda .pasos li .b{display:grid; place-items:center; width:26px; height:26px; border-radius:50%; background:var(--chip); font-family:var(--display); font-weight:600;}
+.pg-rueda .pasos li.on{background:color-mix(in srgb,var(--ac) 14%,transparent); border-color:var(--ac);}
+.pg-rueda .pasos li.on .b{background:var(--ac); color:#1e1a36;}
+.pg-rueda .estado-r{font-family:var(--display); font-size:1.12rem; line-height:1.45; margin:4px 0 12px;}
+.pg-rueda .escalera{width:100%; max-width:380px; height:auto; display:block; margin:6px auto 4px; overflow:visible;}
+.pg-rueda .peld{cursor:pointer; outline:none;}
+.pg-rueda .peld:hover circle,.pg-rueda .peld:focus-visible circle{stroke:var(--ink); stroke-width:2.5;}
+.pg-rueda .esc-n{font-family:var(--body); font-size:11px; font-weight:600; fill:#1e1a36; pointer-events:none;}
+.pg-rueda .esc-t{font-family:var(--display); font-size:13px; fill:var(--ink);}
+.pg-rueda .esc-et{font-family:var(--body); font-size:10px; fill:#8a78d8; letter-spacing:.04em;}
+.pg-rueda .leyenda-esc{display:flex; justify-content:center; gap:16px; font-size:.8rem; color:var(--muted); margin-bottom:8px;}
+.pg-rueda .leyenda-esc span::before{content:""; display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--vc); margin-right:6px; vertical-align:-1px;}
+
+/* Animaciones del visor */
+.pg-rueda .visor .flota{animation:flota 6s ease-in-out infinite;}
+.pg-rueda .visor .gira-lento{animation:spin 30s linear infinite; transform-box:fill-box; transform-origin:center;}
+.pg-rueda .visor .gira-rapido{animation:spin 4s linear infinite; transform-origin:0 0;}
+.pg-rueda .visor .flota-arriba{animation:arriba 3s ease-in-out infinite;}
+.pg-rueda .visor .flota-abajo{animation:abajo 3s ease-in-out infinite;}
+.pg-rueda .visor .eslabon{animation:late-r 3s ease-in-out infinite;}
+.pg-rueda .visor .llamita{animation:llamita 1.6s ease-in-out infinite; transform-box:fill-box; transform-origin:50% 100%;}
+.pg-rueda .visor .brilla{animation:late-r 2.4s ease-in-out infinite;}
+
+@keyframes late-r{0%,100%{opacity:.6;}50%{opacity:1;}}
+@keyframes senda{to{stroke-dashoffset:-24;}}
+@keyframes flota{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
+@keyframes arriba{0%{transform:translateY(10px); opacity:.2;}50%{opacity:1;}100%{transform:translateY(-14px); opacity:.2;}}
+@keyframes abajo{0%{transform:translateY(-10px); opacity:.2;}50%{opacity:1;}100%{transform:translateY(14px); opacity:.2;}}
+@keyframes llamita{0%,100%{transform:scale(1,1);}50%{transform:scale(.9,1.1);}}
+
+
+/* 13. Página: los 108 sentimientos ----------------------------------------- */
+.pg-vedanas .zona{cursor:pointer; transition:opacity .4s, filter .3s; outline:none;}
+.pg-vedanas .zona:hover{filter:brightness(1.15);}
+.pg-vedanas .zona:focus-visible{filter:drop-shadow(0 0 6px #fff6dc) brightness(1.1);}
+.pg-vedanas .seg{stroke:var(--sky); stroke-width:1.2;}
+.pg-vedanas #mandala.has-sel .zona{opacity:.26;}
+.pg-vedanas #mandala.has-sel .zona.sel,.pg-vedanas #mandala.has-sel .zona[data-n="vedana"]{opacity:1;}
+.pg-vedanas #mandala .zona.sel .seg{stroke:#fff6dc; stroke-width:1.6;}
+.pg-vedanas .nombre-s{font-family:var(--display); font-size:18px; font-weight:600; fill:#17122b; pointer-events:none;}
+.pg-vedanas .objeto{font-family:var(--display); font-style:italic; font-size:17px; fill:var(--sky-muted); letter-spacing:.03em;}
+.pg-vedanas .cifra{font-family:var(--display); font-size:46px; font-weight:600; fill:#17122b; font-variant-numeric:lining-nums;}
+.pg-vedanas .cifra-s{font-family:var(--display); font-style:italic; font-size:15px; fill:#5a4520;}
+.pg-vedanas .estrella{animation:tw 4s ease-in-out infinite;}
+.pg-vedanas .halo-c{animation:pulse 6s ease-in-out infinite;}
+
+/* Despliegue: cada segmento crece desde el centro, uno tras otro */
+.pg-vedanas .pliegue{transform-box:view-box; transform-origin:400px 400px;
+  transition:opacity .55s ease, transform .8s cubic-bezier(.2,.8,.2,1); transition-delay:calc(var(--i,0) * var(--d,0ms));}
+.pg-vedanas #mandala.plegado .anillo:not(.abierto) .pliegue{opacity:0; transform:scale(.55) rotate(-24deg);}
+.pg-vedanas #mandala.sin-trans .pliegue{transition:none;}
+
+/* La fórmula 6 × 3 × 2 × 3 = 108 y la leyenda */
+.pg-vedanas .formula{display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:6px 8px;}
+.pg-vedanas .formula i{font-style:normal; font-family:var(--display); font-size:1.4rem; color:var(--sky-muted);}
+.pg-vedanas .fbtn{font:inherit; color:var(--sky-ink); background:var(--sky-2); border:1px solid var(--sky-line); border-radius:14px;
+  padding:6px 12px 7px; cursor:pointer; display:grid; justify-items:center; line-height:1.1; min-width:64px;
+  transition:background .3s, border-color .3s, box-shadow .3s;}
+.pg-vedanas .fbtn b{font-family:var(--display); font-size:1.55rem; font-weight:600; font-variant-numeric:lining-nums;}
+.pg-vedanas .fbtn span{font-size:.7rem; letter-spacing:.04em; color:var(--sky-muted);}
+.pg-vedanas .fbtn:hover{background:var(--sky-hover);}
+.pg-vedanas .fbtn.on{border-color:var(--sky-accent); box-shadow:0 0 18px rgba(232,196,106,.28);}
+.pg-vedanas .fbtn.total b{color:var(--sky-accent);}
+.pg-vedanas .leyenda{display:flex; flex-wrap:wrap; justify-content:center; gap:6px 12px; font-size:.78rem; color:var(--sky-muted);}
+.pg-vedanas .leyenda span{display:inline-flex; align-items:center; gap:6px;}
+.pg-vedanas .leyenda span::before{content:""; width:10px; height:10px; border-radius:3px; background:var(--c);}
+
+/* Visor del panel */
+.pg-vedanas .visor .flota{animation:flota 6s ease-in-out infinite;}
+.pg-vedanas .visor .late{animation:late-r 3s ease-in-out infinite;}
+.pg-vedanas .visor .gira-lento{animation:spin 60s linear infinite; transform-box:fill-box; transform-origin:center;}
+.pg-vedanas .visor-t{font-family:var(--body); font-size:9px; font-weight:500; fill:var(--ink);}
+@media (max-width:560px){
+  .pg-vedanas .formula{gap:4px 4px;}
+  .pg-vedanas .fbtn{min-width:0; padding:4px 7px 5px; border-radius:11px;}
+  .pg-vedanas .fbtn b{font-size:1.25rem;}
+  .pg-vedanas .fbtn span{font-size:.6rem; letter-spacing:0;}
+  .pg-vedanas .formula i{font-size:1rem;}
+}
+
+
+/* 14. Página: la red del esoterismo ---------------------------------------- */
+.pg-esoterismo #red{touch-action:pan-y; cursor:grab; user-select:none; -webkit-user-select:none;}
+.pg-esoterismo #red.arrastrando{cursor:grabbing;}
+.pg-esoterismo #red.tiempo{cursor:default;}
+.pg-esoterismo .estrella{animation:tw 4s ease-in-out infinite;}
+.pg-esoterismo .nodo{cursor:pointer; outline:none;}
+.pg-esoterismo .nodo-i{transition:opacity .4s;}
+.pg-esoterismo .nodo .core{transition:stroke .3s;}
+.pg-esoterismo .nodo:hover .core,.pg-esoterismo .nodo:focus-visible .core{stroke:#fff6dc; stroke-width:2.5;}
+.pg-esoterismo .nodo .aro-sel{opacity:0; transition:opacity .3s;}
+.pg-esoterismo .nodo.elegido .aro-sel{opacity:1; animation:late-r 2.4s ease-in-out infinite;}
+.pg-esoterismo .nodo:focus-visible .aro-sel{opacity:1;}
+.pg-esoterismo .etiqueta{font-family:var(--display); font-size:19px; font-weight:600; fill:var(--sky-ink);
+  paint-order:stroke; stroke:var(--sky); stroke-width:4px; stroke-linejoin:round; pointer-events:none;}
+.pg-esoterismo .arista,.pg-esoterismo .pulso{transition:opacity .4s;}
+.pg-esoterismo #red.has-sel .nodo:not(.on) .nodo-i{opacity:.2;}
+.pg-esoterismo #red.has-sel .arista:not(.on),.pg-esoterismo #red.has-sel .pulso:not(.on){opacity:.06;}
+.pg-esoterismo #red.has-sel .arista.on{stroke-width:2.4;}
+.pg-esoterismo .oculto{display:none;}
+.pg-esoterismo .etq{font-family:var(--body); font-size:11px; font-weight:500; fill:var(--sky-ink);
+  paint-order:stroke; stroke:var(--sky); stroke-width:3.5px; stroke-linejoin:round; pointer-events:none;}
+.pg-esoterismo .constelacion{stroke:#e8c46a; stroke-width:1.6; stroke-dasharray:3 5; opacity:.85; animation:senda 2.4s linear infinite;}
+.pg-esoterismo .capa-t{font-family:var(--display); font-style:italic; font-size:15px; fill:var(--sky-muted);}
+.pg-esoterismo .anio-t{font-family:var(--body); font-size:10.5px; fill:var(--sky-muted);}
+
+/* Leyenda: tipos de vínculo (botones) y grupos de nodos */
+.pg-esoterismo .leyenda-red{display:grid; gap:8px;}
+.pg-esoterismo .tipos{display:flex; flex-wrap:wrap; justify-content:center; gap:6px;}
+.pg-esoterismo .tipo-btn{font:inherit; font-size:.78rem; color:var(--sky-ink); background:var(--sky-2); border:1px solid var(--sky-line);
+  border-radius:999px; padding:5px 11px; cursor:pointer; display:inline-flex; align-items:center; gap:7px; transition:opacity .3s, background .3s;}
+.pg-esoterismo .tipo-btn:hover{background:var(--sky-hover);}
+.pg-esoterismo .tipo-btn[aria-pressed="false"]{opacity:.42; text-decoration:line-through;}
+.pg-esoterismo .tipo-btn .ns{color:var(--sky-muted); font-size:.72rem;}
+.pg-esoterismo .grupos{display:flex; flex-wrap:wrap; justify-content:center; gap:4px 14px; font-size:.78rem; color:var(--sky-muted);}
+.pg-esoterismo .grupos span{display:inline-flex; align-items:center; gap:6px;}
+.pg-esoterismo .grupos span::before{content:""; width:10px; height:10px; border-radius:50%; background:var(--c);}
+.pg-esoterismo .sbtn:disabled{opacity:.4; cursor:default;}
+
+/* Panel */
+.pg-esoterismo .visor .flota{animation:flota 6s ease-in-out infinite;}
+.pg-esoterismo .visor .gira-lento{animation:spin 50s linear infinite; transform-box:fill-box; transform-origin:center;}
+.pg-esoterismo .tipo-k{display:inline-flex; align-items:center; gap:6px; font-family:var(--body); font-size:.74rem; font-weight:500;
+  letter-spacing:.04em; text-transform:uppercase; color:var(--muted);}
+.pg-esoterismo .tipo-k::before{content:""; width:16px; height:3px; border-radius:2px; background:var(--tc);}
+.pg-esoterismo .capa-n{font-size:.82rem; color:var(--muted); margin:14px 0 6px !important;}
+.pg-esoterismo .personas,.pg-esoterismo .textos,.pg-esoterismo .conexiones{list-style:none; margin:0 0 8px; padding:0; display:grid; gap:8px;}
+.pg-esoterismo .personas li,.pg-esoterismo .textos li{padding:9px 12px; border-radius:10px; background:var(--chip); font-size:.92rem; line-height:1.5;}
+.pg-esoterismo .personas strong{font-family:var(--display); font-size:1.06rem; font-weight:600;}
+.pg-esoterismo .textos em{font-family:var(--display); font-size:1.08rem; font-weight:600;}
+.pg-esoterismo .textos p{margin:4px 0 0 !important; color:var(--muted); font-size:.88rem;}
+.pg-esoterismo .principios{margin:8px 0 2px; padding-left:20px; display:grid; gap:4px; font-size:.88rem;}
+.pg-esoterismo .etiquetas{display:flex; flex-wrap:wrap; gap:6px;}
+.pg-esoterismo .etiquetas span{font-size:.84rem; padding:4px 11px; border-radius:999px; border:1px solid var(--line); color:var(--muted);}
+.pg-esoterismo .conex{display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; padding:10px 12px; border-radius:10px;
+  background:var(--chip); border-left:3px solid var(--tc);}
+.pg-esoterismo .conex p{flex-basis:100%; margin:0 !important; font-size:.9rem; line-height:1.5;}
+.pg-esoterismo .conex .chip{background:var(--card);}
+.pg-esoterismo .enl{font:inherit; background:none; border:0; padding:0; color:inherit; cursor:pointer; text-decoration:underline; text-underline-offset:3px; text-align:left;}
+.pg-esoterismo .enl:hover{color:var(--gold);}
+@media (max-width:560px){
+  .pg-esoterismo .etiqueta{font-size:24px; stroke-width:5px;}
+  .pg-esoterismo .tipo-btn{font-size:.72rem; padding:4px 9px;}
+}
+
+
+/* 15. Movimiento reducido -------------------------------------------------- */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important; transition:none !important;}
+}

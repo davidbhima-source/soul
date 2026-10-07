@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es" class="pg-esoterismo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La red del esoterismo · Bhima</title>
+<meta name="description" content="Una esfera interactiva con las corrientes del esoterismo occidental —Hermetismo, alquimia, Cábala, Sufismo, Rosacruz, Masonería, Golden Dawn, Teosofía— y los vínculos documentados, debatidos o legendarios que las unen.">
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="home-link" href="ocultismo.html"><span aria-hidden="true">←</span>Ocultismo</a>
+  <h1>La red del esoterismo</h1>
+  <p class="lede">Quince corrientes y cuarenta vínculos: del Egipto helenístico a la Teosofía. Arrastra la esfera para girarla, toca una tradición para ver su historia, sus conceptos, sus figuras y textos, y sigue las luces que recorren las conexiones para ver hacia dónde fluyó cada influencia.</p>
+</header>
+
+<main>
+  <section class="lienzo" aria-label="Red de las tradiciones esotéricas">
+    <svg id="red" viewBox="0 0 800 760" role="group" aria-label="Esfera interactiva de tradiciones y vínculos"></svg>
+    <div class="mando">
+      <div class="leyenda-red">
+        <div class="tipos" id="tipos" role="group" aria-label="Mostrar u ocultar tipos de vínculo"></div>
+        <div class="grupos" id="grupos" aria-hidden="true"></div>
+      </div>
+      <div class="lectura" aria-live="polite"><span class="paso-n" id="pasoN">15</span><span id="pasoT"></span></div>
+      <div class="botones">
+        <button class="sbtn" id="btnModo" type="button">Ver como línea de tiempo</button>
+        <button class="sbtn" id="btnGiro" type="button">Pausar el giro</button>
+        <button class="sbtn" id="btnTodo" type="button">Ver toda la red</button>
+      </div>
+    </div>
+  </section>
+  <aside class="panel-r" id="panel" aria-live="polite"></aside>
+</main>
+
+<footer class="pie">
+  <div class="nota">
+    <p><strong>Cómo leer la red.</strong> Cada esfera es una corriente; su tamaño crece con el número de vínculos. El color indica qué es: una raíz cultural o religiosa, una tradición con identidad propia, una síntesis que fusiona varias o una idea que organiza el conjunto. Las líneas se distinguen por su solidez histórica, y las luces que las recorren van de la fuente a quien la recibe; en los intercambios viajan en los dos sentidos. En la línea de tiempo, las raíces quedan abajo y las síntesis modernas arriba.</p>
+    <p><strong>Sobre las fuentes.</strong> El mapa es una síntesis de orientación elaborada a partir de la historiografía académica del esoterismo occidental (Antoine Faivre, Wouter Hanegraaff, Gershom Scholem, Frances Yates, David Stevenson y otros), no un tratado: conviene contrastarlo con esas obras. En cada tradición, la nota histórica separa lo documentado de lo que la propia tradición afirma sobre su origen. Los años sirven para ordenar y son aproximados. «Sofismo» se interpreta como Sufismo, la mística islámica.</p>
+  </div>
+</footer>
+
+<script src="esoterismo-datos.js"></script>
+<script>
+(function(){
+const D = window.MAPA_ESOTERISMO;
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const W = 800, H = 760, CX = 400, CY = 372, RAD = 262, DIST = 3.6;
+const INK = '#17122b', ORO = '#d9b265', CREMA = '#ece6d6';
+const NS = 'http://www.w3.org/2000/svg';
+
+/* ================= Datos ================= */
+const NODOS = D.nodes, ARISTAS = D.edges.slice(), CONCEPTOS = D.meta.conceptos_transversales;
+const POR_ID = {}; NODOS.forEach(n => POR_ID[n.id] = n);
+const GRUPO = {
+  raiz:{nombre:'Raíz', plural:'Raíces', color:'#d08a52'},
+  tradicion:{nombre:'Tradición', plural:'Tradiciones', color:'#5fb2d9'},
+  sintesis:{nombre:'Síntesis', plural:'Síntesis', color:'#b48ae6'},
+  idea:{nombre:'Idea', plural:'Ideas', color:'#e8c46a'}
+};
+const TIPO = {
+  documentado:{nombre:'Documentado', color:'#efe7d2', dash:''},
+  debatido:{nombre:'Debatido', color:'#e6aa4c', dash:'8 6'},
+  legendario:{nombre:'Legendario', color:'#e07fb6', dash:'2 6'},
+  especulativo:{nombre:'Especulativo', color:'#ef6a52', dash:'1 7'},
+  intercambio:{nombre:'Intercambio', color:'#5fcf9a', dash:''}
+};
+const CAPAS = ['Raíces','Tradiciones antiguas y medievales','Síntesis renacentista','Síntesis modernas'];
+const ENLACES = {oriente:[['kriya.html','Kriya yoga en este portal'],['buda.html','Budismo en este portal']]};
+
+// Grado de cada nodo y vecinos
+const GRADO = {}, VECINOS = {};
+NODOS.forEach(n => { GRADO[n.id] = 0; VECINOS[n.id] = new Set(); });
+ARISTAS.forEach(e => { GRADO[e.from]++; GRADO[e.to]++; VECINOS[e.from].add(e.to); VECINOS[e.to].add(e.from); });
+
+/* ================= Posiciones ================= */
+/* Esfera: la latitud depende de la capa (las raíces abajo, las síntesis modernas
+   arriba) y la longitud acerca las corrientes que se transmiten entre sí */
+const LON = {egipto_helenistico:0, neoplatonismo:70, mistica_judia:140, islam:230, oriente:300,
+             hermetismo:30, cabala:118, sufismo:262, alquimia:335,
+             renacimiento:62, philosophia_perennis:205,
+             rosacruz:10, masoneria:100, golden_dawn:178, teosofia:268};
+const LAT = [-50, -14, 22, 56];
+const rad = a => a*Math.PI/180;
+NODOS.forEach(n => {
+  const la = rad(LAT[n.capa] + ((LON[n.id]||0) % 3 - 1)*4), lo = rad(LON[n.id] || 0);
+  n._p = [Math.cos(la)*Math.sin(lo), -Math.sin(la), Math.cos(la)*Math.cos(lo)];
+  n._lat = la; n._lon = lo;
+});
+/* Línea de tiempo: en el eje horizontal, el orden cronológico; en el vertical, la capa */
+const ORDEN = NODOS.slice().sort((a,b) => a.anio_orden - b.anio_orden);
+const TX0 = 118, TX1 = 738, TY = [598, 452, 306, 160];
+const enCapa = [0,0,0,0];
+ORDEN.forEach((n,i) => { const k = enCapa[n.capa]++; n._carril = k;
+  n._t = [TX0 + i*(TX1-TX0)/(ORDEN.length-1), TY[n.capa] + (k%2 ? 28 : -28)]; n._rank = i; });
+const anio = y => y < 0 ? (-y)+' a.C.' : y+'';
+
+/* ================= Glifos de cada corriente ================= */
+function glifo(id, c){
+  const s = 'fill="none" stroke="'+c+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"', f = 'fill="'+c+'"';
+  switch(id){
+    case 'egipto_helenistico': return '<path d="M-14,-2 Q0,-12 14,-2 Q0,6 -14,-2 Z" '+s+'/><circle cy="-3" r="3.6" '+f+'/><path d="M-12,-8 Q0,-15 13,-7" '+s+'/><path d="M-2,4 L-4,13 M2,4 C6,10 12,10 11,5 C10,2 7,3 8,5" '+s+'/>';
+    case 'neoplatonismo': return '<circle r="3" '+f+'/><circle r="7.5" '+s+' opacity=".85"/><circle r="12" '+s+' opacity=".6"/><circle r="16" '+s+' opacity=".35"/>';
+    case 'mistica_judia': return '<circle r="13" '+s+'/><circle r="7" '+s+'/><path d="M0,-13 L0,13 M-13,0 L13,0 M-9.2,-9.2 L9.2,9.2 M-9.2,9.2 L9.2,-9.2" '+s+' opacity=".7"/>';
+    case 'islam': return '<rect x="-10" y="-10" width="20" height="20" '+s+'/><rect x="-10" y="-10" width="20" height="20" transform="rotate(45)" '+s+'/><circle r="3.6" '+s+'/>';
+    case 'oriente': return [-60,-30,0,30,60].map(a => '<path d="M0,6 C-5,-2 -4,-10 0,-15 C4,-10 5,-2 0,6 Z" transform="rotate('+a+')" '+s+'/>').join('')+'<path d="M-13,9 Q0,14 13,9" '+s+'/>';
+    case 'hermetismo': return '<path d="M0,-15 L0,16" '+s+'/><circle cy="-16" r="2.4" '+f+'/><path d="M0,-12 C-9,-14 -13,-10 -15,-6 M0,-12 C9,-14 13,-10 15,-6" '+s+'/><path d="M-5,-8 C6,-5 6,-1 0,1 C-6,3 -6,7 0,9 C6,11 5,14 2,15 M5,-8 C-6,-5 -6,-1 0,1 C6,3 6,7 0,9 C-6,11 -5,14 -2,15" '+s+'/>';
+    case 'alquimia': return '<rect x="-14" y="-14" width="28" height="28" '+s+'/><path d="M0,-12 L12,10 L-12,10 Z" '+s+'/><circle cy="3" r="5.4" '+s+'/>';
+    case 'cabala': { const P = [[0,-15],[7,-10],[-7,-10],[7,-3],[-7,-3],[0,1],[7,7],[-7,7],[0,11],[0,16]];
+      const L = [[0,1],[0,2],[1,2],[1,3],[2,4],[3,4],[3,5],[4,5],[1,5],[2,5],[3,6],[4,7],[5,6],[5,7],[6,7],[5,8],[6,8],[7,8],[8,9]];
+      return L.map(([a,b]) => '<path d="M'+P[a]+' L'+P[b]+'" '+s+' stroke-width="1.1" opacity=".7"/>').join('')+P.map(([x,y]) => '<circle cx="'+x+'" cy="'+y+'" r="2.3" '+f+'/>').join(''); }
+    case 'sufismo': return '<rect x="-2.6" y="-16" width="5.2" height="7" rx="1.5" '+f+'/><circle cy="-6.5" r="2.6" '+f+'/><path d="M0,-4 L0,4 M0,-3 L-9,-9 M0,-3 L8,1" '+s+'/><path d="M-11,15 Q0,0 11,15 Q0,10 -11,15 Z" '+f+'/>';
+    case 'renacimiento': return '<circle r="14" '+s+'/><rect x="-11" y="-11" width="22" height="22" '+s+'/><circle cy="-7" r="2.6" '+f+'/><path d="M0,-4 L0,6 M-11,-2 L11,-2 M0,6 L-6,11 M0,6 L6,11" '+s+'/>';
+    case 'philosophia_perennis': return [0,60,120,180,240,300].map(a => { const r0 = rad(a), x = (Math.cos(r0)*15).toFixed(1), y = (Math.sin(r0)*15).toFixed(1); return '<path d="M'+x+','+y+' L0,0" '+s+'/><circle cx="'+x+'" cy="'+y+'" r="2.4" '+f+'/>'; }).join('')+'<circle r="4" '+f+'/>';
+    case 'rosacruz': return '<path d="M0,-16 L0,16 M-12,-5 L12,-5" '+s+' stroke-width="3"/><circle cy="-5" r="6.5" '+f+'/>'+[0,72,144,216,288].map(a => '<circle cx="'+(Math.cos(rad(a))*3).toFixed(1)+'" cy="'+(-5+Math.sin(rad(a))*3).toFixed(1)+'" r="2.4" fill="#d9573f"/>').join('');
+    case 'masoneria': return '<path d="M0,-15 L-11,12 M0,-15 L11,12" '+s+' stroke-width="2.6"/><circle cy="-15" r="2.4" '+f+'/><path d="M-14,4 L0,15 L14,4" '+s+' stroke-width="2.6"/><text y="6" text-anchor="middle" font-family="Georgia,serif" font-size="9" font-weight="700" '+f+'>G</text>';
+    case 'golden_dawn': return '<path d="M-16,8 L16,8" '+s+'/><path d="M-9,8 A9,9 0 0 1 9,8" '+f+'/>'+[-70,-40,-10,20,50].map(a => { const r0 = rad(a-80); return '<path d="M'+(Math.cos(r0)*12).toFixed(1)+','+(8+Math.sin(r0)*12).toFixed(1)+' L'+(Math.cos(r0)*17).toFixed(1)+','+(8+Math.sin(r0)*17).toFixed(1)+'" '+s+'/>'; }).join('')+'<path d="M-10,13 L10,13" '+s+' opacity=".6"/>';
+    case 'teosofia': return '<circle r="13" '+s+' stroke-width="3"/><circle cx="10" cy="-8.5" r="3.4" '+f+'/><path d="M0,-7 L6,4 L-6,4 Z M0,7 L6,-4 L-6,-4 Z" '+s+' stroke-width="1.4"/>';
+    default: return '<circle r="8" '+f+'/>';
+  }
+}
+
+/* ================= Construcción del SVG ================= */
+const svg = document.getElementById('red');
+const el = (tag, at, padre) => { const e = document.createElementNS(NS, tag); for(const k in at) e.setAttribute(k, at[k]); if(padre) padre.appendChild(e); return e; };
+svg.innerHTML = '<defs><radialGradient id="cieloR" cx="50%" cy="48%"><stop offset="0" stop-color="#13285a"/><stop offset="1" stop-color="#060b1c"/></radialGradient>'+
+  '<radialGradient id="globo" cx="42%" cy="38%"><stop offset="0" stop-color="#1d3a7a" stop-opacity=".55"/><stop offset=".75" stop-color="#0f1d3f" stop-opacity=".25"/><stop offset="1" stop-color="#e8c46a" stop-opacity=".12"/></radialGradient>'+
+  '<filter id="brilloR" x="-1" y="-1" width="3" height="3"><feGaussianBlur stdDeviation="3"/></filter></defs>';
+el('rect', {width:W, height:H, fill:'url(#cieloR)'}, svg);
+{ let seed = 5; const rnd = () => (seed = (seed*16807)%2147483647)/2147483647; const g = el('g', {}, svg);
+  for(let i=0;i<140;i++){ const x = rnd()*W, y = rnd()*H, r = rnd()*1.3+.3;
+    el('circle', {class:'estrella', cx:x.toFixed(1), cy:y.toFixed(1), r:r.toFixed(2), fill:'#fff', style:'animation-delay:'+(rnd()*4).toFixed(2)+'s'}, g); } }
+const gGlobo = el('g', {class:'globo'}, svg);
+const disco = el('circle', {cx:CX, cy:CY, r:RAD, fill:'url(#globo)', stroke:'#e8c46a', 'stroke-opacity':.25}, gGlobo);
+// Meridianos y paralelos de la esfera
+const MALLA = [];
+for(let k=0;k<8;k++){ const lo = k*Math.PI/8, pts = []; for(let i=0;i<=48;i++){ const la = -Math.PI/2 + i*Math.PI/48; pts.push([Math.cos(la)*Math.sin(lo), -Math.sin(la), Math.cos(la)*Math.cos(lo)]); } MALLA.push(pts); }
+[-60,-30,0,30,60].forEach(d => { const la = rad(d), pts = []; for(let i=0;i<=64;i++){ const lo = i*2*Math.PI/64; pts.push([Math.cos(la)*Math.sin(lo), -Math.sin(la), Math.cos(la)*Math.cos(lo)]); } MALLA.push(pts); });
+const mallaEls = MALLA.map(() => el('path', {fill:'none', stroke:'#98a7c8', 'stroke-width':.8}, gGlobo));
+// Eje de la línea de tiempo
+const gEje = el('g', {class:'eje', opacity:0}, svg);
+el('path', {d:'M'+(TX0-20)+',690 L'+(TX1+20)+',690', stroke:'#98a7c8', 'stroke-opacity':.5}, gEje);
+[['Raíces',''],['Tradiciones','antiguas'],['Síntesis','renacentista'],['Síntesis','modernas']].forEach(([a,b],i) => {
+  const t = el('text', {x:14, y:TY[i]-(b?4:-4), class:'capa-t'}, gEje); t.textContent = a;
+  if(b){ const u = el('tspan', {x:14, dy:16}, t); u.textContent = b; }
+  el('path', {d:'M14,'+(TY[i]+(b?22:12))+' L64,'+(TY[i]+(b?22:12)), stroke:'#98a7c8', 'stroke-opacity':.3}, gEje); });
+ORDEN.forEach((n,i) => { const [x] = n._t;
+  el('path', {d:'M'+x.toFixed(1)+',684 L'+x.toFixed(1)+',696', stroke:'#98a7c8', 'stroke-opacity':.6}, gEje);
+  const t = el('text', {x:x.toFixed(1), y:i%2 ? 728 : 712, 'text-anchor':'middle', class:'anio-t'}, gEje); t.textContent = anio(n.anio_orden); });
+// Aristas, pulsos, etiquetas y nodos
+const gAristas = el('g', {}, svg), gConst = el('g', {}, svg), gPulsos = el('g', {}, svg), gEtq = el('g', {}, svg), gNodos = el('g', {}, svg);
+ARISTAS.forEach((e,i) => {
+  const t = TIPO[e.tipo];
+  e._el = el('path', {class:'arista', 'data-tipo':e.tipo, fill:'none', stroke:t.color, 'stroke-width':1.6, 'stroke-dasharray':t.dash, 'stroke-linecap':'round'}, gAristas);
+  e._pulsos = [el('circle', {class:'pulso', r:3, fill:t.color, 'data-tipo':e.tipo}, gPulsos)];
+  if(e.tipo==='intercambio') e._pulsos.push(el('circle', {class:'pulso', r:3, fill:t.color, 'data-tipo':e.tipo}, gPulsos));
+  e._fase = (i*0.37) % 1;
+});
+NODOS.forEach(n => {
+  const r = 9 + GRADO[n.id]*1.05, g = GRUPO[n.grupo];
+  n._r = r;
+  const o = el('g', {class:'nodo', tabindex:0, role:'button', 'aria-label':n.label+', '+g.nombre.toLowerCase()+', '+n.periodo, 'data-id':n.id}, gNodos);
+  const i = el('g', {class:'nodo-i'}, o);
+  el('circle', {r:r+9, fill:g.color, opacity:.18, filter:'url(#brilloR)', class:'aura'}, i);
+  el('circle', {r:r+5, fill:'none', stroke:g.color, 'stroke-width':1.5, class:'aro-sel'}, i);
+  el('circle', {r:r, fill:g.color, stroke:'#060b1c', 'stroke-width':1.5, class:'core'}, i);
+  const gl = el('g', {transform:'scale('+(r/19).toFixed(2)+')'}, i); gl.innerHTML = glifo(n.id, INK);
+  const t = el('text', {class:'etiqueta', y:r+18, 'text-anchor':'middle'}, i); t.textContent = n.label;
+  n._el = o; n._lab = t; n._arriba = false;
+});
+
+/* Leyenda: tipos de vínculo (se pueden ocultar) y grupos de nodos */
+const visibles = new Set(Object.keys(TIPO));
+document.getElementById('tipos').innerHTML = Object.entries(TIPO).map(([k,t]) => {
+  const n = ARISTAS.filter(e => e.tipo===k).length;
+  return '<button type="button" class="tipo-btn" data-tipo="'+k+'" aria-pressed="true" title="'+D.meta.tipos_de_arista[k]+'"><svg width="26" height="8" aria-hidden="true"><path d="M1,4 L25,4" stroke="'+t.color+'" stroke-width="2.4" stroke-dasharray="'+t.dash+'" stroke-linecap="round"/></svg>'+t.nombre+' <span class="ns">'+n+'</span></button>';
+}).join('');
+document.getElementById('grupos').innerHTML = Object.entries(GRUPO).map(([k,g]) => '<span style="--c:'+g.color+'">'+g.plural+'</span>').join('');
+document.getElementById('tipos').addEventListener('click', e => {
+  const b = e.target.closest('.tipo-btn'); if(!b) return;
+  const k = b.dataset.tipo, on = !visibles.has(k);
+  if(on) visibles.add(k); else visibles.delete(k);
+  b.setAttribute('aria-pressed', on);
+  svg.querySelectorAll('[data-tipo="'+k+'"]').forEach(x => x.classList.toggle('oculto', !on));
+});
+
+/* ================= Animación ================= */
+let yaw = rad(-20), pitch = rad(-12), girando = !reduce, modo = 0, modoMeta = 0;
+let objetivo = null; // {yaw, pitch} hacia donde gira la esfera al elegir un nodo
+const pantalla = {};
+function proyectar(p){
+  const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
+  const x1 = p[0]*cy + p[2]*sy, z1 = -p[0]*sy + p[2]*cy;
+  const y2 = p[1]*cp - z1*sp, z2 = p[1]*sp + z1*cp;
+  const k = DIST/(DIST - z2);
+  return [CX + x1*RAD*k, CY + y2*RAD*k, z2, k];
+}
+const mezcla = (a,b,t) => a + (b-a)*t;
+let ultimo = 0, reloj = 0, ordenPrevio = '';
+function cuadro(ts){
+  const dt = ultimo ? Math.min(50, ts - ultimo) : 16; ultimo = ts;
+  reloj += dt;
+  // Giro automático o hacia el nodo elegido
+  if(objetivo){
+    let dy = objetivo.yaw - yaw; dy = Math.atan2(Math.sin(dy), Math.cos(dy));
+    yaw += dy * Math.min(1, dt/260); pitch += (objetivo.pitch - pitch) * Math.min(1, dt/260);
+    if(Math.abs(dy) < .002 && Math.abs(objetivo.pitch - pitch) < .002) objetivo = null;
+  } else if(girando && !arrastre && !sobreNodo && !enfocado) yaw += dt * 0.00012;
+  // Transición esfera ↔ línea de tiempo
+  if(modo !== modoMeta){ const paso = dt/1100; modo = modoMeta > modo ? Math.min(modoMeta, modo+paso) : Math.max(modoMeta, modo-paso); }
+  const m = modo<.5 ? 2*modo*modo : 1-Math.pow(-2*modo+2,2)/2;
+  dibujarCuadro(m);
+  requestAnimationFrame(cuadro);
+}
+function dibujarCuadro(m){
+  // Malla de la esfera
+  gGlobo.setAttribute('opacity', (1-m).toFixed(3));
+  gEje.setAttribute('opacity', m.toFixed(3));
+  if(m < 1) MALLA.forEach((pts,i) => {
+    let d = '';
+    pts.forEach((p,j) => { const [x,y,z] = proyectar(p); d += (j ? (z > -.05 ? 'L' : 'M') : 'M')+x.toFixed(1)+','+y.toFixed(1); });
+    mallaEls[i].setAttribute('d', d);
+    mallaEls[i].setAttribute('stroke-opacity', '.16');
+  });
+  // Nodos
+  NODOS.forEach(n => {
+    const [x,y,z,k] = proyectar(n._p);
+    const px = mezcla(x, n._t[0], m), py = mezcla(y, n._t[1], m), prof = mezcla((z+1)/2, 1, m);
+    const esc = mezcla(.62 + .5*((z+1)/2), .82, m);
+    pantalla[n.id] = [px, py, prof];
+    n._el.setAttribute('transform', 'translate('+px.toFixed(1)+' '+py.toFixed(1)+') scale('+esc.toFixed(3)+')');
+    n._el.setAttribute('opacity', (.32 + .68*prof).toFixed(3));
+    n._z = mezcla(z, 0, m);
+    // En la línea de tiempo, las etiquetas se alternan arriba y abajo para no chocar
+    const arriba = m > .5 && n._carril % 2 === 0;
+    if(arriba !== n._arriba){ n._arriba = arriba; n._lab.setAttribute('y', arriba ? -(n._r+10) : n._r+18); }
+  });
+  // Orden de dibujo por profundidad
+  const orden = NODOS.slice().sort((a,b) => a._z - b._z), clave = orden.map(n => n.id).join();
+  // (no se reordena mientras un nodo tiene el foco: moverlo en el DOM se lo quitaría)
+  if(clave !== ordenPrevio && !enfocado){ ordenPrevio = clave; orden.forEach(n => gNodos.appendChild(n._el)); }
+  // Aristas y pulsos
+  ARISTAS.forEach(e => {
+    const a = pantalla[e.from], b = pantalla[e.to];
+    // Curva suave: el punto de control se aparta un poco de la recta
+    const mx = (a[0]+b[0])/2, my = (a[1]+b[1])/2, dx = b[0]-a[0], dy = b[1]-a[1];
+    const qx = mx - dy*.12, qy = my + dx*.12;
+    e._q = [qx, qy];
+    e._el.setAttribute('d', 'M'+a[0].toFixed(1)+','+a[1].toFixed(1)+' Q'+qx.toFixed(1)+','+qy.toFixed(1)+' '+b[0].toFixed(1)+','+b[1].toFixed(1));
+    const prof = (a[2]+b[2])/2;
+    e._el.setAttribute('stroke-opacity', (.12 + .55*prof).toFixed(3));
+    e._pulsos.forEach((p,i) => {
+      if(reduce){ p.setAttribute('opacity', 0); return; }
+      let t = ((reloj/ (2600 + (e._fase*1400))) + e._fase) % 1; if(i) t = 1 - t;
+      const u = 1-t, x = u*u*a[0] + 2*u*t*qx + t*t*b[0], y = u*u*a[1] + 2*u*t*qy + t*t*b[1];
+      p.setAttribute('cx', x.toFixed(1)); p.setAttribute('cy', y.toFixed(1));
+      p.setAttribute('opacity', ((.25 + .75*prof) * Math.sin(Math.PI*t)).toFixed(3));
+    });
+  });
+  // Etiquetas de los vínculos del nodo elegido
+  etiquetas.forEach(([e, t]) => {
+    const a = pantalla[e.from], b = pantalla[e.to];
+    const x = .25*a[0] + .5*e._q[0] + .25*b[0], y = .25*a[1] + .5*e._q[1] + .25*b[1];
+    t.setAttribute('x', x.toFixed(1)); t.setAttribute('y', (y+4).toFixed(1));
+  });
+  // Constelación del concepto elegido
+  if(constelacion.length){
+    let d = ''; constelacion.forEach((id,i) => { const p = pantalla[id]; d += (i?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1); });
+    lineaConst.setAttribute('d', d+'Z');
+  }
+}
+const lineaConst = el('path', {class:'constelacion', fill:'none'}, gConst);
+let constelacion = [], etiquetas = [];
+
+/* ================= Arrastrar para girar ================= */
+let arrastre = null, sobreNodo = false, movido = false, enfocado = false;
+svg.addEventListener('pointerdown', e => {
+  if(modoMeta) return;
+  arrastre = {x:e.clientX, y:e.clientY, yaw, pitch}; movido = false;
+});
+window.addEventListener('pointermove', e => {
+  if(!arrastre) return;
+  const dx = e.clientX - arrastre.x, dy = e.clientY - arrastre.y;
+  if(!movido && Math.hypot(dx,dy) < 5) return;
+  if(!movido){ movido = true; svg.classList.add('arrastrando'); try{ svg.setPointerCapture(e.pointerId); }catch(_){} }
+  const esc = 2.2 / svg.getBoundingClientRect().width * Math.PI;
+  objetivo = null;
+  yaw = arrastre.yaw + dx*esc; pitch = Math.max(-1.25, Math.min(1.25, arrastre.pitch + dy*esc));
+});
+window.addEventListener('pointerup', () => { arrastre = null; svg.classList.remove('arrastrando'); });
+svg.addEventListener('pointerover', e => { const n = e.target.closest('.nodo'); if(n){ sobreNodo = true; hover(n.dataset.id); } });
+svg.addEventListener('pointerout', e => { const n = e.target.closest('.nodo'); if(n && !n.contains(e.relatedTarget)){ sobreNodo = false; hover(null); } });
+svg.addEventListener('click', e => {
+  if(movido){ movido = false; return; }
+  const n = e.target.closest('.nodo'); if(n) abrir(n.dataset.id, true);
+});
+svg.addEventListener('keydown', e => {
+  const n = e.target.closest('.nodo'); if(!n) return;
+  if(e.key==='Enter' || e.key===' '){ e.preventDefault(); abrir(n.dataset.id, true); }
+});
+svg.addEventListener('focusin', e => { const n = e.target.closest('.nodo'); if(n){ enfocado = true; hover(n.dataset.id); } });
+svg.addEventListener('focusout', () => { enfocado = false; hover(null); });
+
+/* ================= Resaltado ================= */
+let actual = 'mapa';
+function marcar(nodos, aristas){
+  const sn = new Set(nodos), sa = new Set(aristas);
+  svg.classList.toggle('has-sel', nodos.length > 0);
+  NODOS.forEach(n => n._el.classList.toggle('on', sn.has(n.id)));
+  ARISTAS.forEach(e => { const on = sa.has(e); e._el.classList.toggle('on', on); e._pulsos.forEach(p => p.classList.toggle('on', on)); });
+}
+function vinculos(id){ return ARISTAS.filter(e => e.from===id || e.to===id); }
+function resaltarNodo(id){
+  const vs = vinculos(id);
+  marcar([id].concat([...VECINOS[id]]), vs);
+  NODOS.forEach(n => n._el.classList.toggle('elegido', n.id===id));
+  gEtq.innerHTML = '';
+  etiquetas = vs.map(e => { const t = el('text', {class:'etq', 'text-anchor':'middle', 'data-tipo':e.tipo}, gEtq); t.textContent = e.etiqueta; if(!visibles.has(e.tipo)) t.classList.add('oculto'); return [e, t]; });
+}
+function limpiar(){
+  marcar([], []); gEtq.innerHTML = ''; etiquetas = []; constelacion = []; lineaConst.setAttribute('d','');
+  NODOS.forEach(n => n._el.classList.remove('elegido'));
+}
+function hover(id){
+  if(id){ const n = POR_ID[id]; lectura(GRADO[id], '<strong>'+n.label+'</strong> · '+n.periodo+' · '+GRADO[id]+' vínculos'); }
+  else lecturaDe(actual);
+}
+function mirarA(id){
+  if(modoMeta) return;
+  const n = POR_ID[id];
+  objetivo = {yaw:-n._lon, pitch:-n._lat*.85};
+}
+
+/* ================= Panel ================= */
+const panel = document.getElementById('panel');
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function visor(id, color){
+  const g = id ? glifo(id, INK) : '';
+  return '<svg class="visor" viewBox="-60 -60 120 120" aria-hidden="true"><circle r="56" fill="'+color+'" opacity=".16"/><circle r="56" fill="none" stroke="'+color+'" stroke-width="1.2" opacity=".6"/>'+
+    '<g class="flota"><circle r="38" fill="'+color+'"/><g transform="scale(1.85)">'+g+'</g></g></svg>';
+}
+function visorRed(){
+  let s = '<svg class="visor" viewBox="-60 -60 120 120" aria-hidden="true"><circle r="56" fill="'+ORO+'" opacity=".16"/><circle r="56" fill="none" stroke="'+ORO+'" stroke-width="1.2" opacity=".6"/><g class="gira-lento">';
+  const P = NODOS.map((n,i) => { const a = rad(i*360/NODOS.length - 90), r = 26 + (n.capa%2)*14; return [Math.cos(a)*r, Math.sin(a)*r, GRUPO[n.grupo].color]; });
+  ARISTAS.forEach(e => { const a = P[NODOS.indexOf(POR_ID[e.from])], b = P[NODOS.indexOf(POR_ID[e.to])]; s += '<path d="M'+a[0].toFixed(1)+','+a[1].toFixed(1)+' L'+b[0].toFixed(1)+','+b[1].toFixed(1)+'" stroke="'+INK+'" stroke-opacity=".35" stroke-width=".8"/>'; });
+  P.forEach(([x,y,c]) => s += '<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="4.4" fill="'+c+'" stroke="'+INK+'" stroke-width=".8"/>');
+  return s+'</g></svg>';
+}
+const chipNodo = id => { const n = POR_ID[id]; return '<button type="button" class="chip" data-ir="'+id+'" style="--ac:'+GRUPO[n.grupo].color+'"><span class="d"></span>'+n.label+'</button>'; };
+const chipConcepto = c => '<button type="button" class="chip" data-ir="c:'+c.id+'" style="--ac:'+ORO+'"><span class="d"></span>'+c.nombre+'</button>';
+function migas(items){
+  return '<nav class="migas" aria-label="Ubicación">'+items.map(([id,t],i) => i<items.length-1
+    ? '<button type="button" data-ir="'+id+'">'+t+'</button><span aria-hidden="true">›</span>' : '<span aria-current="page">'+t+'</span>').join('')+'</nav>';
+}
+const lista = filas => '<dl class="lista">'+filas.map(([k,v]) => '<div><dt>'+k+'</dt><dd>'+v+'</dd></div>').join('')+'</dl>';
+
+function htmlMapa(){
+  let h = migas([['mapa','Red del esoterismo']]);
+  h += '<div class="cab">'+visorRed()+'<div><h2>'+D.meta.titulo+'</h2><p class="san">15 corrientes · 40 vínculos</p><p class="gloss">De las raíces antiguas a las síntesis modernas</p></div></div>';
+  h += '<p>Cada esfera de la red es una corriente; cada línea, un vínculo entre dos de ellas. Las luces que recorren las líneas van de la fuente a quien la recibe, y el tamaño de cada esfera crece con el número de conexiones.</p>';
+  h += '<p><strong>¿Comparten todas el mismo origen?</strong> La red sugiere que no exactamente: nacen de raíces distintas —el Egipto helenístico, la filosofía griega, la mística judía, el Islam— y convergen después, sobre todo en el Renacimiento florentino, donde se fusionan por primera vez en un solo proyecto. La idea de una sabiduría única y primordial, la <em>philosophia perennis</em>, tiene su propia historia, y por eso es un nodo más del mapa.</p>';
+  h += '<p>Por eso no todos los vínculos valen lo mismo:</p>';
+  h += lista(Object.entries(TIPO).map(([k,t]) => ['<span class="tipo-k" style="--tc:'+t.color+'">'+t.nombre+'</span>', D.meta.tipos_de_arista[k]]));
+  h += '<h3>Las cuatro capas</h3>';
+  CAPAS.forEach((c,i) => { h += '<p class="capa-n">'+c+'</p><div class="chips">'+NODOS.filter(n => n.capa===i).sort((a,b) => a.anio_orden-b.anio_orden).map(n => chipNodo(n.id)).join('')+'</div>'; });
+  const F = D.meta.caracteristicas_faivre;
+  h += '<h3>Qué define al esoterismo occidental</h3><p>'+esc(F.fuente)+' Propone cuatro rasgos esenciales y dos secundarios:</p>';
+  h += lista(F.esenciales.map(x => [esc(x.nombre), esc(x.explicacion)]));
+  h += lista(F.secundarias.map(x => [esc(x.nombre)+' <span class="ns">(secundaria)</span>', esc(x.explicacion)]));
+  h += '<h3>Conceptos que atraviesan el mapa</h3><div class="chips">'+CONCEPTOS.map(chipConcepto).join('')+'</div>';
+  return {h, color:ORO};
+}
+function htmlNodo(id){
+  const n = POR_ID[id], g = GRUPO[n.grupo], color = g.color;
+  let h = migas([['mapa','Red del esoterismo'], [id, n.label]]);
+  h += '<div class="cab">'+visor(id, color)+'<div><h2>'+esc(n.label)+'</h2><p class="san">'+esc(n.periodo)+'</p><p class="gloss">'+esc(n.region)+' · '+g.nombre+' · '+CAPAS[n.capa].toLowerCase()+'</p></div></div>';
+  h += '<p>'+esc(n.descripcion)+'</p>';
+  if(n.lema) h += '<div class="ejemplo"><span class="k">Lema</span><p>«'+esc(n.lema)+'»</p></div>';
+  if(n.advertencia_historica) h += '<div class="fila"><span class="k">Nota histórica</span><p>'+esc(n.advertencia_historica)+'</p></div>';
+  if(n.conceptos_clave && n.conceptos_clave.length) h += '<h3>Conceptos clave</h3>'+lista(n.conceptos_clave.map(c => [esc(c.nombre), esc(c.explicacion)]));
+  if(n.variantes) h += '<h3>Variantes</h3>'+lista(n.variantes.map(v => [esc(v.nombre), esc(v.descripcion)]));
+  if(n.ritos) h += '<h3>Ritos</h3>'+lista(n.ritos.map(v => [esc(v.nombre), esc(v.nota)]));
+  if(n.organizaciones_posteriores) h += '<h3>Órdenes posteriores</h3>'+lista(n.organizaciones_posteriores.map(v => [esc(v.nombre)+' <span class="ns">'+esc(v.fecha)+'</span>', esc(v.nota)]));
+  if(n.legado) h += '<h3>Legado</h3>'+lista(n.legado.map(v => [esc(v.nombre)+' <span class="ns">'+esc(v.fecha)+'</span>', esc(v.nota)]));
+  if(n.figuras_clave && n.figuras_clave.length) h += '<h3>Figuras clave</h3><ul class="personas">'+n.figuras_clave.map(f =>
+    '<li><strong>'+esc(f.nombre)+'</strong> <span class="ns">'+esc(f.fechas)+'</span><br>'+esc(f.rol)+'</li>').join('')+'</ul>';
+  if(n.textos_clave && n.textos_clave.length) h += '<h3>Textos clave</h3><ul class="textos">'+n.textos_clave.map(t =>
+    '<li><em>'+esc(t.titulo)+'</em><span class="ns"> · '+esc(t.autor)+' · '+esc(t.fecha)+'</span>'+(t.nota?'<p>'+esc(t.nota)+'</p>':'')+
+    (t.siete_principios ? '<ol class="principios">'+t.siete_principios.map(p => '<li><strong>'+esc(p.nombre)+'.</strong> '+esc(p.enunciado)+'</li>').join('')+'</ol>' : '')+'</li>').join('')+'</ul>';
+  if(n.simbolos) h += '<h3>Símbolos</h3><div class="etiquetas">'+n.simbolos.map(s => '<span>'+esc(s)+'</span>').join('')+'</div>';
+  // Conexiones
+  const fila = (e, otro, dir) => { const t = TIPO[e.tipo];
+    return '<li class="conex" style="--tc:'+t.color+'">'+chipNodo(otro)+'<span class="tipo-k" style="--tc:'+t.color+'">'+t.nombre+'</span>'+
+      (dir ? '<span class="ns">'+dir+'</span>' : '')+'<p><strong>'+esc(e.etiqueta)+'.</strong> '+esc(e.descripcion)+'</p></li>'; };
+  const entran = ARISTAS.filter(e => e.to===id && e.tipo!=='intercambio'), salen = ARISTAS.filter(e => e.from===id && e.tipo!=='intercambio');
+  const mutuos = ARISTAS.filter(e => (e.from===id || e.to===id) && e.tipo==='intercambio');
+  if(entran.length) h += '<h3>Recibe de</h3><ul class="conexiones">'+entran.map(e => fila(e, e.from)).join('')+'</ul>';
+  if(salen.length) h += '<h3>Transmite a</h3><ul class="conexiones">'+salen.map(e => fila(e, e.to)).join('')+'</ul>';
+  if(mutuos.length) h += '<h3>Intercambios</h3><ul class="conexiones">'+mutuos.map(e => fila(e, e.from===id ? e.to : e.from, e.from===id ? 'de aquí hacia allá' : 'de allá hacia aquí')).join('')+'</ul>';
+  const cs = CONCEPTOS.filter(c => c.nodos.includes(id));
+  if(cs.length) h += '<h3>Conceptos que comparte</h3><div class="chips">'+cs.map(chipConcepto).join('')+'</div>';
+  if(ENLACES[id]) h += '<h3>En este portal</h3><div class="chips">'+ENLACES[id].map(([href,t]) => '<a class="chip" href="'+href+'" style="--ac:'+ORO+'"><span class="d"></span>'+t+' →</a>').join('')+'</div>';
+  return {h, color};
+}
+function htmlConcepto(cid){
+  const c = CONCEPTOS.find(x => x.id===cid);
+  let h = migas([['mapa','Red del esoterismo'], ['c:'+cid, c.nombre]]);
+  h += '<div class="cab">'+visorConcepto(c)+'<div><h2>'+esc(c.nombre)+'</h2><p class="san">Concepto transversal</p><p class="gloss">Presente en '+c.nodos.length+' corrientes</p></div></div>';
+  h += '<p>'+esc(c.explicacion)+'</p>';
+  if(c.equivalencias) h += '<h3>Cómo lo nombra cada tradición</h3>'+lista(Object.entries(c.equivalencias).map(([k,v]) => ['<button type="button" class="enl" data-ir="'+k+'">'+esc(POR_ID[k].label)+'</button>', esc(v)]));
+  h += '<h3>Corrientes que lo comparten</h3><div class="chips">'+c.nodos.map(chipNodo).join('')+'</div>';
+  h += '<div class="ejemplo cotidiano"><span class="k">Cómo leerlo</span><p>Que varias tradiciones compartan una idea no prueba que la hayan heredado unas de otras: en la esfera, la línea dorada une a quienes la comparten, y las líneas de colores muestran cuáles de ellas están realmente conectadas.</p></div>';
+  return {h, color:ORO};
+}
+function visorConcepto(c){
+  let s = '<svg class="visor" viewBox="-60 -60 120 120" aria-hidden="true"><circle r="56" fill="'+ORO+'" opacity=".16"/><circle r="56" fill="none" stroke="'+ORO+'" stroke-width="1.2" opacity=".6"/><g class="gira-lento">';
+  const k = c.nodos.length, P = c.nodos.map((id,i) => { const a = rad(i*360/k - 90); return [Math.cos(a)*34, Math.sin(a)*34, GRUPO[POR_ID[id].grupo].color]; });
+  s += '<path d="'+P.map((p,i) => (i?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1)).join('')+'Z" fill="none" stroke="'+ORO+'" stroke-width="1.6"/>';
+  P.forEach(([x,y,col]) => s += '<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="7" fill="'+col+'" stroke="'+INK+'" stroke-width="1"/>');
+  return s+'</g><circle r="6" fill="'+ORO+'"/></svg>';
+}
+
+function abrir(id, desdeRed){
+  actual = id;
+  let r;
+  if(id==='mapa'){ r = htmlMapa(); limpiar(); }
+  else if(id.startsWith('c:')){
+    const c = CONCEPTOS.find(x => x.id===id.slice(2)); r = htmlConcepto(c.id);
+    limpiar(); marcar(c.nodos, ARISTAS.filter(e => c.nodos.includes(e.from) && c.nodos.includes(e.to)));
+    constelacion = c.nodos.slice();
+  } else {
+    r = htmlNodo(id); limpiar(); resaltarNodo(id); mirarA(id);
+  }
+  panel.innerHTML = '<div class="fadein" style="--ac:'+r.color+'">'+r.h+'</div>';
+  lecturaDe(id);
+  if(desdeRed && window.innerWidth < 1000) panel.scrollIntoView({block:'start', behavior: reduce?'auto':'smooth'});
+}
+panel.addEventListener('click', e => { const b = e.target.closest('button[data-ir]'); if(b) abrir(b.dataset.ir); });
+
+/* ================= Lectura y botones ================= */
+const pasoN = document.getElementById('pasoN'), pasoT = document.getElementById('pasoT');
+function lectura(n, html){ pasoN.textContent = n; pasoT.innerHTML = html; }
+function lecturaDe(id){
+  if(id==='mapa') lectura(NODOS.length, modoMeta ? 'La línea de tiempo ordena las corrientes de izquierda a derecha; las raíces quedan abajo y las síntesis modernas, arriba.' : 'corrientes y '+ARISTAS.length+' vínculos. <strong>Arrastra</strong> para girar la esfera y <strong>toca</strong> una corriente para abrir su información.');
+  else if(id.startsWith('c:')){ const c = CONCEPTOS.find(x => x.id===id.slice(2)); lectura(c.nodos.length, '<strong>'+c.nombre+'</strong> · '+c.explicacion); }
+  else { const n = POR_ID[id]; lectura(GRADO[id], '<strong>'+n.label+'</strong> · '+n.periodo+' · '+GRADO[id]+' vínculos: '+[...VECINOS[id]].map(v => POR_ID[v].label).join(', ')+'.'); }
+}
+const btnModo = document.getElementById('btnModo'), btnGiro = document.getElementById('btnGiro');
+btnModo.addEventListener('click', () => {
+  modoMeta = modoMeta ? 0 : 1;
+  if(reduce) modo = modoMeta;
+  btnModo.textContent = modoMeta ? 'Ver como esfera' : 'Ver como línea de tiempo';
+  svg.classList.toggle('tiempo', !!modoMeta);
+  btnGiro.disabled = !!modoMeta;
+  lecturaDe(actual);
+});
+btnGiro.addEventListener('click', () => { girando = !girando; btnGiro.textContent = girando ? 'Pausar el giro' : 'Reanudar el giro'; });
+if(reduce){ btnGiro.textContent = 'Reanudar el giro'; }
+document.getElementById('btnTodo').addEventListener('click', () => { abrir('mapa'); objetivo = {yaw:rad(-20), pitch:rad(-12)}; });
+
+// Un enlace como esoterismo.html#hermetismo abre directamente esa corriente
+const inicial = decodeURIComponent(location.hash.slice(1));
+abrir(Object.prototype.hasOwnProperty.call(POR_ID, inicial) || (inicial.startsWith('c:') && CONCEPTOS.some(c => 'c:'+c.id===inicial)) ? inicial : 'mapa');
+dibujarCuadro(0);
+requestAnimationFrame(cuadro);
+})();
+</script>
+</body>
+</html>

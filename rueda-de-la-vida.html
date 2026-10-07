@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="es" class="pg-rueda">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La rueda de Vida y Renacimiento · Bhima</title>
+<meta name="description" content="El bhavacakra explicado de forma visual e interactiva: los tres venenos, el karma, los seis mundos, los doce eslabones, la impermanencia y la Espiral que sale de la rueda.">
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="home-link" href="buda.html"><span aria-hidden="true">←</span>Budismo</a>
+  <h1>La rueda de Vida y Renacimiento</h1>
+  <p class="lede">El <em>bhavacakra</em> es un mapa de la existencia condicionada: por qué sufrimos, cómo se repite el ciclo y por dónde se sale. Toca cualquier parte de la rueda; cada explicación se abre en niveles más finos, con ejemplos.</p>
+</header>
+
+<main>
+  <section class="lienzo" aria-label="La rueda de la vida">
+    <svg id="rueda" viewBox="0 0 800 860" role="group" aria-label="Rueda de la vida interactiva"></svg>
+    <div class="mando">
+      <div class="lectura" aria-live="polite"><span class="paso-n" id="pasoN">·</span><span id="pasoT">Toca una parte de la rueda o recorre la cadena de los doce eslabones.</span></div>
+      <div class="botones">
+        <button class="sbtn" id="btnCadena" type="button">Recorrer los doce eslabones</button>
+        <button class="sbtn" id="btnInicio" type="button">Ver toda la rueda</button>
+      </div>
+    </div>
+  </section>
+  <aside class="panel-r" id="panel" aria-live="polite"></aside>
+</main>
+
+<footer class="pie">
+  <div class="nota">
+    <p><strong>Cómo leer la rueda.</strong> Tiene cuatro círculos concéntricos y se lee de dentro hacia fuera. En el eje, los tres venenos la hacen girar. Alrededor, el anillo del karma muestra cómo las intenciones nos elevan o nos hunden. Le siguen los seis mundos donde se renace, y en el borde los doce eslabones explican el mecanismo. El monstruo de la impermanencia la sostiene y la devora, y fuera de ella el Buda señala la Espiral, el camino que asciende.</p>
+    <p><strong>Sobre las fuentes.</strong> El contenido resume el material de estudio fundacional <em>El Bhavacakra: La Rueda de la Vida y Renacimiento</em>, del Centro Budista de la Ciudad de México (Comunidad Budista Triratna), basado en la iconografía tibetana. Los ejemplos marcados como «Ejemplo cotidiano» son ilustraciones añadidas para la práctica; los demás proceden del propio texto.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const CX = 400, CY = 440;
+const R = {hub:62, karma:112, reinos:250, borde:312};
+const INK = '#2a1d16', ORO = '#d9b265', CREMA = '#efe3c4';
+
+/* ================= Contenido =================
+   Cada nodo: titulo, san (término original), sub, imagen (lo que se ve), texto (párrafos),
+   lista (filas [clave, texto]), mente, buda, antidoto, ejemplo (del texto) o cotidiano
+   (ejemplo añadido), hijos (subniveles), color, glifo y especial (contenido interactivo). */
+const N = {
+  rueda:{titulo:'La rueda de la vida', san:'bhavacakra', sub:'Un mapa de la existencia condicionada', color:ORO, glifo:'rueda',
+    texto:['Un antiguo texto de la escuela Sarvāstivāda cuenta que Maudgalyāyana, uno de los dos grandes discípulos del Buda, podía visitar todos los mundos de la existencia y ver por qué los seres llegaban a cada uno. Como no había suficientes maestros como él, el Buda pidió que se pintara su visión a la entrada de cada monasterio, con un monje encargado de explicarla a los visitantes.',
+           'La rueda tiene cuatro círculos concéntricos: los tres venenos en el eje, el anillo del karma, los seis mundos y los doce eslabones del borde. La sostiene el monstruo de la impermanencia y, fuera de ella, el Buda señala el camino.',
+           'Vista sola, la rueda muestra solo un lado de la realidad: la condicionalidad que se repite en círculos. El otro lado es la Espiral, el camino que asciende y sale de ella.'],
+    cotidiano:'Un enojo que vuelve cada vez que alguien te interrumpe, con los mismos pensamientos y el mismo final, es una pequeña vuelta de la rueda. Darte cuenta de la repetición ya es el primer paso hacia la Espiral.',
+    hijosTitulo:'Las partes de la rueda', hijos:['venenos','karma','reinos','nidanas','monstruo','buda']},
+
+  /* ---- El eje ---- */
+  venenos:{titulo:'El eje: los tres venenos', san:'las raíces nocivas', sub:'Las fuerzas que hacen girar la rueda', color:'#d9573f', glifo:'tres',
+    imagen:'Un gallo, una víbora y un cerdo; cada uno muerde la cola del que le sigue y forman una cadena circular.',
+    texto:['Como el eje mueve una rueda, estas tres fuerzas mueven la rueda de la vida: la avidez (el gallo), el odio (la víbora) y la ignorancia (el cerdo). De ellas surgen todos los males, por eso se les llama raíces nocivas o venenos.',
+           'Están entrelazadas: la ignorancia es la base de las otras dos; el deseo frustrado se convierte pronto en odio, y casi todo odio contiene un deseo frustrado. Rara vez aparecen en estado puro: los buenos modales suelen esconderlas.',
+           'El texto las entiende como defensas de un ego inmaduro que busca seguridad: poseer lo que cree que lo afirma, destruir lo que lo amenaza y no ver lo que lo inquieta.'],
+    ejemplo:'Alguien habla con amabilidad mientras su cara y su cuerpo muestran hostilidad y miedo, sin darse cuenta. Reconocer en uno mismo al gallo, la víbora y el cerdo es lo que impide que dominen nuestra vida.',
+    hijos:['gallo','vibora','cerdo','virtudes','caracteres']},
+  gallo:{titulo:'El gallo: avidez', san:'lobha · rāga', sub:'Poseer para asegurar el yo', color:'#d9573f', glifo:'gallo',
+    imagen:'Un gallo engreído de plumaje brillante, símbolo de vanidad y lujuria.',
+    texto:['Abarca desde la vaga añoranza hasta la avidez más intensa por poseer algo o a alguien. Es el deseo de hacer las cosas parte de uno mismo creyendo que así se asegura la identidad: objetos, ideas y, sobre todo, el amor y la aprobación de los demás.',
+           'No hay que confundirla con el deseo sano: el hambre se sacia al comer y no deja inquietud. Y hay deseos que conviene cultivar: la amistad, la belleza o el propio desarrollo.'],
+    mente:'Inquietud por conseguir, miedo a perder, dependencia del afecto ajeno.',
+    antidoto:'La generosidad: dar desde la riqueza interior, sin esperar nada a cambio.',
+    ejemplo:'Perder un objeto y sentir no solo fastidio, sino una especie de pánico, como si se hubiera perdido una parte de uno mismo.'},
+  vibora:{titulo:'La víbora: odio', san:'dveṣa', sub:'Destruir lo que amenaza el yo', color:'#5fae7a', glifo:'serpiente',
+    imagen:'Una víbora de sangre fría, mirada helada y picadura venenosa.',
+    texto:['Odiamos todo lo que sentimos que amenaza o menosprecia nuestro sentido del yo. A diferencia de la víbora, que solo ataca para comer o defenderse, el odio humano puede llegar a la crueldad sin sentido contra inocentes.',
+           'Va de una ligera antipatía o un trato frío hasta el deseo de eliminar al otro para recuperar la seguridad.'],
+    mente:'Antipatía, resentimiento, deseo de revancha.',
+    antidoto:'Metta: un deseo intenso y activo por el bienestar de los demás, que no exige reciprocidad.',
+    ejemplo:'Hay quien siempre tiene a alguien que lo menosprecia o lo irrita: cuando esa persona se va, enseguida aparece otra que ocupa su lugar.'},
+  cerdo:{titulo:'El cerdo: ignorancia', san:'moha · avidyā', sub:'Negarse a ver', color:'#3a3046', glifo:'cerdo',
+    imagen:'Un cerdo negro y gordo, con el hocico escarbando en el barro y las orejas caídas sobre los ojos: solo ve la mancha de suciedad que tiene delante.',
+    texto:['No es simple falta de información, sino una estrategia defensiva: no ver lo que amenaza nuestra identidad. Como el avestruz con la cabeza en la arena, nos refugiamos en un mundo estrecho y no vemos que todo decae y que moriremos.',
+           'Es el veneno principal, la raíz de las raíces, y sigue presente, aunque sea sutil, hasta la Iluminación. Puede adoptar formas muy sofisticadas, incluso sistemas de pensamiento complejos.'],
+    mente:'Distracción deliberada, opiniones fijas, preferir el encierro conocido a la libertad desconocida.',
+    antidoto:'La concienciación: darse cuenta del cuerpo, las emociones, los pensamientos, los demás y las dimensiones más altas de la realidad.',
+    ejemplo:'Un amigo nos señala algo incómodo sobre nuestra conducta; lo entendemos… y en ese mismo instante desviamos la mente hacia otra cosa.'},
+  virtudes:{titulo:'De los venenos a las virtudes', sub:'Las fuerzas que mueven la Espiral', color:'#e8c46a', glifo:'virtudes',
+    texto:['Cuando el ego madura y encuentra seguridad en sí mismo, ya no necesita defenderse. Entonces la generosidad sustituye a la avidez, el amor (metta) al odio y la concienciación a la ignorancia.',
+           'Igual que el gallo, la víbora y el cerdo hacen girar la rueda, estas tres virtudes nos elevan por la Espiral.'],
+    lista:[['Avidez → generosidad','Dar con las manos llenas: bienes, tiempo, energía y perdón, sin poner a nadie en deuda.'],
+           ['Odio → metta','Desear el bien de todos. Su enemigo lejano es el odio; su enemigo cercano, el «amor» que en realidad exige algo a cambio.'],
+           ['Ignorancia → concienciación','Saber lo que uno siente, piensa y hace, y percibir que hay dimensiones más altas por descubrir.']],
+    ejemplo:'La meditación de metta (metta bhāvanā) cultiva el amor por etapas: hacia uno mismo, un amigo, una persona neutral, una persona difícil y, al final, hacia todos los seres por igual.'},
+  caracteres:{titulo:'Los tres tipos de carácter', sub:'Según el veneno que predomina', color:'#c9c3b4', glifo:'cama',
+    texto:['Buddhaghosa, el gran erudito del siglo V, describe en su Sendero de la pureza cómo cada tipo delata su veneno dominante en los gestos cotidianos. Casi todos somos una mezcla de los tres, pero reconocer el que predomina ayuda a conocerse.'],
+    lista:[['El ávido','Prepara la cama sin prisa, duerme encogido y tranquilo y se levanta sin brusquedad. Disfruta la vida y se apega a la gente.'],
+           ['El odioso','Prepara la cama a toda prisa, duerme con el ceño fruncido y el cuerpo rígido y, al despertar, responde como con enojo. Ve sobre todo lo desagradable.'],
+           ['El ignorante','Prepara mal la cama, duerme estirado boca abajo y se levanta perezosamente, bostezando con indecisión. Vive en una neblina gris.']],
+    cotidiano:'Observa cómo te levantas mañana: la manera de empezar el día dice algo del veneno que te mueve.'},
+
+  /* ---- El karma ---- */
+  karma:{titulo:'Anillo de luz, anillo de sombra', san:'karma · el segundo círculo', sub:'Toda acción intencional tiene consecuencias', color:'#c9c3b4', glifo:'karma',
+    imagen:'Una banda dividida en dos. A la izquierda, blanca, seres de pie y sonrientes que meditan, reparten dinero o veneran al Buda. A la derecha, negra, seres desnudos que caen de cabeza acosados por demonios.',
+    texto:['Karma significa acción de la voluntad. Su ley dice que toda acción intencional produce un efecto que, tarde o temprano, vive quien la hizo, y que la naturaleza del efecto depende de la intención.',
+           'Las acciones nacidas de la avidez, el odio y la ignorancia se llaman torpes y llevan al sufrimiento; las nacidas de la generosidad, el amor y la concienciación se llaman perspicaces y llevan a la felicidad.'],
+    ejemplo:'Cuando el autor del texto se interesó por el budismo, empezó a encontrarlo por todas partes: titulares, libros, personas. Las intenciones atraen experiencias afines.',
+    hijos:['claro','oscuro','intencion','ordenes','natural','preceptos']},
+  claro:{titulo:'La mitad blanca', sub:'Acciones perspicaces: se asciende', color:'#f4eee0', glifo:'sube',
+    imagen:'Hombres y mujeres de pie, sonrientes, con ropas brillantes, que meditan, comparten y veneran al Buda.',
+    texto:['Bajo estados mentales sanos, los seres actúan con perspicacia y viven felicidad y placer mientras ascienden la Espiral.',
+           '«Perspicaz» significa hecho con inteligencia, cuidado y una especie de habilidad ética, como la pericia de un artesano: no se trata de seguir reglas, sino de ser sensible a los demás y a las consecuencias.'],
+    ejemplo:'Cada acto generoso o amable deja una reserva de karma positivo, el «mérito», que hace la vida más tranquila y abre mejores oportunidades.'},
+  oscuro:{titulo:'La mitad negra', sub:'Acciones torpes: se cae', color:'#17132a', glifo:'baja',
+    imagen:'Seres desnudos que caen de cabeza, con la cara crispada y los brazos agitándose, acosados por demonios.',
+    texto:['Bajo estados mentales nocivos, los seres realizan acciones torpes, sufren sus consecuencias dolorosas y siguen girando en la rueda.',
+           'Nadie les impone ese sufrimiento desde fuera: es la consecuencia natural de sus propios actos.'],
+    ejemplo:'Quien consiente los estados negativos empieza a sentirse peor y suele toparse con más obstáculos; quien actúa desde estados sanos se siente más claro y la vida fluye con más facilidad.'},
+  intencion:{titulo:'El karma es intención', sub:'Lo que cuenta es la voluntad', color:'#d9b265', glifo:'semilla',
+    texto:['Solo las acciones intencionales producen karma: parpadear o tirar una taza sin querer no lo producen. Pero la intención incluye también el pensamiento y la palabra, y los deseos que no nos permitimos reconocer.',
+           'Una intención intensa que las circunstancias frustran tiene casi el mismo peso que la que se cumple.'],
+    ejemplo:'En tiempos del Buda, un monje se sentó sobre lo que creyó un banco cubierto con una manta y asfixió sin saberlo a un bebé. El Buda dijo que no era homicidio, porque no hubo intención, pero sí un descuido extremo, y el descuido ya es un estado mental nocivo.'},
+  ordenes:{titulo:'Los cinco órdenes de condicionalidad', sub:'No todo es karma', color:'#8b7ce0', glifo:'lista',
+    texto:['La filosofía budista distingue cinco niveles de condiciones, cada uno con sus propias leyes. El karma es solo uno de ellos, así que no se puede atribuir cualquier desgracia al karma pasado.'],
+    lista:[['Físico','Las leyes de la física y la química.'],['Orgánico','Las de la biología.'],['Mental inferior','Funciones mentales sin libre albedrío, como la percepción.'],['Kármico','El nivel del libre albedrío.'],['Dhármico','El orden trascendental.']],
+    ejemplo:'Una fiebre puede venir de un cambio de temperatura (físico), de un virus (orgánico), de un esfuerzo mental (mental), de acciones torpes del pasado (kármico) o de la reorganización de cuerpo y mente tras la Visión Clara (dhármico). Solo si fallan los remedios de los demás órdenes se puede pensar, con cautela, en el karma.'},
+  natural:{titulo:'Una ley natural, no un castigo', sub:'El karma no es fatalismo', color:'#5fb2d9', glifo:'lista',
+    texto:['El karma funciona como la gravedad: no hay ningún juez ni poder divino que reparta premios y castigos.',
+           'Tampoco es fatalismo: no todo lo que nos pasa viene del karma, y un karma torpe muy pesado puede contrarrestarse con acciones perspicaces de igual o mayor intensidad.'],
+    ejemplo:'La pobreza o una enfermedad pueden ser o no fruto del karma; en cualquier caso, quien sigue el camino trabaja para aliviarlas, en sí mismo y en los demás.'},
+  preceptos:{titulo:'Los cinco preceptos', sub:'Una guía mientras aprendemos', color:'#5fae7a', glifo:'lista',
+    texto:['Mientras no tenemos un sentido ético natural, los preceptos describen lo que un Buda nunca haría. No son mandamientos, sino principios de entrenamiento, y cada uno tiene su versión positiva.'],
+    lista:[['1','No dañar a los seres vivos · actuar con amor y bondad.'],['2','No tomar lo que no se ha dado · generosidad sin límite.'],['3','No tener una conducta sexual dañina · tranquilidad, sencillez y contento.'],['4','No hablar con falsedad · comunicación veraz.'],['5','No tomar sustancias que nublen la mente · conciencia clara y lúcida.']],
+    ejemplo:'La mejor manera de aprender a actuar con perspicacia es rodearse de personas que ya lo hacen: el respeto que les tenemos inspira más que el miedo al castigo.'},
+
+  /* ---- Los seis mundos ---- */
+  reinos:{titulo:'Los seis mundos', san:'el tercer círculo', sub:'Mundos de la existencia condicionada', color:'#e8c04a', glifo:'reinos',
+    imagen:'Seis escenas. Abajo, los infiernos; abajo a la izquierda, los espectros hambrientos; abajo a la derecha, los animales; arriba a la izquierda, los humanos; arriba a la derecha, los titanes; y en lo alto, los dioses.',
+    texto:['Un mundo es el equivalente objetivo de un estado de conciencia: la naturaleza de quien percibe determina lo que percibe. Por eso los seis mundos pueden entenderse como dimensiones en las que literalmente se renace, o como estados psicológicos que vivimos aquí y ahora.',
+           'Ninguno es permanente ni es un castigo: se permanece en él mientras dura el impulso de las intenciones que llevaron allí.',
+           'En cada mundo aparece un Buda, de un color distinto y con un objeto distinto, que ofrece lo que esos seres necesitan para salir.'],
+    cotidiano:'En un mismo día podemos pasar por varios: la euforia de un éxito (dioses), la envidia del éxito ajeno (titanes), un enojo que quema (infiernos) y las ganas de algo más justo después de conseguir algo (espectros hambrientos).',
+    hijos:['infiernos','espectros','animales','titanes','humanos','dioses','budas']},
+  infiernos:{titulo:'El mundo infernal', san:'naraka', sub:'La objetivación del odio', color:'#b8402c', glifo:'llama', bc:'#1f3a8a',
+    imagen:'Un mundo en llamas, de calor insoportable salvo en lo más profundo, donde reina un frío absoluto. En el centro, Yama, el Juez de la Muerte, sostiene un espejo.',
+    texto:['Es el reflejo de una mente dominada por el odio: un sufrimiento constante que parece impuesto por seres furiosos. El calor corresponde a la pasión del odio; el frío del fondo, a la malevolencia fría que disfruta del dolor ajeno, el estado más torpe de todos.',
+           'No es un castigo ni dura para siempre: cuando se agota o se contrarresta el karma que lo produjo, se sale.'],
+    mente:'Sentir que todos intentan hacernos daño, vivir en enemistad abierta o encubierta y, con nuestra conducta, crear los enemigos que antes eran imaginarios.',
+    buda:'Un Buda azul oscuro con un tarro de ungüento: primero alivia el dolor, porque en plena agonía nadie puede escuchar, y después enseña el Dharma.',
+    ejemplo:'La queja constante, el chisme y la murmuración son maneras en que se descarga un resentimiento acumulado.',
+    hijos:['espejo']},
+  espejo:{titulo:'El espejo de Yama', sub:'Nuestra propia conciencia', color:'#b8402c', glifo:'espejo',
+    texto:['Yama es la personificación de la muerte, no un juez divino. El espejo que sostiene es nuestra propia conciencia, nuestra sensibilidad hacia los demás, que a menudo acallamos y que se revela al morir.',
+           'Algunas tradiciones dicen que el Señor de la Muerte es Avalokiteśvara, el bodhisattva de la compasión: vista con claridad, incluso la muerte revela la naturaleza real de las cosas.'],
+    ejemplo:'Quienes han estado cerca de la muerte cuentan que vieron pasar su vida ante sus ojos: así se reflejan nuestros actos en el espejo.'},
+  espectros:{titulo:'Los espectros hambrientos', san:'preta', sub:'La objetivación de la avidez', color:'#857a84', glifo:'preta', bc:'#d9573f',
+    imagen:'Un desierto con un río de agua salobre y árboles sin hojas. Criaturas de color humo, de vientre enorme, miembros quebradizos y boca del tamaño de una cabeza de alfiler: el agua se aleja cuando se acercan, la que beben se vuelve fuego y la fruta se vuelve espadas.',
+    texto:['Es un infierno hecho no tanto de tortura como de deseo insatisfecho. En el fondo hay un vacío interior, una pobreza emocional que se intenta llenar con cosas, experiencias o personas que nunca bastan.',
+           'Hay que distinguirlo de las necesidades sanas: el hambre, la sed, el deseo sexual sencillo o la necesidad de reconocimiento sí se sacian.'],
+    mente:'El avaro, el coleccionista que siempre quiere más, el adicto. La adicción más común es a otras personas: buscar en ellas el alimento emocional que no encontramos en nosotros.',
+    buda:'Un Buda rojo con una jarra de néctar: ofrece un alimento que sí nutre y ayuda a mirar de frente el vacío para descubrir qué se desea de verdad.',
+    ejemplo:'Una pareja en la que cada uno busca en el otro lo que le falta y, al no encontrarlo, lo culpa por no dárselo.'},
+  animales:{titulo:'El mundo de los animales', san:'tiryak', sub:'La objetivación de la ignorancia', color:'#4f86c6', glifo:'pez', bc:'#8cc6f0',
+    imagen:'Animales a punto de ser cazados por el hombre.',
+    texto:['Es la vida del cuerpo: todo el esfuerzo se dirige a satisfacer las necesidades físicas y a sobrevivir. Los animales no tienen culpa; el «animal humano» sí, porque estrecha a la fuerza sus horizontes y se niega a ver un sentido más alto.',
+           'Puede llevar una vida sofisticada y un trabajo complejo, pero sin ideales ni nada que vaya más allá de sí mismo y de su grupo. El texto llama al consumismo «la filosofía del animal».'],
+    mente:'Comer, dormir y aparearse como únicos fines: una satisfacción sana, pero sin horizonte.',
+    buda:'Un Buda azul claro con un libro, que representa la cultura: despierta la vida de la mente y del corazón, la belleza y la imaginación.',
+    ejemplo:'Por primera vez, el animal levanta la cabeza de la hierba que come y ve la extensión del cielo sin límites.'},
+  titanes:{titulo:'El mundo de los titanes', san:'asura', sub:'La objetivación de la envidia', color:'#2f6b55', glifo:'arbol', bc:'#3f9a6c',
+    imagen:'Gigantes de piel azul o verde oscuro, siempre con armadura, que luchan contra los dioses por el árbol que concede todos los deseos.',
+    texto:['Los dioses ganaron ese árbol con sus buenas acciones; los titanes lo quieren sin haber puesto los cimientos y tratan de cortarlo: matan la gallina de los huevos de oro. Cuando pierden, luchan entre ellos por el poder.',
+           'Su motor no es la simple avidez, sino la envidia: el éxito ajeno les hace sentirse menos. El texto los asocia también con la polarización extrema entre lo masculino y lo femenino.'],
+    mente:'Competir a toda costa, relacionarse solo como dominante o como sometido, conspirar.',
+    buda:'Un Buda verde con armadura y espada en llamas: no hiere a nadie, sino que enseña a usar esa energía para cortar la confusión y llegar a la verdad.',
+    ejemplo:'La persona que, en el trabajo o en la política, necesita ser siempre más lista, más fuerte o más rica que los demás.'},
+  humanos:{titulo:'El mundo humano', san:'manuṣya', sub:'La comunicación y la oportunidad', color:'#e8c04a', glifo:'personas', bc:'#f2c14e',
+    imagen:'Hombres y mujeres ocupados en los asuntos de cada día.',
+    texto:['Es el renacimiento más favorable para empezar el camino, porque equilibra placer y dolor: el dolor constante desmoraliza y el placer constante adormece.',
+           'Su rasgo principal es la comunicación: reconocer al otro como persona, sin proyecciones. De ahí nacen la cooperación, la cultura y la civilización. Es el punto donde la evolución inferior puede volverse Evolución Superior.'],
+    mente:'La vida cotidiana —trabajo, familia, aprendizaje, arte— y la capacidad de reflexionar y comprometerse.',
+    buda:'Un Buda amarillo, con hábito naranja y los objetos de un monje errante: anima a comprometerse con el Buda, el Dharma y la Sangha.',
+    cotidiano:'Una conversación en la que de verdad escuchas a alguien y ves el mundo desde su punto de vista: eso es lo propiamente humano.'},
+  dioses:{titulo:'Los cielos de los dioses', san:'deva', sub:'Belleza y felicidad, con un peligro', color:'#efe9dc', glifo:'palacio', bc:'#ffffff',
+    imagen:'Seres hermosos que viven en un mundo de gran belleza, donde todo deseo se cumple al instante.',
+    texto:['La palabra «dios» viene de una raíz que significa brillar. Son la objetivación de una conciencia ética: su bondad les permite apreciar la belleza. Hay muchos niveles, cada vez más sutiles, pero ninguno es eterno ni creador.',
+           'Su peligro es la complacencia: es tan agradable vivir en el deleite que se olvida seguir creciendo.'],
+    mente:'Felicidad, bienestar y sensibilidad estética, fruto de una vida ética.',
+    buda:'Un Buda blanco que toca el laúd: la melodía es bella pero se acaba, y al escucharla los dioses recuerdan la impermanencia.',
+    ejemplo:'Cuando estamos felices disfrutando, tendemos a perder la conciencia de nosotros mismos y a actuar con torpeza.'},
+  budas:{titulo:'Los seis Budas', sub:'La Iluminación posible en cada mundo', color:'#e8c46a', glifo:'seisbudas',
+    texto:['En cada mundo el Buda aparece con un color y un objeto distintos, porque responde a lo que esos seres necesitan. El Dharma es uno, pero la forma de transmitirlo cambia según la persona: es universal en su invitación e individual en su aplicación.'],
+    lista:[['Infiernos','Buda azul oscuro · tarro de ungüento'],['Espectros hambrientos','Buda rojo · jarra de néctar'],['Animales','Buda azul claro · libro'],['Titanes','Buda verde · armadura y espada en llamas'],['Humanos','Buda amarillo · hábito naranja y objetos de monje'],['Dioses','Buda blanco · laúd']],
+    ejemplo:'Unos llegan al camino por la meditación, otros por el estudio y otros por el trabajo: cada uno entra por su propia puerta.'},
+
+  /* ---- Los doce eslabones ---- */
+  nidanas:{titulo:'Los doce eslabones', san:'pratītya-samutpāda · el borde', sub:'La coproducción condicionada', color:'#efe3c4', glifo:'cadena',
+    imagen:'Doce escenas alrededor del borde, del ciego con su bastón al cadáver camino de la pira, en el sentido de las agujas del reloj.',
+    texto:['El Buda resumió así lo que vio al iluminarse: «Esto siendo, aquello surge; esto cesando, aquello cesa». Todo surge en dependencia de una red de condiciones, más parecida a un ecosistema que a unas bolas de billar.',
+           'La cadena es circular, sin principio ni fin: el doce es un número práctico y cualquier eslabón puede servir de inicio. Se suele empezar por la ignorancia porque es la condición más general.',
+           'Cuando Ānanda comentó que esta enseñanza era fácil de entender, el Buda respondió: «No digas eso, Ānanda. Profunda es esta ley causal».'],
+    ejemplo:'Las doce escenas son siempre las mismas en cada vuelta de la rueda; solo cambian la ropa y los rasgos de los personajes.',
+    hijosTitulo:'Los doce eslabones y tres maneras de leerlos',
+    hijos:['n1','n2','n3','n4','n5','n6','n7','n8','n9','n10','n11','n12','tresvidas','instante','brecha']},
+  n1:{num:1, titulo:'Ignorancia', san:'avidyā', color:'#3a3046', glifo:'ciega',
+    imagen:'Un ciego, encorvado por los años, que avanza a tientas con su bastón. Cree reconocer el camino, tropieza, cae y vuelve a levantarse con nueva esperanza.',
+    texto:['No es solo no ver, sino creer que vemos. Nuestras acciones se basan en suposiciones sobre la vida que casi nunca examinamos, y mucho de lo que «sabemos» lo absorbemos del grupo por el deseo de pertenecer.',
+           'Sus dos formas extremas son el eternalismo (un yo o un Dios eterno detrás de todo) y el nihilismo (la muerte como fin absoluto). El camino medio es ver que todo surge en dependencia de condiciones.'],
+    ejemplo:'Sócrates decía que, si era el más sabio de Grecia, era solo porque sabía que no sabía nada: reconocer la propia ignorancia es el principio del conocimiento.'},
+  n2:{num:2, titulo:'Actividades volitivas', san:'saṃskāra', color:'#a8642a', glifo:'vasija',
+    imagen:'Un alfarero moldea jarros en su torno; por su cara pasan la tristeza, el enojo, la alegría o la vanidad, y cada estado de ánimo guía sus dedos.',
+    texto:['Son fuerzas formativas: la suma de todas nuestras intenciones, en actos, en palabras o en deseos guardados. Como los hilos de una cuerda, miles de pequeñas voliciones dan forma al rumbo de nuestra vida.',
+           'Según el texto, este «anteproyecto» es lo que pasa de una vida a la siguiente a través del estado intermedio y busca un mundo afín.'],
+    ejemplo:'Cuando el alfarero está enojado, el jarro sale duro y desagradable: lo que sentimos al actuar queda impreso en lo que hacemos.'},
+  n3:{num:3, titulo:'Consciencia', san:'vijñāna', color:'#8a6a1c', glifo:'mono',
+    imagen:'Un mono que salta de rama en rama sin descanso; muerde una fruta y la suelta en cuanto ve otra más lejos.',
+    texto:['Es la primera chispa de conciencia de una nueva vida, que surge al unirse el óvulo, el espermatozoide y el impulso de las voliciones pasadas. Lleva en semilla toda la personalidad futura.',
+           'Nada pasa de una vida a otra como un alma que cambia de guante: la nueva vida «no es la misma ni es diferente». Es como una ola: ninguna gota viaja del principio al final, pero hay continuidad.'],
+    ejemplo:'Los niños muestran muy pronto preferencias y rechazos que no aprendieron de sus padres: traemos tendencias de antes.'},
+  n4:{num:4, titulo:'Organismo psicofísico', san:'nāma-rūpa', color:'#4f86c6', glifo:'barca',
+    imagen:'Cuatro hombres en una barca: uno rema, otro mira, otro vigila el horizonte y otro opina sobre todo. Ninguno sabe adónde van, discuten entre ellos y la barca hace agua.',
+    texto:['Representa todos los procesos de cuerpo y mente que forman al ser humano. Los cuatro hombres más la barca son los cinco agregados.',
+           'Al ver que cada uno es un proceso cambiante, descubrimos que no hay nada fijo con lo que identificarnos, y por eso mismo podemos desarrollarnos.'],
+    cotidiano:'Cuando el cuerpo pide descanso, la emoción quiere pelea y la cabeza hace planes, la barca gira en círculos sin rumbo.',
+    hijos:['agregados']},
+  agregados:{titulo:'Los cinco agregados', san:'skandha', sub:'Los componentes de la experiencia', color:'#4f86c6', glifo:'barca',
+    texto:['Más que un análisis filosófico, es una forma de meditar sobre todo lo que compone la experiencia. Cada agregado es un proceso que surge y pasa.'],
+    lista:[['Forma (rūpa)','La sensación de resistencia: tierra (lo sólido), agua (lo que cohesiona), fuego (el calor) y aire (lo que se mueve).'],
+           ['Consciencia (vijñāna)','El darse cuenta discriminativo, siempre en flujo.'],
+           ['Interpretación (saṃjñā)','Reconocer y nombrar: a lo lejos algo es una cabra, luego una roca, luego otra cosa.'],
+           ['Sentimiento (vedanā)','El tono agradable, desagradable o neutro de cada experiencia.'],
+           ['Voluntad (saṃskāra)','La respuesta activa: querer lo agradable y rechazar lo doloroso.']],
+    ejemplo:'Junto al fuego sientes calor, oyes crujidos, ves llamas y hueles humo. Si dejas que la escena se deshaga, quedan solo sensaciones; «estar junto al fuego» lo añade la mente.'},
+  n5:{num:5, titulo:'Los seis sentidos', san:'ṣaḍāyatana', color:'#5fae7a', glifo:'casa',
+    imagen:'Un hombre dentro de una casa con cinco ventanas y una puerta, por la que entra y sale un torrente de gente.',
+    texto:['Vista, oído, olfato, gusto, tacto y mente: los portales por los que entra el mundo. La mente es un sentido más, con sus propios objetos —recuerdos, fantasías, pensamientos—, y por ella se accede a los mundos más altos.',
+           'El cuerpo y los sentidos son resultado de acciones pasadas y en sí son inocentes: ver no es malo; el problema empieza al reaccionar a lo que vemos.'],
+    cotidiano:'Mirar un escaparate no es ni bueno ni malo; lo que hagamos con lo que vemos, sí.'},
+  n6:{num:6, titulo:'Contacto', san:'sparśa', color:'#d9573f', glifo:'pareja',
+    imagen:'Un hombre y una mujer que se miran con pasión, se toman de las manos y se abrazan.',
+    texto:['Es el encuentro de los sentidos con sus objetos: aquí el organismo empieza a interactuar con el mundo. Lo único seguro es que tenemos sensaciones; la imagen del mundo la construimos encima.',
+           'Si confundimos esa imagen con la realidad, nos cerramos a otras formas de ver.'],
+    cotidiano:'Oyes un ruido de noche y la mente ya construyó «un ladrón»; luego resulta ser el gato.'},
+  n7:{num:7, titulo:'Sentimientos', san:'vedanā', color:'#e8c04a', glifo:'flecha',
+    imagen:'Un hombre cae de rodillas gritando, con una flecha clavada en el ojo derecho.',
+    texto:['Lo percibido nos afecta: produce placer, dolor o algo neutro. No somos cámaras que registran sin más.',
+           'El budismo no condena el placer: el camino trae una felicidad creciente. El problema es tomar la búsqueda del placer y la huida del dolor como únicos principios.',
+           'Este eslabón marca la transición crucial: hasta aquí todo es resultado del pasado; a partir de aquí vuelve a entrar la voluntad.'],
+    cotidiano:'Una mirada de desaprobación se siente como una flecha antes de que pensemos nada.'},
+  n8:{num:8, titulo:'Avidez', san:'tṛṣṇā', color:'#c4553c', glifo:'copa',
+    imagen:'Un hombre que ha trabajado todo el día en el campo, sediento, mientras una mujer le acerca lentamente un vaso de agua fría; él la llama con impaciencia.',
+    texto:['La palabra significa literalmente «sed», por la inmediatez y la fuerza del deseo neurótico. Queremos lo que creemos que nos dará placer y rechazamos lo que creemos que nos dará dolor.',
+           'El odio no aparece como eslabón aparte: se entiende como avidez frustrada.'],
+    hijos:['avideces']},
+  avideces:{titulo:'Las tres avideces', sub:'Las fuerzas que nos mueven por la rueda', color:'#c4553c', glifo:'copa',
+    lista:[['De objetos sensuales','Cualquier cosa que entre por los sentidos o por la mente.'],
+           ['De existencia','Mantener un yo fijo para siempre, sobre todo en un mundo celestial. Ligada al eternalismo.'],
+           ['De inexistencia','Desaparecer en el olvido. Ligada al nihilismo; aparece como desesperanza, deseo de anestesia o de no tener que responder por nada.']],
+    cotidiano:'«Ojalá pudiera dormirme y no despertar en una semana»: así roza la avidez de inexistencia.'},
+  n9:{num:9, titulo:'Apego', san:'upādāna', color:'#a8642a', glifo:'fruto',
+    imagen:'Una mujer hambrienta se pone de puntillas y arranca una manzana del árbol.',
+    texto:['La avidez pasa a la acción: nos aferramos a lo que deseamos.'],
+    ejemplo:'Por eso cuesta tanto conversar con calma sobre aquello en lo que no estamos de acuerdo: negar la opinión de alguien se siente como negarlo a él.',
+    hijos:['apegos']},
+  apegos:{titulo:'Los cuatro apegos', sub:'Aquello a lo que nos aferramos', color:'#a8642a', glifo:'fruto',
+    lista:[['A los placeres sensuales','Vivir en función de ellos.'],
+           ['A las opiniones','Hacer de nuestras creencias parte de la identidad; de ahí las «guerras santas».'],
+           ['A reglas y rituales como fines','Creer que basta con cumplirlos: sentarse a meditar sin intentar concentrarse.'],
+           ['A la creencia en un yo permanente','La idea de un núcleo que nunca cambia.']],
+    ejemplo:'Una práctica espiritual hecha solo por costumbre, sin esfuerzo real, se vuelve un talismán y deja de transformar.'},
+  n10:{num:10, titulo:'Devenir', san:'bhava', color:'#b46aa8', glifo:'union',
+    imagen:'Una pareja en el acto sexual; ninguno de los dos advierte que en el vientre de la mujer empieza a generarse una nueva vida.',
+    texto:['Resume toda la rueda: un proceso continuo de llegar a ser. Tiene una parte activa, la volición, y otra pasiva, sus consecuencias.',
+           'El apego a esta vida crea tendencias que se descargan en un nuevo renacimiento, en el plano que corresponde a nuestras voliciones.'],
+    ejemplo:'La palabra bhava es la misma que da nombre a la rueda: bhavacakra, la rueda del devenir.'},
+  n11:{num:11, titulo:'Nacimiento', san:'jāti', color:'#e48d45', glifo:'bebe',
+    imagen:'Una mujer en pleno parto; un médico recibe en sus manos al recién nacido.',
+    texto:['El impulso de las voliciones produce una nueva vida, en cualquiera de los muchos planos de la existencia. Y esa vida ya es la condición de la muerte.'],
+    cotidiano:'También «nacemos» a cada rato: el yo ofendido de una discusión, el yo orgulloso de un logro.'},
+  n12:{num:12, titulo:'Vejez y muerte', san:'jarāmaraṇa', color:'#5a4a6a', glifo:'muerte',
+    imagen:'Seis hombres cargan un ataúd y lo depositan en la rampa del crematorio.',
+    texto:['Todo lo que nace enferma, envejece, sufre la separación y muere: «pena, lamentación, aflicción y desesperación». Nacemos porque nos aferramos, y tendremos que separarnos de aquello a lo que nos aferramos.',
+           'Con el paso siguiente la rueda da la vuelta completa y aparece otra vez el ciego con su bastón.']},
+  tresvidas:{titulo:'Lectura en tres vidas', sub:'Fases causales y resultantes', color:'#d9b265', glifo:'tres-vidas', especial:'tresvidas',
+    texto:['La cadena se reparte en tres vidas, alternando fases causales (lo que establecen nuestras voliciones) y fases resultantes (sus efectos inevitables). En la rueda se colorean los cuatro grupos.',
+           'En realidad cada vida contiene las cuatro fases: por eso se dice que cada vida tiene treinta y seis eslabones, y que todos actúan en cada momento.']},
+  instante:{titulo:'La cadena en un instante', sub:'Los eslabones en un solo momento', color:'#e48d45', glifo:'reloj', especial:'instante',
+    texto:['El texto señala que los eslabones están presentes en cada momento, mientras creamos nuestro futuro con cada acto de voluntad. Pulsa «Reproducir» para verlo en un ejemplo cotidiano.']},
+  brecha:{titulo:'La brecha: sentimiento o avidez', sub:'El único punto donde la rueda puede cambiar', color:'#5fae7a', glifo:'tijera', especial:'brecha',
+    texto:['Hasta los sentimientos (7), todo es resultado inevitable del pasado. A partir de la avidez (8), empieza una nueva fase de voluntad. Esa transición es la brecha por la que se puede escapar.',
+           'Ante cada sentimiento podemos reaccionar con avidez u odio, y la rueda gira otra vez; o responder con fe, y empieza la Espiral. Compara las dos opciones en la rueda.']},
+
+  /* ---- La impermanencia ---- */
+  monstruo:{titulo:'El monstruo de la impermanencia', sub:'Quien sostiene y devora la rueda', color:'#7a2a3a', glifo:'monstruo',
+    imagen:'Una figura de cara feroz, tres ojos rojos y corona de calaveras, que muerde la rueda con sus colmillos y la desgarra con sus garras.',
+    texto:['Simboliza la impermanencia, que no permite que nada permanezca estático. Todo lo que hay dentro de la rueda, de los infiernos a los cielos más altos, está en sus garras.',
+           'Si imaginamos la rueda girando tan deprisa en sus garras que sus detalles se pierden, podemos ver surgir de su periferia la Espiral, que asciende.'],
+    ejemplo:'Si lográramos mirar la muerte de frente, dice el texto, no veríamos los ojos rojos de un monstruo, sino la sonrisa compasiva de Avalokiteśvara.',
+    hijos:['impermanencia']},
+  impermanencia:{titulo:'Impermanencia', sub:'Llegar a ser y desaparecer', color:'#7a2a3a', glifo:'vela',
+    texto:['Surgir y desaparecer es el destino de todo lo condicionado. Igual que el cuerpo se renueva y los pensamientos surgen y decaen, nacemos y morimos momento a momento.',
+           'Nada condicionado puede darnos una seguridad duradera: hasta la vida misma es un «estado intermedio».'],
+    ejemplo:'Una pérdida, un fracaso o una ruptura son «pequeñas muertes»: el suelo se abre bajo los pies, duele, pero también aparecen horizontes nuevos.'},
+
+  /* ---- Fuera de la rueda ---- */
+  buda:{titulo:'El Buda fuera de la rueda', sub:'Señala el camino de salida', color:'#e8c46a', glifo:'buda',
+    imagen:'En lo alto a la derecha, fuera de la rueda, el Buda señala el camino hacia la Iluminación.',
+    texto:['La rueda es un círculo vicioso, pero no una cárcel sin salida. Fuera de ella, el Buda muestra que existe otro tipo de condicionalidad: la que no gira en círculos, sino que asciende.',
+           'Aquí se pasa de la Rueda a la Espiral. Conocer el lado sombrío de nuestra situación es necesario, pero también lo es apreciar las posibilidades positivas de la vida humana.'],
+    cotidiano:'Como alguien que ya salió del laberinto y, desde arriba, te indica el siguiente paso.',
+    hijos:['espiral','positivos','nobles','mandala']},
+  espiral:{titulo:'La Espiral', sub:'La condicionalidad progresiva', color:'#e8c46a', glifo:'espiral',
+    texto:['Si la rueda es la condicionalidad cíclica, la Espiral es la progresiva: cada paso crea las condiciones para otro más alto, más feliz, más claro y más amoroso.',
+           'Empieza en el mundo humano y en los cielos inferiores. La divide en dos el punto de la Entrada en la Corriente: antes, seres cada vez más bellos y luminosos; después, seres con un brillo de sabiduría en los ojos. Culmina en el Mandala de los cinco Budas.'],
+    ejemplo:'La generosidad, el amor y la concienciación mueven la Espiral, igual que los tres venenos mueven la rueda.'},
+  positivos:{titulo:'Los doce eslabones positivos', sub:'La cadena que sale de la rueda', color:'#e8c46a', glifo:'espiral', especial:'escalera',
+    texto:['Son el equivalente espiral de los doce eslabones del borde, pero esta vez no forman un círculo, sino una escalera que asciende. Del 1 al 7 forman el sendero mundano, donde aún se puede retroceder; del 8 al 12, el trascendental, donde ya no hay vuelta atrás.',
+           'También se agrupan en ética (1 a 3), meditación (4 a 7) y sabiduría (8 a 12). Toca un peldaño para verlo.'],
+    hijos:['p1','p2','p3','p4','p5','p6','p7','p8','p9','p10','p11','p12']},
+  p1:{num:1, titulo:'Insatisfacción', san:'duḥkha', color:'#d9b265', glifo:'peldano',
+    texto:['Aunque la vida nos dé placeres, empieza a crecer una frustración más profunda: todo lo mundano es limitado y se acaba. No es la queja de quien se siente defraudado, sino la intuición de que existe una realización verdadera, aunque aún no sepamos dónde.'],
+    ejemplo:'Tenerlo «todo» —trabajo, salud, relaciones— y sentir aun así que falta algo esencial. Ese sentimiento no hay que curarlo: es la puerta de entrada al camino.'},
+  p2:{num:2, titulo:'Fe', san:'śraddhā', color:'#d9b265', glifo:'peldano',
+    texto:['No es creer sin razonar, sino la respuesta de todo el ser hacia el ideal: algo en nuestro interior vibra con lo que reflejan una imagen del Buda, un libro o una persona. Madura con claridad intelectual y se confirma con la experiencia.',
+           'Su expresión activa es Ir al Refugio de las Tres Joyas: el compromiso con el Buda, el Dharma y la Sangha.'],
+    ejemplo:'Ante cada sentimiento hay dos opciones: reaccionar con avidez o responder con fe. Ahí está la bifurcación entre la rueda y la Espiral.'},
+  p3:{num:3, titulo:'Deleite', san:'prāmodya', color:'#d9b265', glifo:'peldano',
+    texto:['La alegría de vivir de acuerdo con los propios ideales: la conciencia tranquila, sin nada que reprocharse ni que los demás puedan reprocharnos. Por eso se da tanta importancia a disolver la culpa, por ejemplo confesando una falta a un amigo espiritual.'],
+    cotidiano:'La ligereza de pedir perdón de verdad y comprometerse a no repetir algo.'},
+  p4:{num:4, titulo:'Éxtasis', san:'prīti', color:'#5fb2d9', glifo:'peldano',
+    texto:['Al resolverse los conflictos internos y liberarse la energía atrapada, surgen sensaciones intensas de placer y alegría. La tradición distingue niveles, desde un leve estremecimiento hasta un éxtasis que impregna todo el cuerpo, como un globo lleno de aire.'],
+    ejemplo:'Las lágrimas o el temblor ante una obra de arte o un acto de heroísmo son parientes cercanos de este eslabón.'},
+  p5:{num:5, titulo:'Calma', san:'praśrabdhi', color:'#5fb2d9', glifo:'peldano',
+    texto:['El éxtasis físico se asienta en una tranquilidad profunda: la mente queda clara, ligera, receptiva y sin rigidez. No es menos feliz que el éxtasis, sino una felicidad más refinada.'],
+    cotidiano:'Como el agua turbia que se aclara cuando deja de agitarse.'},
+  p6:{num:6, titulo:'Arrobamiento', san:'sukha', color:'#5fb2d9', glifo:'peldano',
+    texto:['La felicidad, a través de la paz, sube a un nivel más alto. Están presentes todas las emociones positivas —metta, compasión, alegría por el bien ajeno, gratitud y devoción— en perfecta ecuanimidad.'],
+    cotidiano:'Alegrarse sinceramente del éxito de otra persona, sin rastro de envidia.'},
+  p7:{num:7, titulo:'Absorción', san:'samādhi', color:'#5fb2d9', glifo:'peldano',
+    texto:['Toda la energía del ser se unifica en un solo punto. Es la cumbre de lo mundano y la base indispensable para poder ver la realidad.'],
+    hijos:['obstaculos','dhyanas']},
+  obstaculos:{titulo:'Los cinco obstáculos', sub:'Lo que impide concentrarse', color:'#5fb2d9', glifo:'lista',
+    texto:['Para meditar —por ejemplo, siguiendo la respiración— hay que dejar a un lado cinco obstáculos. Cada vez que uno nos atrapa, simplemente se vuelve a la respiración. Cuanto más feliz y ética es la vida, más fácil resulta.'],
+    lista:[['Deseo sensual','Fantasear con cosas agradables.'],['Odio','Planear la revancha contra supuestos enemigos.'],['Letargo y pereza','Somnolencia, aburrimiento, falta de energía.'],['Ansiedad y desasosiego','La mente revolotea de un tema a otro.'],['Duda e indecisión','No comprometerse de corazón con la práctica.']]},
+  dhyanas:{titulo:'Los cuatro niveles de absorción', san:'dhyāna', sub:'De la integración a la radiación', color:'#5fb2d9', glifo:'lista',
+    lista:[['Integración','Toda la energía se unifica; aún hay algo de pensamiento, junto con éxtasis y júbilo.'],
+           ['Inspiración','Cesa el pensamiento discursivo; se siente una energía creativa que llega como de una fuente superior.'],
+           ['Permeación','La mente queda inmersa en esa dimensión; el éxtasis se apaga y la felicidad crece.'],
+           ['Radiación','Un equilibrio dinámico que irradia amor y bienestar, como un aura.']]},
+  p8:{num:8, titulo:'Conocimiento y visión de las cosas como realmente son', san:'yathābhūta-jñānadarśana', color:'#b9a6ff', glifo:'peldano',
+    texto:['Por primera vez se levanta el velo de la ignorancia: se ve que lo condicionado es impermanente, insustancial e imperfecto, y que en su fondo yace lo Incondicionado.',
+           'Es la Entrada en la Corriente, el punto sin retorno: desde aquí la corriente lleva a la Iluminación.'],
+    ejemplo:'El Buda comparó a quienes llegan aquí con criaturas que nadan en el océano profundo: solo alcanzamos a ver su aleta de vez en cuando.'},
+  p9:{num:9, titulo:'Retracción', san:'nirveda', color:'#b9a6ff', glifo:'peldano',
+    texto:['Los viejos apegos se caen solos, sin esfuerzo. Es un desapego sereno y alegre, que no aleja de los demás, sino que deja más espacio para el amor y la compasión.'],
+    ejemplo:'Como un niño que deja atrás, sin notarlo, los juguetes por los que antes peleaba y lloraba.'},
+  p10:{num:10, titulo:'Desapasionamiento', san:'virāga', color:'#b9a6ff', glifo:'peldano',
+    texto:['Nada terrenal perturba ya la calma. No es indiferencia, sino un amor por igual hacia todas las cosas.'],
+    cotidiano:'Como el mar profundo, que no se altera aunque haya oleaje en la superficie.'},
+  p11:{num:11, titulo:'Liberación', san:'vimukti', color:'#b9a6ff', glifo:'peldano',
+    texto:['Cae la barrera más sutil, incluso la distinción entre lo condicionado y lo Incondicionado. Todo se ve vacío de características fijas, y esa vacuidad no es la nada, sino un potencial creativo infinito.'],
+    ejemplo:'Como el humo de una chimenea: no tiene una forma esencial que podamos atrapar, solo un fluir de formas que se puede disfrutar.'},
+  p12:{num:12, titulo:'Reconocimiento de la destrucción de los venenos', san:'āsravakṣaya-jñāna', color:'#b9a6ff', glifo:'peldano',
+    texto:['Es la Iluminación. Se han secado los tres flujos venenosos —el deseo de experiencias sensuales, el deseo de existir en algún mundo y la ignorancia— y se sabe con claridad, sin ninguna grandeza, que es así.'],
+    ejemplo:'El Iluminado puede usar y disfrutar los sentidos, pero ya no tiene una necesidad neurótica de ellos.'},
+  nobles:{titulo:'Los cuatro individuos nobles', sub:'Quienes han visto la naturaleza de las cosas', color:'#b9a6ff', glifo:'lista',
+    texto:['La tradición Theravāda los clasifica en cuatro niveles, según cuántas de las diez trabas que nos atan han roto.'],
+    lista:[['Entrante en la Corriente','Ha roto tres trabas: la noción de un yo inmutable, la duda crónica y el apego a reglas y rituales como fines. Llegará a la Iluminación en un máximo de siete vidas y no volverá a los mundos de sufrimiento.'],
+           ['El que regresa una vez','Además ha debilitado el deseo sensual y la aversión; renacerá una vez más como humano.'],
+           ['El que no regresa','Ha disuelto el deseo sensual y la aversión; ya no renace en el plano de los sentidos.'],
+           ['El Iluminado','Ha disuelto también las trabas más sutiles: el deseo de los mundos de la forma y sin forma, el engreimiento, la intranquilidad y la ignorancia.']]},
+  mandala:{titulo:'El Mandala de los cinco Budas', sub:'La culminación de la Espiral', color:'#e8c46a', glifo:'mandala',
+    texto:['Al final, la Espiral se convierte en un mandala: un círculo ordenado con cinco Budas que irradian luz y de los que surgen sin fin nuevas formas. Es un símbolo distinto de los seis Budas que aparecen dentro de la rueda.'],
+    lista:[['Vairocana · centro','Blanco, el Iluminador. Trono de leones; gira una rueda dorada de ocho radios.'],
+           ['Akṣobhya · este','Azul, el Imperturbable. Trono de elefantes; toca la tierra y sostiene un rayo dorado.'],
+           ['Ratnasambhava · sur','Amarillo, la Joya naciente. Trono de caballos; gesto de generosidad y una joya.'],
+           ['Amitābha · oeste','Rojo, la Luz infinita. Trono de pavos reales; manos en meditación con un loto rojo.'],
+           ['Amoghasiddhi · norte','Verde, el del Éxito infalible. Sostiene un doble rayo y alza la mano en gesto de confianza.']]}
+};
+const PADRE = {};
+Object.entries(N).forEach(([k,n]) => (n.hijos||[]).forEach(h => PADRE[h] = k));
+/* Disposición de los mundos (ángulo del centro de cada sector, 0° = derecha, en sentido horario) */
+const REINOS = [['dioses',-90],['titanes',-30],['animales',30],['infiernos',90],['espectros',150],['humanos',-150]];
+const VIDAS = [['vida-a','Vida pasada · fase causal',[1,2],'#8b7ce0','Ignorancia y actividades volitivas: la fuerza formativa que trae a esta vida.'],
+               ['vida-b','Vida presente · fase resultante',[3,4,5,6,7],'#5fb2d9','Consciencia, organismo, sentidos, contacto y sentimientos: lo que recibimos, sin elección.'],
+               ['vida-c','Vida presente · fase causal',[8,9,10],'#e48d45','Avidez, apego y devenir: lo que sembramos ahora.'],
+               ['vida-d','Vida futura · fase resultante',[11,12],'#d9573f','Nacimiento, vejez y muerte de la vida siguiente.']];
+const INSTANTE = [[6,'Pasas frente a una pastelería y ves un pastel en el escaparate.'],
+                  [7,'Se siente agradable, antes de pensar nada.'],
+                  [8,'Aparece la sed: «lo quiero».'],
+                  [9,'«Me lo merezco; hoy tengo que comprarlo.»'],
+                  [10,'Se forma un pequeño yo: «el que necesita algo dulce para estar bien».'],
+                  [11,'Entras, lo compras y lo comes: ese yo «nace» y se cumple.'],
+                  [12,'El placer termina pronto y queda un leve vacío.'],
+                  [1,'Y, sin verlo, creemos que el próximo pastel sí nos dejará satisfechos: la ignorancia reinicia la cadena.']];
+
+/* ================= Glifos ================= */
+function glifo(t, c){
+  c = c || INK;
+  const f = 'fill="'+c+'"', s = 'fill="none" stroke="'+c+'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+  switch(t){
+    case 'ciega': return '<circle cx="-3" cy="-10" r="4" '+f+'/><path d="M-3,-6 C-4,-1 -4,2 -3,5 M-3,5 L-7,14 M-3,5 L1,14 M-3,-2 L5,2" '+s+'/><path d="M6,-1 L10,14" '+s+'/><path d="M-8,-11 L2,-11" stroke="'+c+'" stroke-width="2.6"/>';
+    case 'vasija': return '<path d="M-8,-6 C-13,3 -8,13 0,13 C8,13 13,3 8,-6 Z" '+f+'/><path d="M-7,-9 L7,-9" '+s+'/><ellipse cx="0" cy="16" rx="12" ry="2.4" '+f+' opacity=".5"/>';
+    case 'mono': return '<circle cx="0" cy="0" r="8" '+f+'/><circle cx="-9" cy="-1" r="3.4" '+f+'/><circle cx="9" cy="-1" r="3.4" '+f+'/><ellipse cx="0" cy="2.5" rx="4.6" ry="4" fill="'+CREMA+'"/><circle cx="-2" cy="1.5" r="1" '+f+'/><circle cx="2" cy="1.5" r="1" '+f+'/><path d="M8,6 C16,8 16,16 10,16" '+s+'/>';
+    case 'barca': return '<path d="M-16,4 Q0,15 16,4 Z" '+f+'/>'+[-10,-3.5,3,9.5].map(x => '<circle cx="'+x+'" cy="-4" r="2.6" '+f+'/><path d="M'+x+',-1 L'+x+',4" '+s+'/>').join('')+'<path d="M-13,6 L-19,12" '+s+'/>';
+    case 'casa': { let w = ''; [[-8,-1],[-1.7,-1],[4.6,-1],[-8,5],[4.6,5]].forEach(([x,y]) => w += '<rect x="'+x+'" y="'+y+'" width="3.4" height="3.6" fill="'+CREMA+'"/>'); return '<path d="M-12,-2 L0,-13 L12,-2 L12,12 L-12,12 Z" '+f+'/>'+w+'<rect x="-1.7" y="5" width="3.4" height="7" fill="'+CREMA+'"/>'; }
+    case 'pareja': return '<circle cx="-4.5" cy="-9" r="4" '+f+'/><circle cx="4.5" cy="-9" r="4" '+f+'/><path d="M-11,13 C-11,0 -7,-4 -2,-4 L2,-4 C7,-4 11,0 11,13 Z" '+f+'/><path d="M-6,2 Q0,6 6,2" stroke="'+CREMA+'" stroke-width="1.6" fill="none"/>';
+    case 'flecha': return '<path d="M-14,2 Q0,-9 14,2 Q0,12 -14,2 Z" '+s+'/><circle cx="0" cy="2" r="3.6" '+f+'/><path d="M15,-14 L3,-1" '+s+'/><path d="M3,-1 L9,-3 M3,-1 L5,-7" '+s+'/>';
+    case 'copa': return '<path d="M-8,-13 L8,-13 L6,-2 Q0,4 -6,-2 Z" '+f+'/><path d="M0,3 L0,11 M-6,12 L6,12" '+s+'/>';
+    case 'fruto': return '<path d="M-13,-12 Q0,-4 13,-13" '+s+'/><circle cx="-6" cy="-1" r="4.4" '+f+'/><circle cx="5" cy="1" r="4.4" '+f+'/><circle cx="-1" cy="10" r="4.4" '+f+'/><path d="M-6,-5 L-6,-8 M5,-3 L5,-8" '+s+'/>';
+    case 'union': return '<circle cx="-5" cy="0" r="9" '+s+'/><circle cx="5" cy="0" r="9" '+s+'/><circle cx="0" cy="0" r="2.6" '+f+'/>';
+    case 'bebe': return '<circle cx="0" cy="-6" r="5" '+f+'/><path d="M-6,-1 C-8,9 -3,14 0,14 C3,14 8,9 6,-1 Z" '+f+'/><path d="M-4,4 L4,8" stroke="'+CREMA+'" stroke-width="1.4"/>';
+    case 'muerte': return '<path d="M-15,4 C-15,-3 15,-3 15,4 C15,8 -15,8 -15,4 Z" '+f+'/><path d="M-12,10 L-12,14 M-4,10 L-4,14 M4,10 L4,14 M12,10 L12,14 M-15,10 L15,10" '+s+'/><path d="M0,-6 C3,-10 0,-14 2,-17" stroke="'+c+'" stroke-width="1.4" fill="none" opacity=".6"/>';
+    case 'palacio': return '<path d="M-18,-4 L0,-18 L18,-4 Z" '+f+'/><path d="M-12,-3 L-12,12 M-4,-3 L-4,12 M4,-3 L4,12 M12,-3 L12,12 M-17,14 L17,14" '+s+'/>';
+    case 'arbol': return '<circle cx="-3" cy="-8" r="10" '+f+'/><path d="M-3,0 L-3,15" '+s+'/><path d="M6,-12 L17,15 M9,-2 L15,-5" '+s+'/>';
+    case 'personas': return '<circle cx="-7" cy="-9" r="4.6" '+f+'/><circle cx="7" cy="-7" r="4" '+f+'/><path d="M-15,14 C-15,0 -11,-3 -7,-3 C-3,-3 1,0 1,14 Z" '+f+'/><path d="M1,14 C1,3 4,0 7,0 C10,0 14,3 14,14 Z" '+f+'/>';
+    case 'pez': return '<path d="M-14,0 Q-2,-11 11,0 Q-2,11 -14,0 Z" '+f+'/><path d="M10,0 L18,-7 L18,7 Z" '+f+'/><circle cx="-7" cy="-2" r="1.6" fill="#4f86c6"/>';
+    case 'preta': return '<circle cx="0" cy="-16" r="3.4" '+f+'/><path d="M0,-12 L0,-8" '+s+'/><circle cx="0" cy="3" r="11" '+f+'/><path d="M-5,13 L-6,19 M5,13 L6,19 M-9,-3 L-14,4 M9,-3 L14,4" '+s+'/>';
+    case 'llama': return '<path d="M0,-18 C8,-8 10,0 6,8 C10,4 12,10 8,16 L-8,16 C-12,10 -10,4 -6,8 C-10,0 -8,-8 0,-18 Z" '+f+'/><path d="M0,-2 C4,4 4,10 0,14 C-4,10 -4,4 0,-2 Z" fill="#fff4d2"/>';
+    case 'gallo': return '<path d="M-12,-2 C-16,-12 -8,-14 -6,-6 C-10,-14 -2,-16 -3,-6" fill="none" stroke="'+c+'" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="0" cy="2" rx="9" ry="7" '+f+'/><circle cx="8" cy="-6" r="4" '+f+'/><path d="M6,-10 L8,-14 L10,-10" '+f+'/><path d="M12,-6 L16,-5 L12,-4 Z" fill="#e8c04a"/><path d="M-2,9 L-2,14 M3,9 L3,14" '+s+'/>';
+    case 'serpiente': return '<path d="M-15,4 C-11,-8 -4,10 1,0 C5,-8 9,6 13,-2" fill="none" stroke="'+c+'" stroke-width="4.4" stroke-linecap="round"/><circle cx="14" cy="-3" r="3.6" '+f+'/><path d="M17,-3 L21,-5 M17,-3 L21,-1" stroke="#d9573f" stroke-width="1"/>';
+    case 'cerdo': return '<ellipse cx="-1" cy="1" rx="11" ry="7.5" '+f+'/><ellipse cx="11" cy="0" rx="3.4" ry="3" fill="#c98a8f"/><path d="M5,-6 L9,-10 L9,-2 Z" '+f+'/><path d="M-7,8 L-7,12 M4,8 L4,12" '+s+'/><path d="M-12,-1 C-16,-3 -16,3 -13,2" '+s+'/>';
+    default: return '<circle r="12" '+f+'/>';
+  }
+}
+/* Visor animado del panel, según el glifo del nodo */
+function visor(n){
+  const c = n.color || ORO, t = n.glifo;
+  const disco = '<circle r="54" fill="'+c+'" opacity=".16"/><circle r="54" fill="none" stroke="'+c+'" stroke-width="1.2" opacity=".6"/>';
+  let d;
+  if(t==='rueda'){ d = ''; REINOS.forEach(([k,a]) => { d += '<path d="'+sectorO(18,40,a-30,a+30)+'" fill="'+N[k].color+'" stroke="'+ORO+'" stroke-width=".8"/>'; }); d = '<g class="gira-lento"><circle r="46" fill="'+CREMA+'"/>'+d+'</g><circle r="18" fill="#17132a"/><circle r="10" fill="'+CREMA+'"/>'; }
+  else if(t==='tres') d = '<g class="gira-lento"><g transform="translate(0,-22) scale(1.1)">'+glifo('gallo','#d9573f')+'</g><g transform="translate(20,14) scale(1.1)">'+glifo('serpiente','#5fae7a')+'</g><g transform="translate(-20,14) scale(1.1)">'+glifo('cerdo','#3a3046')+'</g></g>';
+  else if(t==='virtudes') d = ['#d9573f','#5fae7a','#3a3046'].map((col,i) => { const a = (-90+i*120)*Math.PI/180, x = Math.cos(a)*30, y = Math.sin(a)*30; return '<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="9" fill="'+col+'"/><circle class="late" style="animation-delay:'+(i*.5)+'s" cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="14" fill="none" stroke="'+ORO+'" stroke-width="2"/>'; }).join('');
+  else if(t==='cama') d = '<rect x="-34" y="-4" width="68" height="16" rx="4" fill="'+INK+'"/><rect x="-34" y="-14" width="16" height="12" rx="3" fill="'+CREMA+'"/><g class="flota"><path d="M-12,-14 C-4,-24 10,-24 20,-14 Z" fill="'+c+'"/></g>';
+  else if(t==='karma') d = '<path d="M0,-44 A44,44 0 0 0 0,44 Z" fill="#f4eee0"/><path d="M0,-44 A44,44 0 0 1 0,44 Z" fill="#17132a"/><circle r="44" fill="none" stroke="'+ORO+'"/><circle class="flota-arriba" cx="-22" cy="10" r="5" fill="'+INK+'"/><circle class="flota-abajo" cx="22" cy="-10" r="5" fill="#f4eee0"/>';
+  else if(t==='sube') d = '<path d="M-30,30 L0,-30 L30,30 Z" fill="none" stroke="'+INK+'" stroke-width="1.5" opacity=".3"/><g class="flota-arriba"><circle cy="10" r="7" fill="'+INK+'"/><path d="M-7,24 L0,16 L7,24" stroke="'+INK+'" stroke-width="2" fill="none"/></g>';
+  else if(t==='baja') d = '<g class="flota-abajo"><circle cy="-10" r="7" fill="#f4eee0"/><path d="M-7,-24 L0,-16 L7,-24" stroke="#f4eee0" stroke-width="2" fill="none"/></g>';
+  else if(t==='semilla') d = '<g class="late"><path d="M0,-26 C14,-14 14,8 0,20 C-14,8 -14,-14 0,-26 Z" fill="'+c+'"/><path d="M0,-18 L0,14" stroke="'+INK+'" stroke-width="1.4"/></g>';
+  else if(t==='reinos'){ d = ''; REINOS.forEach(([k,a]) => { d += '<path d="'+sectorO(18,46,a-30,a+30)+'" fill="'+N[k].color+'" stroke="'+ORO+'" stroke-width=".8"/>'; }); d = '<g class="gira-lento">'+d+'</g><circle r="18" fill="'+CREMA+'"/>'; }
+  else if(t==='seisbudas'){ d = ''; REINOS.forEach(([k,a],i) => { const r = a*Math.PI/180; d += '<circle class="late" style="animation-delay:'+(i*.35)+'s" cx="'+(Math.cos(r)*34).toFixed(1)+'" cy="'+(Math.sin(r)*34).toFixed(1)+'" r="9" fill="'+N[k].bc+'" stroke="'+ORO+'" stroke-width="1.5"/>'; }); }
+  else if(t==='cadena'){ d = ''; for(let i=0;i<12;i++){ const a = (-90+i*30)*Math.PI/180; d += '<circle class="eslabon" style="animation-delay:'+(i*.25)+'s" cx="'+(Math.cos(a)*40).toFixed(1)+'" cy="'+(Math.sin(a)*40).toFixed(1)+'" r="6" fill="none" stroke="'+INK+'" stroke-width="2.4"/>'; } }
+  else if(t==='tres-vidas'){ d = ''; VIDAS.forEach(([,,,col],i) => { d += '<circle class="late" style="animation-delay:'+(i*.5)+'s" cx="'+(-33+i*22)+'" cy="0" r="9" fill="'+col+'"/>'; }); }
+  else if(t==='reloj') d = '<circle r="34" fill="none" stroke="'+INK+'" stroke-width="2"/><g class="gira-rapido"><path d="M0,0 L0,-26" stroke="'+INK+'" stroke-width="3" stroke-linecap="round"/></g><circle r="3" fill="'+INK+'"/>';
+  else if(t==='tijera') d = '<path d="M-36,0 L-6,0" stroke="'+INK+'" stroke-width="3" stroke-dasharray="6 4"/><path d="M6,0 C16,0 22,-10 30,-24" stroke="'+ORO+'" stroke-width="3" fill="none"/><g class="late"><circle r="8" fill="#5fae7a"/></g>';
+  else if(t==='monstruo') d = '<circle r="34" fill="#5c1f2b"/><g class="late"><ellipse cx="-12" cy="0" rx="6" ry="3.4" fill="#e0453a"/><ellipse cx="12" cy="0" rx="6" ry="3.4" fill="#e0453a"/><ellipse cx="0" cy="-15" rx="3.4" ry="6" fill="#e0453a"/></g><path d="M-14,16 L-10,24 L-6,16 L-2,24 L2,16 L6,24 L10,16 L14,24" stroke="'+CREMA+'" stroke-width="2" fill="none"/>';
+  else if(t==='espejo') d = '<circle cy="-6" r="26" fill="#d8d0ef" stroke="'+ORO+'" stroke-width="3"/><path d="M-4,20 L-4,40 L4,40 L4,20 Z" fill="'+ORO+'"/><g class="brilla"><path d="M-12,-20 L6,-2" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".7"/></g>';
+  else if(t==='vela') d = '<rect x="-9" y="-6" width="18" height="36" rx="2" fill="'+CREMA+'"/><g class="llamita"><path d="M0,-30 C7,-22 6,-12 0,-8 C-6,-12 -7,-22 0,-30 Z" fill="#ffb347"/></g>';
+  else if(t==='buda') d = '<circle cy="-14" r="22" fill="'+ORO+'" opacity=".35"/><circle cy="-14" r="9" fill="#f2b53c"/><path d="M-12,30 L-9,0 C-6,-4 6,-4 9,0 L12,30 Z" fill="#c9662c"/><path d="M-8,-2 L-30,-20" stroke="#f2b53c" stroke-width="4" stroke-linecap="round"/>';
+  else if(t==='espiral'||t==='peldano') d = '<path d="'+espiralD(0,0,6,44,3)+'" fill="none" stroke="'+ORO+'" stroke-width="2.4" stroke-linecap="round"/><circle r="4" fill="#fff6dc"><animateMotion dur="5s" repeatCount="indefinite" path="'+espiralD(0,0,6,44,3)+'"/></circle>';
+  else if(t==='mandala') d = [[0,0,'#f6f1ff'],[0,-30,'#3f6fd1'],[30,0,'#f2c14e'],[0,30,'#d9573f'],[-30,0,'#3f9a6c']].map(([x,y,col],i) => '<circle class="late" style="animation-delay:'+(i*.3)+'s" cx="'+x+'" cy="'+y+'" r="'+(i?11:14)+'" fill="'+col+'" stroke="'+ORO+'" stroke-width="1.5"/>').join('');
+  else if(t==='lista'){ const k = (n.lista||[]).length || 5; d = ''; for(let i=0;i<k;i++){ const a = (-90+i*360/k)*Math.PI/180; d += '<circle class="late" style="animation-delay:'+(i*.3)+'s" cx="'+(Math.cos(a)*30).toFixed(1)+'" cy="'+(Math.sin(a)*30).toFixed(1)+'" r="8" fill="'+c+'"/>'; } d += '<text y="6" text-anchor="middle" class="visor-n">'+k+'</text>'; }
+  else if(['llama','preta','pez','arbol'].includes(t)) d = '<circle r="42" fill="'+c+'"/><g transform="scale(2.2)">'+glifo(t, t==='llama' ? '#ffd27a' : '#fbf6ea')+'</g>';
+  else d = '<g transform="scale(2.4)">'+glifo(t, INK)+'</g>';
+  return '<svg class="visor" viewBox="-60 -60 120 120" aria-hidden="true">'+disco+'<g class="flota">'+d+'</g></svg>';
+}
+
+/* ================= Geometría ================= */
+const pol = (r,a) => [CX + r*Math.cos(a*Math.PI/180), CY + r*Math.sin(a*Math.PI/180)];
+function sectorO(r0,r1,a0,a1){
+  const p = (r,a) => (r*Math.cos(a*Math.PI/180)).toFixed(1)+','+(r*Math.sin(a*Math.PI/180)).toFixed(1);
+  return 'M'+p(r1,a0)+' A'+r1+','+r1+' 0 0 1 '+p(r1,a1)+' L'+p(r0,a1)+' A'+r0+','+r0+' 0 0 0 '+p(r0,a0)+' Z';
+}
+function sector(r0,r1,a0,a1){
+  const f = v => v.toFixed(1), lg = (a1-a0)>180 ? 1 : 0;
+  const [x0,y0] = pol(r1,a0), [x1,y1] = pol(r1,a1), [x2,y2] = pol(r0,a1), [x3,y3] = pol(r0,a0);
+  return 'M'+f(x0)+','+f(y0)+' A'+r1+','+r1+' 0 '+lg+' 1 '+f(x1)+','+f(y1)+' L'+f(x2)+','+f(y2)+' A'+r0+','+r0+' 0 '+lg+' 0 '+f(x3)+','+f(y3)+' Z';
+}
+/* Espiral que se abre desde el centro (cx,cy), del radio r0 al r1, en «vueltas» vueltas */
+function espiralD(cx,cy,r0,r1,vueltas){
+  let d = '';
+  for(let i=0;i<=120;i++){ const t = i/120, a = t*vueltas*2*Math.PI - Math.PI/2, r = r0+(r1-r0)*t;
+    d += (i?'L':'M')+(cx+Math.cos(a)*r).toFixed(1)+','+(cy+Math.sin(a)*r).toFixed(1); }
+  return d;
+}
+const at = (r,a,inner,sc) => { const [x,y] = pol(r,a); return '<g transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+')'+(sc?' scale('+sc+')':'')+'">'+inner+'</g>'; };
+const zona = (id, inner) => '<g class="zona" data-n="'+id+'" tabindex="0" role="button" aria-label="'+N[id].titulo+'">'+inner+'</g>';
+
+/* ================= Dibujo de la rueda ================= */
+function dibujar(){
+  let s = '<defs><radialGradient id="cieloG" cx="50%" cy="45%"><stop offset="0" stop-color="#13285a"/><stop offset="1" stop-color="#060b1c"/></radialGradient>'+
+    '<radialGradient id="halo"><stop offset="0" stop-color="#f6e7b8" stop-opacity=".55"/><stop offset="1" stop-color="#f6e7b8" stop-opacity="0"/></radialGradient></defs>';
+  s += '<rect width="800" height="860" fill="url(#cieloG)"/>';
+  let seed = 7; const rnd = () => (seed = (seed*16807)%2147483647)/2147483647;
+  for(let i=0;i<110;i++){ const x = rnd()*800, y = rnd()*860; if(Math.hypot(x-CX,y-CY) < 345){ rnd(); continue; }
+    s += '<circle class="estrella" cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(rnd()*1.4+.4).toFixed(2)+'" fill="#fff" style="animation-delay:'+(rnd()*4).toFixed(2)+'s"/>'; }
+
+  // La Espiral (arriba a la izquierda) y el Buda que la señala (arriba a la derecha)
+  const esp = espiralD(94,96,4,42,2.6);
+  s += zona('espiral', '<circle cx="94" cy="96" r="64" fill="url(#halo)" class="late"/><path d="'+esp+'" fill="none" stroke="'+ORO+'" stroke-width="3" stroke-linecap="round"/>'+
+    (reduce?'':'<circle r="4.5" fill="#fff6dc"><animateMotion dur="6s" repeatCount="indefinite" path="'+esp+'"/></circle>')+
+    '<text class="rotulo" x="94" y="160" text-anchor="middle">la Espiral</text>');
+  s += '<path d="M664,92 C560,30 220,30 140,82" fill="none" stroke="'+ORO+'" stroke-width="1.4" stroke-dasharray="3 9" opacity=".55" class="senda"/>';
+  s += zona('buda', '<circle cx="704" cy="96" r="38" fill="'+ORO+'" opacity=".18" class="late"/><circle cx="704" cy="74" r="20" fill="none" stroke="'+ORO+'" stroke-width="1.2" opacity=".7"/>'+
+    '<circle cx="704" cy="74" r="9" fill="#f2b53c"/><ellipse cx="704" cy="64" rx="4.4" ry="3.6" fill="#3a1a10"/>'+
+    '<path d="M690,140 L693,96 C696,86 712,86 715,96 L718,140 Z" fill="#c9662c"/><path d="M694,94 C688,90 676,84 664,90" stroke="#f2b53c" stroke-width="5" stroke-linecap="round" fill="none"/>'+
+    '<text class="rotulo" x="704" y="160" text-anchor="middle">el Buda</text>');
+
+  // El monstruo de la impermanencia, detrás de la rueda
+  let m = '<circle cx="'+CX+'" cy="'+CY+'" r="340" fill="#5c1f2b"/><circle cx="'+CX+'" cy="96" r="64" fill="#5c1f2b"/>';
+  for(let i=0;i<5;i++){ const x = CX-40+i*20, y = 40+Math.abs(i-2)*5; m += '<circle cx="'+x+'" cy="'+y+'" r="7.5" fill="'+CREMA+'"/><circle cx="'+(x-2.4)+'" cy="'+(y-1)+'" r="1.6" fill="#5c1f2b"/><circle cx="'+(x+2.4)+'" cy="'+(y-1)+'" r="1.6" fill="#5c1f2b"/>'; }
+  m += '<g class="ojos"><ellipse cx="'+(CX-22)+'" cy="88" rx="10" ry="5.5" fill="#e0453a"/><ellipse cx="'+(CX+22)+'" cy="88" rx="10" ry="5.5" fill="#e0453a"/><ellipse cx="'+CX+'" cy="66" rx="5" ry="8.5" fill="#e0453a"/>'+
+       '<circle cx="'+(CX-22)+'" cy="88" r="2.6" fill="#2a0d14"/><circle cx="'+(CX+22)+'" cy="88" r="2.6" fill="#2a0d14"/><circle cx="'+CX+'" cy="66" r="2.4" fill="#2a0d14"/></g>';
+  m += '<path d="M'+(CX-40)+',74 Q'+(CX-22)+',64 '+(CX-6)+',76 M'+(CX+6)+',76 Q'+(CX+22)+',64 '+(CX+40)+',74" stroke="#2a0d14" stroke-width="3" fill="none"/>';
+  m += '<path d="M330,770 C320,800 290,810 286,830 L370,830 C370,808 356,790 356,770 Z" fill="#5c1f2b"/><path d="M470,770 C480,800 510,810 514,830 L430,830 C430,808 444,790 444,770 Z" fill="#5c1f2b"/>';
+  s += zona('monstruo', m);
+
+  // Borde: los doce eslabones
+  let borde = '';
+  for(let k=1;k<=12;k++){
+    const a0 = -90+(k-1)*30, a1 = a0+30, mid = a0+15, [nx,ny] = pol(303,mid);
+    borde += zona('n'+k, '<path class="seg" d="'+sector(R.reinos+2, R.borde, a0+.6, a1-.6)+'" fill="'+(k%2?CREMA:'#e6d6b0')+'" stroke="'+ORO+'" stroke-width="1"/>'+
+      at(276, mid, glifo(N['n'+k].glifo, INK), .92)+
+      '<text class="num" x="'+nx.toFixed(1)+'" y="'+(ny+3.5).toFixed(1)+'" text-anchor="middle">'+k+'</text>');
+  }
+  s += '<g id="borde">'+borde+'</g><circle cx="'+CX+'" cy="'+CY+'" r="'+(R.borde+2)+'" fill="none" stroke="'+ORO+'" stroke-width="3"/>';
+
+  // Los seis mundos, con el Buda de cada uno en su color
+  let reinos = '';
+  REINOS.forEach(([k,a]) => {
+    const n = N[k], claro = k==='dioses' || k==='humanos';
+    const tinta = claro ? INK : (k==='infiernos' ? '#ffd27a' : '#fbf6ea');
+    const nombre = {dioses:'Dioses', titanes:'Titanes', animales:'Animales', infiernos:'Infiernos', espectros:'Espectros', humanos:'Humanos'}[k];
+    const [lx,ly] = pol(224,a);
+    reinos += zona(k, '<path class="seg" d="'+sector(R.karma+2, R.reinos, a-30+.5, a+30-.5)+'" fill="'+n.color+'" stroke="'+ORO+'" stroke-width="1"/>'+
+      at(176, a, glifo(n.glifo, tinta), 1.5)+
+      '<text class="nombre" x="'+lx.toFixed(1)+'" y="'+(ly+5).toFixed(1)+'" text-anchor="middle" fill="'+tinta+'">'+nombre+'</text>'+
+      at(140, a+20, '<circle r="10" fill="'+ORO+'" opacity=".3" class="late"/><circle r="5.2" fill="'+n.bc+'" stroke="#fff6dc" stroke-width="1.4"/>'));
+  });
+  s += '<g id="reinos">'+reinos+'</g>';
+
+  // El karma: mitad blanca (izquierda, ascienden) y mitad negra (derecha, caen)
+  s += zona('claro', '<path class="seg" d="'+sector(R.hub+2, R.karma, 90, 270)+'" fill="#f4eee0" stroke="'+ORO+'" stroke-width="1"/>');
+  s += zona('oscuro', '<path class="seg" d="'+sector(R.hub+2, R.karma, 270, 450)+'" fill="#17132a" stroke="'+ORO+'" stroke-width="1"/>');
+  if(!reduce){
+    const rk = 88, [bx,by] = pol(rk,95), [tx,ty] = pol(rk,265), [tx2,ty2] = pol(rk,275), [bx2,by2] = pol(rk,445);
+    const sube = 'M'+bx.toFixed(1)+','+by.toFixed(1)+' A'+rk+','+rk+' 0 0 1 '+tx.toFixed(1)+','+ty.toFixed(1);
+    const baja = 'M'+tx2.toFixed(1)+','+ty2.toFixed(1)+' A'+rk+','+rk+' 0 0 1 '+bx2.toFixed(1)+','+by2.toFixed(1);
+    let seres = '';
+    for(let i=0;i<4;i++){
+      seres += '<circle r="4.6" fill="'+INK+'" opacity=".85"><animateMotion dur="8s" repeatCount="indefinite" begin="'+(i*2)+'s" path="'+sube+'"/></circle>';
+      seres += '<circle r="4.6" fill="#f4eee0" opacity=".9"><animateMotion dur="5s" repeatCount="indefinite" begin="'+(i*1.25)+'s" path="'+baja+'"/></circle>';
+    }
+    s += '<g pointer-events="none">'+seres+'</g>';
+  }
+
+  // El eje: los tres venenos persiguiéndose
+  s += zona('venenos', '<circle cx="'+CX+'" cy="'+CY+'" r="'+R.hub+'" fill="'+CREMA+'" stroke="'+ORO+'" stroke-width="1.5"/>');
+  let anim = '';
+  [['gallo',-90,'#d9573f'],['vibora',30,'#5fae7a'],['cerdo',150,'#3a3046']].forEach(([k,a,col]) => {
+    const [x,y] = pol(36,a);
+    anim += zona(k, '<g transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+') rotate('+(a+90)+') scale(1.15)"><circle r="20" fill="transparent"/>'+glifo(N[k].glifo,col)+'</g>');
+  });
+  s += '<g class="animales">'+anim+'</g>';
+
+  // Colmillos y garras del monstruo, por encima del borde
+  let garras = '';
+  for(let i=0;i<7;i++) garras += '<path d="M'+(CX-42+i*12)+',118 L'+(CX-36+i*12)+',134 L'+(CX-30+i*12)+',118 Z" fill="'+CREMA+'"/>';
+  [1,-1].forEach(sx => {
+    const x0 = CX + sx*318;
+    for(let j=0;j<4;j++){ const y = CY-36+j*24;
+      garras += '<path d="M'+(x0+sx*22)+','+y+' C'+(x0+sx*6)+','+(y-4)+' '+(x0-sx*8)+','+(y+2)+' '+(x0-sx*14)+','+(y+12)+'" stroke="#5c1f2b" stroke-width="9" stroke-linecap="round" fill="none"/>'+
+                '<path d="M'+(x0-sx*14)+','+(y+12)+' l'+(-sx*5)+',4" stroke="'+CREMA+'" stroke-width="3" stroke-linecap="round"/>'; }
+  });
+  s += '<g pointer-events="none">'+garras+'</g>';
+  s += '<circle id="cuenta" r="9" fill="#fff6dc" stroke="'+ORO+'" stroke-width="2" opacity="0" pointer-events="none" style="filter:drop-shadow(0 0 6px #fff6dc)"/>';
+  return s;
+}
+const svg = document.getElementById('rueda');
+svg.innerHTML = dibujar();
+
+/* ================= Resaltado ================= */
+/* Zonas de la rueda que corresponden a un nodo: la suya, la de sus subniveles
+   o, si no tiene ninguna, la del nivel superior */
+function zonasDe(id, dentro){
+  const n = N[id];
+  if(n.zonas) return n.zonas;
+  if(svg.querySelector('[data-n="'+id+'"]')) return [id];
+  const deHijos = (n.hijos||[]).flatMap(h => zonasDe(h, true));
+  if(deHijos.length || dentro) return deHijos;
+  return PADRE[id] ? zonasDe(PADRE[id]) : [];
+}
+function resaltar(ids){
+  svg.classList.toggle('has-sel', ids.length>0);
+  svg.querySelectorAll('.zona').forEach(z => z.classList.toggle('sel', ids.includes(z.dataset.n)));
+}
+function limpiarVidas(){ svg.querySelectorAll('[data-n^="n"]').forEach(z => { z.classList.remove('vida','apagado'); z.style.removeProperty('--vida'); }); }
+
+/* ================= Panel ================= */
+const panel = document.getElementById('panel');
+const corto = k => { const t = N[k].titulo.replace(/^(El|La|Los|Las) /,''); return t.charAt(0).toUpperCase()+t.slice(1); };
+function ruta(id){ const r = [id]; while(PADRE[r[0]]) r.unshift(PADRE[r[0]]); return r; }
+function abrir(id, desdeRueda){
+  detenerCadena(); limpiarVidas();
+  const n = N[id], r = ruta(id);
+  let h = '<nav class="migas" aria-label="Ubicación">'+r.map((k,i) => i<r.length-1
+      ? '<button type="button" data-ir="'+k+'">'+corto(k)+'</button><span aria-hidden="true">›</span>'
+      : '<span aria-current="page">'+corto(k)+'</span>').join('')+'</nav>';
+  h += '<div class="cab">'+visor(n)+'<div><h2>'+(n.num?'<span class="num-g">'+n.num+'</span>':'')+n.titulo+'</h2>'+
+       (n.san?'<p class="san">'+n.san+'</p>':'')+(n.sub?'<p class="gloss">'+n.sub+'</p>':'')+'</div></div>';
+  if(n.imagen) h += '<div class="fila"><span class="k">En la imagen</span><p>'+n.imagen+'</p></div>';
+  h += (n.texto||[]).map(t => '<p>'+t+'</p>').join('');
+  if(n.lista) h += '<dl class="lista">'+n.lista.map(([k,v]) => '<div><dt>'+k+'</dt><dd>'+v+'</dd></div>').join('')+'</dl>';
+  if(n.mente) h += '<div class="fila"><span class="k">En la vida humana</span><p>'+n.mente+'</p></div>';
+  if(n.buda) h += '<div class="fila buda-fila" style="--bc:'+(n.bc||ORO)+'"><span class="k"><span class="bdot"></span>El Buda en este mundo</span><p>'+n.buda+'</p></div>';
+  if(n.antidoto) h += '<div class="fila"><span class="k">Lo que lo sustituye</span><p>'+n.antidoto+'</p></div>';
+  if(n.especial) h += especial(n.especial);
+  if(n.ejemplo) h += '<div class="ejemplo"><span class="k">Ejemplo del texto</span><p>'+n.ejemplo+'</p></div>';
+  if(n.cotidiano) h += '<div class="ejemplo cotidiano"><span class="k">Ejemplo cotidiano</span><p>'+n.cotidiano+'</p></div>';
+  if(n.hijos && n.especial!=='escalera'){
+    h += '<h3>'+(n.hijosTitulo||'Profundiza')+'</h3><div class="chips">'+n.hijos.map(k =>
+      '<button type="button" class="chip" data-ir="'+k+'" style="--ac:'+(N[k].color||ORO)+'"><span class="d"></span>'+(N[k].num?N[k].num+'. ':'')+N[k].titulo+'</button>').join('')+'</div>';
+  }
+  if(PADRE[id]){
+    const hermanos = N[PADRE[id]].hijos, i = hermanos.indexOf(id), prev = hermanos[i-1], next = hermanos[i+1];
+    if(prev || next) h += '<div class="pasar">'+(prev?'<button type="button" class="sbtn-c" data-ir="'+prev+'">← '+corto(prev)+'</button>':'<span></span>')+
+         (next?'<button type="button" class="sbtn-c" data-ir="'+next+'">'+corto(next)+' →</button>':'')+'</div>';
+  }
+  panel.innerHTML = '<div class="fadein" style="--ac:'+(n.color||ORO)+'">'+h+'</div>';
+  if(n.especial==='tresvidas') aplicarVidas(); else resaltar(id==='rueda' ? [] : zonasDe(id));
+  if(n.num && /^n\d/.test(id)){ mover(n.num); lectura(n.num); } else lecturaInicial();
+  if(desdeRueda && window.innerWidth < 1000) panel.scrollIntoView({block:'start', behavior: reduce?'auto':'smooth'});
+}
+panel.addEventListener('click', e => {
+  const b = e.target.closest('[data-ir]'); if(b){ abrir(b.dataset.ir); return; }
+  const a = e.target.closest('[data-accion]'); if(a) acciones[a.dataset.accion](a);
+});
+
+/* ---- Contenidos especiales ---- */
+function especial(tipo){
+  if(tipo==='tresvidas') return '<div class="vidas">'+VIDAS.map(([cl,t,ns,col,d]) =>
+      '<div class="vida-f" style="--vc:'+col+'"><span class="sw"></span><div><strong>'+t+'</strong> <span class="ns">('+ns.join(', ')+')</span><p>'+d+'</p></div></div>').join('')+'</div>';
+  if(tipo==='instante') return '<div class="instante"><div class="botones-p"><button type="button" class="sbtn-c" data-accion="reproducir">▶ Reproducir</button><button type="button" class="sbtn-c" data-accion="siguiente">Paso siguiente</button></div><ol class="pasos">'+
+      INSTANTE.map(([k,t],i) => '<li data-i="'+i+'"><span class="b">'+k+'</span><span><strong>'+N['n'+k].titulo+'.</strong> '+t+'</span></li>').join('')+'</ol></div>';
+  if(tipo==='brecha') return '<div class="romper"><div class="botones-p"><button type="button" class="sbtn-c" data-accion="avidez">Reaccionar con avidez</button><button type="button" class="sbtn-c" data-accion="fe">Responder con fe</button></div><p class="estado-r" id="estadoR">Elige una de las dos respuestas.</p></div>';
+  if(tipo==='escalera') return escalera();
+  return '';
+}
+/* Escalera en espiral de los doce eslabones positivos */
+function escalera(){
+  const grupos = {1:'#d9b265',2:'#d9b265',3:'#d9b265',4:'#5fb2d9',5:'#5fb2d9',6:'#5fb2d9',7:'#5fb2d9'};
+  const pts = []; for(let i=1;i<=12;i++){ const t = (i-1)/11, a = t*2.2*2*Math.PI + Math.PI/2; pts.push([150+Math.cos(a)*(78-t*30), 318-t*286, i]); }
+  let camino = 'M'+pts.map(p => p[0].toFixed(1)+','+p[1].toFixed(1)).join(' L');
+  let s = '<svg class="escalera" viewBox="0 0 300 340" role="group" aria-label="Escalera de los doce eslabones positivos">';
+  s += '<path d="'+camino+'" fill="none" stroke="'+ORO+'" stroke-width="2" stroke-dasharray="3 5" opacity=".7"/>';
+  const yCorriente = (pts[6][1]+pts[7][1])/2;
+  s += '<line x1="20" x2="280" y1="'+yCorriente+'" y2="'+yCorriente+'" stroke="#b9a6ff" stroke-dasharray="4 4"/><text class="esc-et" x="280" y="'+(yCorriente+13)+'" text-anchor="end">Entrada en la Corriente</text>';
+  if(!reduce) s += '<circle r="5" fill="#fff6dc"><animateMotion dur="9s" repeatCount="indefinite" path="'+camino+'"/></circle>';
+  pts.forEach(([x,y,i]) => {
+    const col = grupos[i] || '#b9a6ff', izq = x < 150;
+    s += '<g class="peld" data-ir="p'+i+'" tabindex="0" role="button" aria-label="'+i+'. '+N['p'+i].titulo+'"><circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="11" fill="'+col+'" stroke="#fff6dc" stroke-width="1.5"/>'+
+         '<text class="esc-n" x="'+x.toFixed(1)+'" y="'+(y+4).toFixed(1)+'" text-anchor="middle">'+i+'</text>'+
+         '<text class="esc-t" x="'+(x+(izq?-16:16)).toFixed(1)+'" y="'+(y+4).toFixed(1)+'" text-anchor="'+(izq?'end':'start')+'">'+N['p'+i].titulo.replace('Conocimiento y visión de las cosas como realmente son','Visión clara').replace('Reconocimiento de la destrucción de los venenos','Iluminación')+'</text></g>';
+  });
+  s += '</svg><div class="leyenda-esc"><span style="--vc:#d9b265">Ética</span><span style="--vc:#5fb2d9">Meditación</span><span style="--vc:#b9a6ff">Sabiduría</span></div>';
+  return s;
+}
+panel.addEventListener('keydown', e => {
+  const g = e.target.closest('.peld'); if(g && (e.key==='Enter' || e.key===' ')){ e.preventDefault(); abrir(g.dataset.ir); }
+});
+function aplicarVidas(){
+  svg.classList.remove('has-sel');
+  VIDAS.forEach(([,,ns,col]) => ns.forEach(k => { const z = svg.querySelector('[data-n="n'+k+'"]'); z.classList.add('vida'); z.style.setProperty('--vida', col); }));
+}
+let pasoI = -1, pasoT = null;
+function mostrarPaso(i){
+  pasoI = i;
+  const [k,t] = INSTANTE[i];
+  panel.querySelectorAll('.pasos li').forEach(li => li.classList.toggle('on', +li.dataset.i===i));
+  resaltar(['n'+k]); mover(k); lectura(k, t);
+}
+const acciones = {
+  reproducir(btn){
+    if(pasoT){ clearInterval(pasoT); pasoT = null; btn.textContent = '▶ Reproducir'; return; }
+    btn.textContent = '❚❚ Pausar';
+    mostrarPaso((pasoI+1) % INSTANTE.length);
+    pasoT = setInterval(() => { if(pasoI >= INSTANTE.length-1){ clearInterval(pasoT); pasoT = null; btn.textContent = '▶ Reproducir'; pasoI = -1; return; } mostrarPaso(pasoI+1); }, 2400);
+  },
+  siguiente(){ if(pasoT){ clearInterval(pasoT); pasoT = null; } mostrarPaso((pasoI+1) % INSTANTE.length); },
+  avidez(){ limpiarVidas(); recorrer(12, true, 'Reaccionar: al sentimiento agradable le sigue la sed, y la rueda vuelve a girar completa, una y otra vez.'); },
+  fe(){ limpiarVidas(); recorrer(7, false, 'Responder: se reconoce que el sentimiento surge de condiciones y el corazón se orienta hacia algo más alto. La rueda se detiene en el 7 y empieza la Espiral.', ['espiral']); }
+};
+
+/* ---- Cuenta que recorre el borde ---- */
+const cuenta = document.getElementById('cuenta');
+let rafId = null;
+function lecturaInicial(){
+  document.getElementById('pasoN').textContent = '·';
+  document.getElementById('pasoT').textContent = 'Toca una parte de la rueda o recorre la cadena de los doce eslabones.';
+}
+function lectura(k, t){
+  document.getElementById('pasoN').textContent = k;
+  document.getElementById('pasoT').innerHTML = '<strong>'+N['n'+k].titulo+'</strong> · '+N['n'+k].san+(t?' — '+t:'');
+}
+function mover(k){
+  const [x,y] = pol(R.borde-8, -90+(k-1)*30+15);
+  cuenta.setAttribute('cx', x.toFixed(1)); cuenta.setAttribute('cy', y.toFixed(1)); cuenta.setAttribute('opacity','1');
+}
+function detenerCadena(){
+  if(rafId){ cancelAnimationFrame(rafId); rafId = null; }
+  if(pasoT){ clearInterval(pasoT); pasoT = null; pasoI = -1; }
+  cuenta.setAttribute('opacity','0');
+  btnCadena.textContent = 'Recorrer los doce eslabones';
+}
+function recorrer(hasta, bucle, mensaje, extra){
+  if(rafId) cancelAnimationFrame(rafId);
+  const porEslabon = 1100, total = hasta*porEslabon;
+  let t0 = null, ultimo = 0;
+  for(let k=hasta+1;k<=12;k++) svg.querySelector('[data-n="n'+k+'"]').classList.add('apagado');
+  const est = document.getElementById('estadoR'); if(est) est.textContent = mensaje || '';
+  const fin = () => { mover(hasta); resaltar(['n'+hasta].concat(extra||[])); lectura(hasta, hasta<12 ? 'aquí se detiene la rueda.' : ''); };
+  if(reduce){ fin(); return; }
+  function paso(ts){
+    if(t0===null) t0 = ts;
+    let el = ts - t0;
+    if(el >= total){
+      if(bucle){ t0 = ts; el = 0; }
+      else { fin(); rafId = null; return; }
+    }
+    const ang = -90 + (el/porEslabon)*30, k = Math.min(12, Math.floor(el/porEslabon)+1);
+    const [x,y] = pol(R.borde-8, ang);
+    cuenta.setAttribute('cx', x.toFixed(1)); cuenta.setAttribute('cy', y.toFixed(1)); cuenta.setAttribute('opacity','1');
+    if(k!==ultimo){ ultimo = k; resaltar(['n'+k]); lectura(k); }
+    rafId = requestAnimationFrame(paso);
+  }
+  rafId = requestAnimationFrame(paso);
+}
+const btnCadena = document.getElementById('btnCadena');
+btnCadena.addEventListener('click', () => {
+  if(rafId){ detenerCadena(); resaltar([]); return; }
+  abrir('nidanas'); recorrer(12, true); btnCadena.textContent = 'Detener';
+});
+document.getElementById('btnInicio').addEventListener('click', () => {
+  abrir('rueda');
+});
+
+/* ---- Clic y teclado sobre la rueda ---- */
+svg.addEventListener('click', e => {
+  const z = e.target.closest('.zona'); if(!z) return;
+  abrir(z.dataset.n, true);
+});
+svg.addEventListener('keydown', e => {
+  const z = e.target.closest('.zona'); if(!z) return;
+  if(e.key==='Enter' || e.key===' '){ e.preventDefault(); abrir(z.dataset.n, true); }
+});
+
+// Un enlace como rueda-de-la-vida.html#brecha abre directamente esa explicación
+const inicial = decodeURIComponent(location.hash.slice(1));
+abrir(Object.prototype.hasOwnProperty.call(N, inicial) ? inicial : 'rueda');
+})();
+</script>
+</body>
+</html>

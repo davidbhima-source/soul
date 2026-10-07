@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es" class="pg-vedanas">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>108 Vedanās · Bhima</title>
+<meta name="description" content="Las 108 formas de sentir del Aṭṭhasatapariyāya Sutta (SN 36.22): seis sentidos, tres tonos, mundano o renuncia, y tres tiempos, en un mandala interactivo.">
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="home-link" href="buda.html"><span aria-hidden="true">←</span>Budismo</a>
+  <h1>108 Vedanās</h1>
+  <p class="lede">En el Canon Pali, el <em>Aṭṭhasatapariyāya Sutta</em> (SN 36.22, «La exposición de los 108») enumera las formas de sentir. Seis sentidos, por tres tonos, por dos direcciones, por tres tiempos: 108 maneras en que la experiencia se tiñe de gusto, rechazo o indiferencia. Toca cualquier anillo del mandala para ver cómo se desglosa.</p>
+</header>
+
+<main>
+  <section class="lienzo" aria-label="El mandala de los 108 sentimientos">
+    <svg id="mandala" viewBox="0 0 800 800" role="group" aria-label="Mandala interactivo de los 108 sentimientos"></svg>
+    <div class="mando">
+      <div class="formula" role="group" aria-label="La multiplicación de los 108">
+        <button class="fbtn" type="button" data-ir="sentidos" data-nivel="1"><b>6</b><span>sentidos</span></button><i aria-hidden="true">×</i>
+        <button class="fbtn" type="button" data-ir="tonos" data-nivel="2"><b>3</b><span>tonos</span></button><i aria-hidden="true">×</i>
+        <button class="fbtn" type="button" data-ir="caminos" data-nivel="3"><b>2</b><span>direcciones</span></button><i aria-hidden="true">×</i>
+        <button class="fbtn" type="button" data-ir="tiempos" data-nivel="4"><b>3</b><span>tiempos</span></button><i aria-hidden="true">=</i>
+        <button class="fbtn total" type="button" data-ir="vedana" data-nivel="5"><b>108</b><span>formas de sentir</span></button>
+      </div>
+      <div class="leyenda" id="leyenda" aria-hidden="true"></div>
+      <div class="lectura" aria-live="polite"><span class="paso-n" id="pasoN">·</span><span id="pasoT"></span></div>
+      <div class="botones">
+        <button class="sbtn" id="btnDesplegar" type="button">Desplegar los 108</button>
+        <button class="sbtn" id="btnContacto" type="button">Seguir un contacto</button>
+        <button class="sbtn" id="btnInicio" type="button">Ver todo el mandala</button>
+      </div>
+    </div>
+  </section>
+  <aside class="panel-r" id="panel" aria-live="polite"></aside>
+</main>
+
+<footer class="pie">
+  <div class="nota">
+    <p><strong>Cómo leer el mandala.</strong> Se lee de dentro hacia fuera, como nace un sentimiento. Fuera del círculo están los objetos: formas, sonidos, olores, sabores, lo tangible y lo mental. Cuando uno de ellos toca su sentido (primer anillo), surge un tono agradable, desagradable o neutro (segundo anillo, 18). Ese tono puede inclinar la mente hacia el apego mundano o apoyarse en la renuncia (tercer anillo, 36), y puede pertenecer al pasado, al presente o al futuro (borde, 108).</p>
+    <p><strong>Sobre las fuentes.</strong> La estructura de los 108 procede del <em>Aṭṭhasatapariyāya Sutta</em> (SN 36.22); la distinción entre sentimientos mundanos y de renuncia se desarrolla en el <em>Saḷāyatanavibhaṅga Sutta</em> (MN 137), las dos flechas en el <em>Sallatha Sutta</em> (SN 36.6) y las tendencias latentes en el <em>Cūḷavedalla Sutta</em> (MN 44). Los ejemplos marcados como «Ejemplo cotidiano» son ilustraciones añadidas para la práctica, no citas del Canon.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const CX = 400, CY = 400;
+/* Radios de cada anillo: centro, sentidos, tonos, direcciones, tiempos y objetos */
+const R = {hub:64, s0:68, s1:150, t0:150, t1:212, c0:212, c1:262, k0:262, k1:306, obj:340};
+const ORO = '#d9b265', INK = '#17122b', NOCHE = '#060b1c';
+
+/* ================= Las cuatro dimensiones ================= */
+const SENT = [
+  {k:'ojo', nombre:'Ojo', titulo:'El ojo', san:'cakkhu', obj:'formas visibles', objS:'rūpa', objA:'las formas visibles', objN:'formas', color:'#5fb2d9',
+   llega:'Una forma visible llega al ojo',
+   texto:['La base visual y su objeto: las formas y los colores. La conciencia visual surge cuando el ojo y una forma se encuentran.',
+          'Es el sentido que más alimenta la comparación: lo bello y lo feo, lo que tengo y lo que no. Por eso la práctica empieza muchas veces por «custodiar las puertas de los sentidos», comenzando por la mirada.']},
+  {k:'oido', nombre:'Oído', titulo:'El oído', san:'sota', obj:'sonidos', objS:'sadda', objA:'los sonidos', objN:'sonidos', color:'#8b7ce0',
+   llega:'Un sonido llega al oído',
+   texto:['La base auditiva y su objeto: los sonidos. Voces, música, ruido, el silencio que se rompe.',
+          'Por el oído llegan también las palabras de los demás: el elogio y la crítica, dos de las «ocho condiciones mundanas» que más fácilmente nos zarandean.']},
+  {k:'nariz', nombre:'Nariz', titulo:'La nariz', san:'ghāna', obj:'olores', objS:'gandha', objA:'los olores', objN:'olores', color:'#5fbf8a',
+   llega:'Un olor llega a la nariz',
+   texto:['La base olfativa y su objeto: los olores. Es el camino más directo hacia la memoria: un aroma puede traer de golpe una casa, una persona, una época.',
+          'Por eso muestra muy bien los tres tiempos: un olor presente despierta un sentimiento del pasado.']},
+  {k:'lengua', nombre:'Lengua', titulo:'La lengua', san:'jivhā', obj:'sabores', objS:'rasa', objA:'los sabores', objN:'sabores', color:'#e48d45',
+   llega:'Un sabor llega a la lengua',
+   texto:['La base gustativa y su objeto: los sabores. Junto con el tacto, es la puerta más ligada a la supervivencia y a los hábitos.',
+          'En la tradición, «conocer la medida en la comida» es una práctica básica: notar el sabor sin dejar que el sabor decida por nosotros.']},
+  {k:'cuerpo', nombre:'Cuerpo', titulo:'El cuerpo', san:'kāya', obj:'lo tangible', objS:'phoṭṭhabba', objA:'las sensaciones del tacto', objN:'sensaciones', color:'#e0697a',
+   llega:'Algo tangible toca el cuerpo',
+   texto:['La base táctil, que abarca todo el cuerpo, y su objeto: lo tangible. Calor, frío, presión, dureza, suavidad, dolor.',
+          'Aquí está el dolor físico, el ejemplo con el que el Buda explicó las dos flechas: la primera es la sensación; la segunda, nuestra reacción ante ella.']},
+  {k:'mente', nombre:'Mente', titulo:'La mente', san:'mano', obj:'lo mental', objS:'dhammā', objA:'los fenómenos mentales', objN:'pensamientos', color:'#c7a2ec',
+   llega:'Una idea o un recuerdo aparece en la mente',
+   texto:['La sexta base, cuyo objeto son los fenómenos mentales (dhammā): pensamientos, recuerdos, imágenes, planes, emociones.',
+          'La mente recibe y elabora también lo que llega por las otras cinco puertas. Por eso es la base que más claramente viaja en el tiempo: recuerda el pasado e imagina el futuro.']}
+];
+const TONOS = [
+  {k:'a', nombre:'Agradable', lo:'Lo agradable', san:'sukha', color:'#f0c75e',
+   toque:'El contacto se siente bien: hay atracción, ganas de acercarse o de prolongarlo.'},
+  {k:'d', nombre:'Desagradable', lo:'Lo desagradable', san:'dukkha', color:'#cf5a78',
+   toque:'El contacto duele o incomoda: hay contracción, ganas de apartarse o de que termine.'},
+  {k:'n', nombre:'Neutro', lo:'Lo neutro', san:'adukkham-asukha', color:'#93a4b8',
+   toque:'El contacto no inclina hacia ningún lado: apenas se nota, y la atención tiende a irse a otra parte.'}
+];
+const CAMINOS = [
+  {k:'m', nombre:'Mundano', san:'gehasita', color:'#c07a45', inclina:'la mente se inclina hacia el apego'},
+  {k:'r', nombre:'Renuncia', san:'nekkhammasita', color:'#5fb39b', inclina:'la mente se apoya en la renuncia'}
+];
+const TIEMPOS = [
+  {k:'p', nombre:'Pasado', san:'atīta', color:'#7c86c4', frase:'Pertenece al pasado: se sintió entonces y, al recordarlo, vuelve a teñir el presente.'},
+  {k:'h', nombre:'Presente', san:'paccuppanna', color:'#e6cf8a', frase:'Pertenece al presente: está sucediendo ahora, en este contacto.'},
+  {k:'f', nombre:'Futuro', san:'anāgata', color:'#8fc3e6', frase:'Pertenece al futuro: aún no llega, pero la mente ya lo anticipa.'}
+];
+
+/* Las seis combinaciones de tono y dirección (MN 137) */
+const CUAL = {
+  am:{nombre:'Alegría mundana', pali:'gehasita somanassa',
+      desc:s => 'Es la alegría de quien toma como una ganancia '+s.objN+' deseables, o recuerda lo que ya tuvo. El gusto se vuelve posesión: «esto es mío, quiero más».',
+      sigue:'Avidez: querer más, retenerlo, repetirlo. Alimenta la tendencia latente a la pasión (rāgānusaya).',
+      practica:'Reconocer «esto es agradable» antes de que la mano se estire. Disfrutar sin convertirlo en posesión.'},
+  dm:{nombre:'Pesar mundano', pali:'gehasita domanassa',
+      desc:s => 'Es el pesar de quien no obtiene '+s.objN+' deseables, de quien pierde lo que tenía o se topa con lo que rechaza. Lo desagradable se vuelve aversión: «esto no debería estar aquí».',
+      sigue:'Aversión: rechazar, apartar, querer que desaparezca. Alimenta la tendencia latente a la aversión (paṭighānusaya).',
+      practica:'Sentir el dolor como dolor, sin añadir la segunda flecha del «no debería pasarme».'},
+  nm:{nombre:'Indiferencia mundana', pali:'gehasita upekkhā',
+      desc:s => 'Es la indiferencia de quien no ha comprendido la experiencia: un neutro apagado que pasa de largo ante '+s.objA+' sin verlos con claridad. No trasciende el objeto; simplemente no lo atiende.',
+      sigue:'Ignorancia: aburrimiento, distracción, buscar otro estímulo. Alimenta la tendencia latente a la ignorancia (avijjānusaya).',
+      practica:'Interesarse por lo neutro: notar que también es una sensación, y que cambia.'},
+  ar:{nombre:'Alegría de la renuncia', pali:'nekkhammasita somanassa',
+      desc:s => 'Es la alegría que surge al ver con sabiduría la impermanencia de '+s.objA+', las de ahora y las de antes. No depende de poseer: es el gozo de ver claro.',
+      sigue:'Una alegría que no ata: abre a la calma y a la concentración.',
+      practica:'Dejarla estar, sin convertirla en un nuevo objeto de apego.'},
+  dr:{nombre:'Pesar de la renuncia', pali:'nekkhammasita domanassa',
+      desc:s => 'Es el pesar que nace del anhelo de liberación: al ver la impermanencia de '+s.objA+', surge la pregunta «¿cuándo viviré en la libertad en que viven los nobles?». Duele, pero empuja hacia adelante.',
+      sigue:'Urgencia espiritual (saṃvega): el anhelo de liberación se vuelve energía para practicar.',
+      practica:'Usarlo como impulso, sin convertirlo en culpa ni en autocastigo.'},
+  nr:{nombre:'Ecuanimidad de la renuncia', pali:'nekkhammasita upekkhā',
+      desc:s => 'Es la ecuanimidad que, viendo la impermanencia de '+s.objA+', ya no se inclina hacia lo agradable ni contra lo desagradable. Es neutra, pero despierta y luminosa.',
+      sigue:'Ecuanimidad lúcida: ve surgir y cesar sin inclinarse, y prepara la visión clara.',
+      practica:'Distinguirla de la indiferencia apagada: aquí la atención está despierta.'}
+};
+
+/* Ejemplos cotidianos: sentido → tono+dirección → [pasado, presente, futuro] */
+const EJ = {
+  ojo:{
+    am:['Repasas las fotos de unas vacaciones y quieres volver a tener esos días.',
+        'Ves en un escaparate el teléfono nuevo y la mirada se queda pegada: «lo quiero».',
+        'Imaginas cómo se verá la casa recién pintada y ya la sientes tuya.'],
+    ar:['Recuerdas un amanecer que miraste sin querer fotografiarlo, y vuelve una alegría limpia.',
+        'Contemplas cómo cambian los colores del atardecer; la alegría nace de verlos pasar, sin retener.',
+        'Piensas en la luz de la sala de meditación del retiro y sientes una alegría tranquila, sin ansia.'],
+    dm:['Te acuerdas del gesto de desprecio de alguien y vuelve el disgusto.',
+        'Ves la cocina desordenada y surge el rechazo: «esto no debería estar así».',
+        'Imaginas la cara de tu jefa al ver el error y ya te molesta.'],
+    dr:['Recuerdas la imagen de un ser querido enfermo y nace el deseo sincero de practicar mientras hay tiempo.',
+        'Ves en el espejo una cana nueva; el pesar se vuelve recordatorio de la impermanencia, no queja.',
+        'Imaginas una vida entera mirando pantallas sin despertar, y ese pesar te empuja a cambiar.'],
+    nm:['Del trayecto de ayer no recuerdas nada: las calles pasaron sin dejar huella.',
+        'Miras el celular sin ver nada en realidad: ni gusto ni disgusto, solo aturdimiento.',
+        'Piensas en las paredes de la oficina de mañana con una indiferencia apagada.'],
+    nr:['Recuerdas una pared blanca del retiro, vista con calma clara y sin aburrimiento.',
+        'Ves pasar las nubes sin preferir ninguna forma; la mirada está despierta y en paz.',
+        'Anticipas el paisaje gris del viaje sabiendo que también cambiará, sin rechazo ni apetito.']},
+  oido:{
+    am:['Vuelves a oír en la memoria el elogio de la reunión y quieres que se repita.',
+        'Suena tu canción favorita y subes el volumen para que no se acabe.',
+        'Imaginas los aplausos cuando presentes tu proyecto y ya te ilusionan.'],
+    ar:['Recuerdas el sonido de la campana al final de una meditación y vuelve una alegría serena.',
+        'Escuchas el canto de un pájaro hasta que se apaga, y te alegra precisamente que pase.',
+        'Piensas en volver a escuchar una enseñanza que te aclaró la mente y sientes un gozo sencillo.'],
+    dm:['Una crítica de hace años resuena en tu cabeza y vuelve a doler.',
+        'Arranca el taladro del vecino y todo el cuerpo se tensa contra el ruido.',
+        'Anticipas los gritos de la discusión de esta noche y ya te irritas.'],
+    dr:['Recuerdas las palabras duras que dijiste y el pesar se vuelve propósito de hablar mejor.',
+        'Oyes la noticia de una muerte y surge la urgencia de no desperdiciar esta vida.',
+        'Imaginas oír otra vez tu propia queja automática y deseas de corazón soltarla.'],
+    nm:['No recuerdas qué decía la radio de fondo esta mañana.',
+        'El zumbido del refrigerador está ahí y no lo notas: neutro y sin conciencia.',
+        'Piensas en el tráfico de mañana con una indiferencia distraída.'],
+    nr:['Recuerdas cómo escuchabas la lluvia en el retiro: ni agrado ni rechazo, solo claridad.',
+        'Escuchas el tráfico como sonido que surge y se va, sin etiquetarlo de molesto.',
+        'Sabes que mañana habrá ruido de obra y te dispones a oírlo con ecuanimidad.']},
+  nariz:{
+    am:['Recuerdas el olor del pan de tu abuela y quieres volver a ese momento.',
+        'Pasas frente a una cafetería, el aroma te atrapa y entras sin haberlo decidido.',
+        'Imaginas el aroma de la cena de esta noche y se te hace agua la boca.'],
+    ar:['Recuerdas el olor a tierra mojada de una caminata atenta y vuelve una alegría limpia.',
+        'Hueles el incienso del altar y lo dejas ir con la respiración, alegre sin aferrarte.',
+        'Piensas en el olor del bosque al que irás a practicar, con un gusto tranquilo y sin ansia.'],
+    dm:['Basta recordar el olor del hospital para que algo se cierre por dentro.',
+        'El olor de la basura en la calle provoca asco y quieres alejarte ya.',
+        'Imaginas el olor del metro lleno de mañana y ya lo rechazas.'],
+    dr:['Recuerdas el olor de las flores marchitas de un funeral y nace el anhelo de vivir con sentido.',
+        'Hueles algo que se pudre y lo tomas como recordatorio de que el cuerpo también cambia, sin drama.',
+        'Te imaginas usando el perfume para impresionar otra vez y sientes ganas de liberarte de esa necesidad.'],
+    nm:['No sabrías decir a qué olía la oficina ayer.',
+        'El aire de la habitación no huele a nada especial y la atención se va a otra parte.',
+        'Piensas en el olor del autobús de mañana sin interés, con la mente ausente.'],
+    nr:['Recuerdas los olores neutros del día sabiendo que pasaron, sin buscarlos ni rechazarlos.',
+        'Notas el olor tenue del aire al inhalar, ni bueno ni malo, con la atención despierta.',
+        'Te propones notar mañana los olores tal como lleguen, con ecuanimidad.']},
+  lengua:{
+    am:['Recuerdas el postre del domingo y ya estás buscando otro.',
+        'El primer bocado de chocolate es tan bueno que el segundo va de camino antes de saborear el primero.',
+        'Planeas la comida del sábado y te deleitas imaginándola.'],
+    ar:['Recuerdas un té tomado en silencio y la alegría de saborearlo sin prisa.',
+        'Saboreas una fruta con plena atención y te alegra lo sencillo, sin pedir más.',
+        'Piensas en la comida sencilla del retiro con una alegría que no necesita más.'],
+    dm:['Recuerdas una comida que te cayó mal y vuelve la repugnancia.',
+        'La medicina amarga en la boca y el rechazo inmediato: «qué asco».',
+        'Imaginas que la cena estará insípida y ya estás de mal humor.'],
+    dr:['Recuerdas cuántas veces comiste por ansiedad y el pesar te anima a cambiar.',
+        'Notas que comes sin hambre y el pesar sincero se vuelve deseo de libertad.',
+        'Imaginas repetir el atracón de siempre y sientes el anhelo de no hacerlo más.'],
+    nm:['Comiste mirando el celular y no recuerdas a qué sabía.',
+        'Bebes el vaso de agua sin notar nada: un sabor neutro y ausente.',
+        'Piensas en la comida de mañana como un trámite, sin interés.'],
+    nr:['Recuerdas el sabor neutro del arroz del retiro, comido con atención serena.',
+        'Bebes agua atendiendo a su sabor apenas perceptible, presente y en calma.',
+        'Te dispones a comer mañana lo que haya, sin preferencias, con atención.']},
+  cuerpo:{
+    am:['Recuerdas el masaje de la semana pasada y ya quieres reservar el próximo.',
+        'La regadera caliente es tan agradable que pasan veinte minutos y no puedes salir.',
+        'Imaginas la cama blanda de las vacaciones y te aferras a esa idea.'],
+    ar:['Recuerdas la ligereza del cuerpo después de meditar y vuelve una alegría serena.',
+        'Sientes el aire fresco en la piel y te alegras sin necesidad de retenerlo.',
+        'Piensas en la caminata meditativa de mañana con un gusto tranquilo.'],
+    dm:['Recordar el dolor de la caída hace que el cuerpo se encoja otra vez.',
+        'Te duele la rodilla y la mente añade: «siempre me pasa, esto es insoportable».',
+        'Anticipas el frío de la madrugada y ya lo detestas desde la cama.'],
+    dr:['Recuerdas la enfermedad del año pasado y nace el deseo de usar bien el tiempo.',
+        'Sientes el dolor de rodillas en la meditación y lo observas con paciencia: duele, pero sin pelear.',
+        'Imaginas la vejez del cuerpo y surge un pesar que impulsa a practicar ahora.'],
+    nm:['No recuerdas el contacto de la ropa en todo el día.',
+        'La silla bajo el cuerpo, ni agradable ni desagradable, pasa inadvertida.',
+        'Piensas en otra jornada frente a la computadora, sin ningún interés.'],
+    nr:['Recuerdas las sensaciones sutiles del cuerpo en la meditación, sabiendo que cambiaron.',
+        'Notas el contacto neutro de los pies en el suelo con una atención clara y tranquila.',
+        'Te propones notar mañana las sensaciones neutras del cuerpo en vez de ignorarlas.']},
+  mente:{
+    am:['Rememoras un éxito antiguo y lo saboreas una y otra vez.',
+        'Te llega la idea de que vas a recibir un ascenso y la mente se enciende de deseo.',
+        'Fantaseas con la vida que tendrás cuando ganes más dinero.'],
+    ar:['Recuerdas un acto de generosidad hecho sin esperar nada, y vuelve una alegría limpia.',
+        'Comprendes de pronto que un pensamiento no eres tú, y surge una alegría ligera.',
+        'Piensas en tu próxima sesión de práctica con alegría y confianza.'],
+    dm:['Una vieja ofensa vuelve a la mente y el resentimiento se renueva.',
+        'Surge la idea «no valgo lo suficiente» y la mente se vuelve contra sí misma.',
+        'Te preocupa la reunión de mañana e imaginas todo lo que saldrá mal.'],
+    dr:['Recuerdas tus errores pasados y el pesar se vuelve aspiración a la sabiduría.',
+        'Ves con claridad cuánto te aferras a tener razón y surge un deseo sincero de liberarte.',
+        'Te preguntas «¿cuándo viviré con la libertad de quienes despertaron?», y ese anhelo te impulsa.'],
+    nm:['No recuerdas en qué pensabas hace una hora: pensamientos grises y sin rumbo.',
+        'La mente divaga entre ideas sin color, sin darse cuenta de que divaga.',
+        'Planeas la semana con una indiferencia mecánica, sin atención.'],
+    nr:['Recuerdas pensamientos que surgieron y pasaron, sin aferrarte a ninguno.',
+        'Observas un pensamiento neutro aparecer y desvanecerse, con lucidez y calma.',
+        'Te dispones a recibir los pensamientos de mañana con una ecuanimidad clara.']}
+};
+
+/* ================= Contenido =================
+   Cada nodo: titulo, san (término pali), sub, texto (párrafos), lista (filas [clave, texto]),
+   cita (del Canon), cotidiano (ejemplo añadido), sigue, practica, hijos (subniveles),
+   ver (enlaces a otros nodos sin ser subniveles), enlace (a otra página), color, v (visor) y zonas. */
+const N = {
+  vedana:{titulo:'Las 108 vedanās', corto:'108 vedanās', san:'Aṭṭhasatapariyāya Sutta · SN 36.22', sub:'Las ciento ocho formas de sentir', color:ORO, v:{tipo:'mandala'},
+    texto:['<em>Vedanā</em> es el tono afectivo que acompaña a toda experiencia: el matiz agradable, desagradable o ni lo uno ni lo otro con el que algo nos toca. No es una emoción elaborada ni un juicio; es la primera coloración, inmediata, de lo que vemos, oímos, olemos, saboreamos, tocamos o pensamos.',
+           'El sutta de «la exposición de los 108» enumera las formas de sentir con una lógica multiplicativa: seis bases sensoriales, por tres tonos, por dos direcciones —el apego mundano o la renuncia—, por tres tiempos.',
+           'No habla de 108 pecados, sino de 108 maneras en que la experiencia se tiñe de gusto, rechazo o indiferencia. Ese es el punto de partida del análisis budista del sufrimiento: del sentimiento nace el deseo.'],
+    lista:[['6 sentidos','ojo, oído, nariz, lengua, cuerpo y mente'],['× 3 tonos = 18','agradable, desagradable o neutro'],['× 2 direcciones = 36','ligado al apego mundano o basado en la renuncia'],['× 3 tiempos = 108','pasado, presente o futuro']],
+    cotidiano:'Al despertar hoy, la luz en la ventana (ojo, agradable), el despertador (oído, desagradable) y el roce de la sábana (cuerpo, neutro) ya eran tres de los 108 antes de que dijeras una palabra.',
+    hijosTitulo:'Los cuatro niveles y lo que se desprende de ellos',
+    hijos:['sentidos','tonos','caminos','tiempos','deseo','flechas','practica','sutta']},
+
+  sentidos:{titulo:'Las seis bases sensoriales', corto:'Seis sentidos', san:'saḷāyatana', sub:'Seis puertas por donde entra el mundo', color:'#5fb2d9', v:{tipo:'sentidos'}, nivel:1,
+    texto:['El budismo cuenta seis sentidos, no cinco: a la vista, el oído, el olfato, el gusto y el tacto se suma la mente, que tiene sus propios objetos —ideas, recuerdos, imágenes, emociones— y conoce también lo que llega por las otras cinco puertas.',
+           'Cada sentido funciona en pareja con su objeto. Cuando la base, el objeto y la conciencia correspondiente se encuentran, surge el contacto (<em>phassa</em>), y con el contacto surge, inevitablemente, un sentimiento.'],
+    lista:SENT.map(s => [s.nombre+' · '+s.san, s.obj+' ('+s.objS+')']),
+    cita:'<em>Phassa-paccayā vedanā</em>: «con el contacto como condición, surge el sentimiento».',
+    cotidiano:'Lees este texto: el ojo (la base) encuentra las letras (el objeto) y aparece la conciencia visual. En ese encuentro, el contacto, ya hay un tono: quizá un interés agradable, quizá cansancio.',
+    hijosTitulo:'Elige un sentido', hijos:SENT.map(s => 's-'+s.k)},
+
+  tonos:{titulo:'Los tres tonos', corto:'Tres tonos', san:'sukha · dukkha · adukkham-asukha', sub:'6 sentidos × 3 tonos = 18', color:'#f0c75e', v:{tipo:'tonos'}, nivel:2,
+    texto:['Todo contacto llega con un tono: agradable, desagradable o neutro. Multiplicados por las seis bases, dan 18 sentimientos: lo agradable del ojo, lo desagradable del oído, lo neutro de la mente…',
+           'En el sutta de los 108, estos 18 aparecen como las «exploraciones» de la mente (<em>manopavicāra</em>): con cada sentido, la mente examina un objeto que da alegría, pesar o ecuanimidad.'],
+    lista:[['Agradable','despierta la tendencia latente a la pasión (rāgānusaya)'],['Desagradable','despierta la tendencia latente a la aversión (paṭighānusaya)'],['Neutro','despierta la tendencia latente a la ignorancia (avijjānusaya)']],
+    cita:'Según el <em>Cūḷavedalla Sutta</em> (MN 44), la pasión subyace al sentimiento agradable, la aversión al desagradable y la ignorancia al neutro. No siempre, sino como tendencia que hay que abandonar.',
+    hijosTitulo:'Cada tono', hijos:['t-a','t-d','t-n']},
+  't-a':{titulo:'Agradable', san:'sukhā vedanā', sub:'Lo que se siente bien', color:'#f0c75e', v:{t:0},
+    texto:['Es el tono de lo que atrae: el calor del sol, una buena noticia, un sabor dulce. En sí no es un problema; el Buda no enseñó a rechazar lo agradable.',
+           'El riesgo está en la tendencia que despierta: la pasión o avidez, el impulso de agarrar y repetir.'],
+    cotidiano:'Estiras la espalda después de horas frente a la pantalla y algo se afloja: «ah, qué bien». Ese «qué bien» es la vedanā agradable.'},
+  't-d':{titulo:'Desagradable', san:'dukkhā vedanā', sub:'Lo que duele o incomoda', color:'#cf5a78', v:{t:1},
+    texto:['Es el tono de lo que duele o incomoda: un golpe, un ruido estridente, una crítica, un recuerdo amargo.',
+           'Despierta la tendencia a la aversión: resistir, culpar, huir. El sutta de la flecha (SN 36.6) muestra además que, sin entrenamiento, ante el dolor buscamos refugio en el placer sensorial, y así se alimentan las dos tendencias a la vez.'],
+    cotidiano:'Te golpeas el pie con la pata de la mesa. Antes de cualquier palabra, ya está el tono: desagradable.'},
+  't-n':{titulo:'Neutro', san:'adukkham-asukhā vedanā', sub:'Ni agradable ni desagradable', color:'#93a4b8', v:{t:2},
+    texto:['Es el tono más frecuente y el menos notado: el contacto de la ropa, el zumbido del refrigerador, la mayor parte de lo que vemos en un día.',
+           'Despierta la tendencia a la ignorancia: como no tira ni empuja, pasa inadvertido, y la mente se aburre o se distrae. Bien observado, en cambio, puede volverse ecuanimidad.'],
+    cotidiano:'Ahora mismo, ¿cómo sientes la planta de los pies? Probablemente neutro. Al notarlo, deja de ser invisible.'},
+
+  caminos:{titulo:'Mundano o de renuncia', corto:'Dos direcciones', san:'gehasita · nekkhammasita', sub:'18 × 2 = 36', color:'#c07a45', v:{tipo:'caminos'}, nivel:3,
+    texto:['Cada uno de los 18 sentimientos puede estar ligado al apego mundano o basado en la renuncia. El tono es el mismo —agradable, desagradable o neutro—; lo que cambia es hacia dónde inclina a la mente.',
+           'Así se llega a 36. El <em>Saḷāyatanavibhaṅga Sutta</em> (MN 137) los llama las «treinta y seis posiciones de los seres»: seis alegrías, seis pesares y seis ecuanimidades de cada clase. Y propone un orden para soltarlos:'],
+    lista:[['Alegría de la renuncia','ayuda a dejar la alegría mundana'],['Pesar de la renuncia','ayuda a dejar el pesar mundano'],['Ecuanimidad de la renuncia','ayuda a dejar la indiferencia mundana'],['Ecuanimidad','al final, deja atrás incluso la alegría y el pesar de la renuncia']],
+    hijosTitulo:'Las dos direcciones', hijos:['c-m','c-r']},
+  'c-m':{titulo:'Mundano', san:'gehasita', sub:'Literalmente, «ligado a la casa»: al apego y a la búsqueda del placer sensorial', color:'#c07a45', v:{c:0},
+    texto:['<em>Gehasita</em> significa «dependiente del hogar». No se refiere a vivir en una casa, sino a la vida orientada a conseguir, conservar y evitar.',
+           'Estos sentimientos no son «malos»: son el terreno ordinario de la vida. Pero son los que la avidez, la aversión y la ignorancia usan como combustible.'],
+    lista:[['Alegría mundana','el gusto de obtener lo deseable o de recordar lo que se tuvo'],['Pesar mundano','el dolor de no obtenerlo, de perderlo o de toparse con lo que se rechaza'],['Indiferencia mundana','el neutro apagado de quien no ha comprendido la experiencia']],
+    cotidiano:'Abres una aplicación de compras «solo para ver»: el gusto de mirar, el pesar de no poder comprar, el aburrimiento de seguir deslizando. Las tres caras del sentir mundano en un minuto.'},
+  'c-r':{titulo:'Renuncia', san:'nekkhammasita', sub:'Basado en la renuncia: el desapego propio de quien practica', color:'#5fb39b', v:{c:1},
+    texto:['<em>Nekkhamma</em> es la renuncia, pero no como castigo sino como alivio: soltar la búsqueda compulsiva.',
+           'El Buda aconseja apoyarse en estos sentimientos para dejar los mundanos, y después apoyarse en la ecuanimidad para dejar incluso la alegría y el pesar de la renuncia.'],
+    lista:[['Alegría de la renuncia','la alegría de ver la impermanencia de las cosas'],['Pesar de la renuncia','el que nace del anhelo de liberación'],['Ecuanimidad de la renuncia','la que ve surgir y cesar sin inclinarse']],
+    cotidiano:'Contemplas cómo se apaga una vela al final de la práctica: hay belleza, un poco de tristeza por lo que termina y, debajo, una calma que no necesita que dure.'},
+
+  tiempos:{titulo:'Los tres tiempos', corto:'Tres tiempos', san:'atīta · paccuppanna · anāgata', sub:'36 × 3 = 108', color:'#8fc3e6', v:{tipo:'tiempos'}, nivel:4,
+    texto:['Cada uno de los 36 puede pertenecer al pasado, al presente o al futuro: así se completan los 108.',
+           'El matiz es práctico: el sentimiento no surge solo ante lo que tenemos delante. Un recuerdo trae de vuelta el gusto o la herida; una expectativa anticipa el placer o el miedo. Gran parte del sufrimiento sucede así, con objetos que ya no están o que todavía no llegan.'],
+    cotidiano:'Es domingo por la tarde y nada malo está ocurriendo, pero ya sientes el lunes: un sentimiento desagradable del futuro, vivido ahora.',
+    hijosTitulo:'Cada tiempo', hijos:['k-p','k-h','k-f']},
+  'k-p':{titulo:'Pasado', san:'atīta', sub:'Lo que ya se sintió', color:'#7c86c4', v:{k:0},
+    texto:['Sentimientos que ya fueron. Al recordarlos, la mente revive su tono: la nostalgia de lo agradable, el resentimiento por lo doloroso, el olvido de lo neutro.',
+           'La práctica no consiste en borrar la memoria, sino en notar que el tono del recuerdo se siente ahora, y que también pasa.'],
+    cotidiano:'Suena una canción de tu adolescencia y, de golpe, vuelven la alegría y la tristeza de entonces.'},
+  'k-h':{titulo:'Presente', san:'paccuppanna', sub:'Lo que se siente ahora', color:'#e6cf8a', v:{k:1},
+    texto:['El sentimiento que está ocurriendo ahora, en este contacto. Es el único lugar donde se puede observar directamente.',
+           'Por eso la contemplación de los sentimientos (<em>vedanānupassanā</em>), el segundo fundamento de la atención, se practica aquí: al sentir un sentimiento agradable, se sabe «siento un sentimiento agradable».'],
+    cotidiano:'Ahora, mientras lees: ¿hay algo agradable, desagradable o neutro en el cuerpo? Eso es el presente.'},
+  'k-f':{titulo:'Futuro', san:'anāgata', sub:'Lo que se anticipa', color:'#8fc3e6', v:{k:2},
+    texto:['Sentimientos que aún no llegan pero ya se anticipan: la ilusión ante un plan, la ansiedad ante una cita médica.',
+           'La imaginación es una fábrica de vedanā: la mente pone delante un objeto futuro y reacciona a él como si estuviera presente.'],
+    cotidiano:'Antes de abrir un correo que esperas con temor, el estómago ya se encoge.'},
+
+  deseo:{titulo:'Del sentimiento nace el deseo', san:'vedanā-paccayā taṇhā', sub:'El punto donde empieza el sufrimiento… o la salida', color:'#e0654a', v:{tipo:'brecha'},
+    texto:['En la cadena del origen dependiente, el contacto condiciona el sentimiento, y el sentimiento condiciona la avidez (<em>taṇhā</em>): ante lo agradable, querer más; ante lo desagradable, querer que desaparezca; ante lo neutro, buscar algo que llene el vacío.',
+           'Pero entre el sentimiento y la avidez hay una brecha. El sentimiento es resultado del pasado; la avidez ya es una respuesta. Si se ve el sentimiento como sentimiento, sin añadirle «lo quiero» o «no lo soporto», la cadena puede romperse.',
+           'Por eso los 108 no son una lista de faltas, sino un mapa de los lugares donde se puede despertar.'],
+    lista:[['Agradable','→ pasión, avidez de más'],['Desagradable','→ aversión, querer que termine'],['Neutro','→ ignorancia, distracción, búsqueda de estímulo']],
+    cotidiano:'Sientes el impulso de revisar el celular. Antes del impulso hubo un instante de aburrimiento: un sentimiento neutro o desagradable. Si lo ves, puedes elegir.',
+    enlace:[['rueda-de-la-vida.html#n7','Los sentimientos en la rueda de la vida'],['rueda-de-la-vida.html#brecha','La brecha: sentimiento o avidez']]},
+  flechas:{titulo:'Las dos flechas', san:'Sallatha Sutta · SN 36.6', sub:'El dolor y el sufrimiento añadido', color:'#cf5a78', v:{tipo:'flechas'},
+    texto:['El Buda compara a quien siente dolor con una persona herida por una flecha que, enseguida, recibe una segunda. La primera es el sentimiento doloroso; la segunda, la reacción: lamentarse, resistirse, angustiarse. Quien no ha sido instruido siente las dos; quien practica siente solo la primera.',
+           'Además, quien no conoce otra salida busca alivio en el placer sensorial, y así, desde el dolor, alimenta la avidez. Quien practica conoce otra salida: ver el sentimiento con claridad, sin dejarse arrastrar.'],
+    cita:'«Siente un solo sentimiento: el corporal, no el mental». Así describe el sutta a quien ha sido instruido, ante el dolor.',
+    cotidiano:'Te duele la cabeza: primera flecha. «¿Por qué hoy, justo hoy, con todo lo que tengo que hacer?»: segunda flecha.'},
+  practica:{titulo:'Practicar con los 108', san:'vedanānupassanā', sub:'La contemplación de los sentimientos', color:'#5fb39b', v:{tipo:'mala'},
+    texto:['La contemplación de los sentimientos es el segundo de los cuatro fundamentos de la atención. No pide clasificar cada experiencia en una de las 108 casillas: pide reconocer el tono mientras sucede.'],
+    lista:[['1. Detente','elige un momento del día: comer, caminar, escuchar.'],['2. Nota el tono','¿agradable, desagradable o neutro? Una palabra basta.'],['3. Nota la dirección','¿me inclina a agarrar, a rechazar o a distraerme? ¿O hay alegría, urgencia o calma que no atan?'],['4. Nota el tiempo','¿responde a lo que está aquí, a un recuerdo o a una expectativa?'],['5. Deja pasar','ver que el sentimiento cambia ya es empezar a soltarlo.']],
+    cotidiano:'Toma una mala de 108 cuentas y, en cada cuenta, nota el tono de lo que aparece en ese momento. Al terminar la vuelta habrás mirado 108 veces la puerta por la que entra el deseo.'},
+  sutta:{titulo:'La exposición de los 108', san:'Aṭṭhasatapariyāya Sutta · SN 36.22', sub:'Las muchas maneras de contar los sentimientos', color:ORO, v:{tipo:'cuentas'},
+    texto:['En el <em>Saṃyutta Nikāya</em>, dentro de los discursos sobre los sentimientos (<em>Vedanā Saṃyutta</em>), el Buda ofrece «una exposición del Dhamma basada en los 108». No da una sola lista: muestra que los sentimientos pueden contarse de muchas maneras, según lo que se quiera ver.',
+           'En otro discurso del mismo capítulo (SN 36.19), el Buda advierte que ha descrito los sentimientos de distintos modos y que discutir cuál es la cuenta correcta solo lleva a disputas. Las listas son herramientas, no dogmas.'],
+    lista:[['2','corporales y mentales'],['3','agradables, desagradables y neutros'],['5','las facultades de placer, dolor, alegría, pesar y ecuanimidad'],['6','los nacidos del contacto de cada sentido'],['18','seis exploraciones con alegría, seis con pesar y seis con ecuanimidad'],['36','seis alegrías, seis pesares y seis ecuanimidades, cada uno mundano o de renuncia'],['108','esos 36 en el pasado, en el futuro y en el presente']]}
+};
+
+/* Los niveles combinados se generan a partir de las cuatro dimensiones */
+const T_IDS = {a:[], d:[], n:[]}, C_IDS = {m:[], r:[]}, K_IDS = {p:[], h:[], f:[]};
+SENT.forEach((s,si) => {
+  const sid = 's-'+s.k, ej = EJ[s.k];
+  N[sid] = {titulo:s.titulo, corto:s.nombre, san:s.san, sub:'Su objeto: '+s.obj+' ('+s.objS+')', color:s.color, v:{s:si}, texto:s.texto,
+    lista:TONOS.map(t => [t.nombre, ej[t.k+'m'][1]]),
+    hijosTitulo:'Los tres tonos '+(['nariz','lengua','mente'].includes(s.k) ? 'de la ' : 'del ')+s.nombre.toLowerCase(),
+    hijos:TONOS.map(t => s.k+'-'+t.k)};
+  TONOS.forEach((t,ti) => {
+    const tid = s.k+'-'+t.k; T_IDS[t.k].push(tid);
+    N[tid] = {titulo:s.nombre+' · '+t.nombre.toLowerCase(), corto:t.nombre, san:s.san+' · '+t.san, sub:t.lo+' que llega por '+s.titulo.toLowerCase(), color:t.color, v:{s:si, t:ti},
+      texto:[t.toque, 'Este sentimiento puede tomar dos direcciones: ligarse al apego mundano o apoyarse en la renuncia.'],
+      lista:CAMINOS.map(c => [CUAL[t.k+c.k].nombre, ej[t.k+c.k][1]]), hijosTitulo:'Dos direcciones', hijos:CAMINOS.map(c => tid+'-'+c.k)};
+    CAMINOS.forEach((c,ci) => {
+      const cid = tid+'-'+c.k, q = CUAL[t.k+c.k]; C_IDS[c.k].push(cid);
+      N[cid] = {titulo:s.nombre+' · '+t.nombre.toLowerCase()+' · '+c.nombre.toLowerCase(), corto:c.nombre, san:q.pali, sub:q.nombre, color:c.color, v:{s:si, t:ti, c:ci},
+        texto:[q.desc(s)], sigue:q.sigue, cotidiano:ej[t.k+c.k][1],
+        lista:TIEMPOS.map((k,ki) => [k.nombre, ej[t.k+c.k][ki]]), hijosTitulo:'En los tres tiempos', hijos:TIEMPOS.map(k => cid+'-'+k.k)};
+      TIEMPOS.forEach((k,ki) => {
+        const kid = cid+'-'+k.k, num = si*18 + ti*6 + ci*3 + ki + 1; K_IDS[k.k].push(kid);
+        N[kid] = {titulo:s.nombre+' · '+t.nombre.toLowerCase()+' · '+c.nombre.toLowerCase()+' · '+k.nombre.toLowerCase(), corto:k.nombre, num,
+          san:s.san+' · '+t.san+' · '+c.san+' · '+k.san, sub:'Uno de los 108: '+q.nombre.toLowerCase()+' en '+k.nombre.toLowerCase(), color:k.color, v:{s:si, t:ti, c:ci, k:ki},
+          texto:[s.llega+', el tono es '+t.nombre.toLowerCase()+' y '+c.inclina+'. '+k.frase],
+          cotidiano:ej[t.k+c.k][ki], sigue:q.sigue, practica:q.practica};
+      });
+    });
+  });
+});
+N['t-a'].ver = T_IDS.a; N['t-d'].ver = T_IDS.d; N['t-n'].ver = T_IDS.n;
+['t-a','t-d','t-n'].forEach(id => N[id].zonas = T_IDS[id.slice(2)]);
+['c-m','c-r'].forEach(id => N[id].zonas = C_IDS[id.slice(2)]);
+['k-p','k-h','k-f'].forEach(id => N[id].zonas = K_IDS[id.slice(2)]);
+N.sentidos.zonas = SENT.map(s => 's-'+s.k);
+N.tonos.zonas = [].concat(T_IDS.a, T_IDS.d, T_IDS.n);
+N.caminos.zonas = [].concat(C_IDS.m, C_IDS.r);
+N.tiempos.zonas = [].concat(K_IDS.p, K_IDS.h, K_IDS.f);
+['t-a','t-d','t-n'].forEach(id => N[id].verTitulo = 'Este tono en cada sentido');
+
+const PADRE = {};
+Object.keys(N).forEach(k => (N[k].hijos||[]).forEach(h => PADRE[h] = k));
+
+/* ================= Glifos ================= */
+function glifo(dim, k, c){
+  const f = 'fill="'+c+'"', s = 'fill="none" stroke="'+c+'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"';
+  const g = {
+    ojo:'<path d="M-13,0 Q0,-11 13,0 Q0,11 -13,0 Z" '+s+'/><circle r="4.4" '+f+'/>',
+    oido:'<circle cx="-8" r="3.2" '+f+'/><path d="M-2,-6 A8,8 0 0 1 -2,6 M3,-10.5 A13,13 0 0 1 3,10.5 M8,-14 A18,18 0 0 1 8,14" '+s+'/>',
+    nariz:'<path d="M-7,12 q-5,-6 0,-12 q5,-6 0,-12 M0,12 q-5,-6 0,-12 q5,-6 0,-12 M7,12 q-5,-6 0,-12 q5,-6 0,-12" '+s+'/>',
+    lengua:'<path d="M0,-13 C5,-6 9,-1 9,4 A9,9 0 0 1 -9,4 C-9,-1 -5,-6 0,-13 Z" '+f+'/>',
+    cuerpo:'<circle cy="-8" r="4.6" '+f+'/><path d="M-10,12 C-10,1 -5,-2 0,-2 C5,-2 10,1 10,12 Z" '+f+'/>',
+    mente:'<path d="M-2,0 a2,2 0 0 1 4,0 a4,4 0 0 1 -8,0 a6,6 0 0 1 12,0 a8,8 0 0 1 -16,0 a10,10 0 0 1 20,0" '+s+'/>',
+    a:'<circle r="5" '+f+'/>'+[0,45,90,135,180,225,270,315].map(a => { const r = a*Math.PI/180, q = (d) => (Math.cos(r)*d).toFixed(1)+','+(Math.sin(r)*d).toFixed(1); return '<path d="M'+q(7.5)+' L'+q(11.5)+'" '+s+'/>'; }).join(''),
+    d:'<path d="M-10,10 L7,-7" '+s+'/><path d="M11,-11 L1,-8.5 L8.5,-1 Z" '+f+'/><path d="M-10,10 L-10,4 M-10,10 L-4,10" '+s+'/>',
+    n:'<circle r="8.5" '+s+'/><path d="M-4,0 L4,0" '+s+'/>',
+    m:'<path d="M-11,-1 L0,-11 L11,-1 L11,10 L-11,10 Z" '+f+'/><rect x="-2.6" y="2.5" width="5.2" height="7.5" fill="'+NOCHE+'" opacity=".55"/>',
+    r:'<path d="M-12,-1 L12,-1 A12,10.5 0 0 1 -12,-1 Z" '+f+'/><path d="M-6,-5 Q0,-11 6,-5" '+s+'/>',
+    p:'<path d="M10,0 L-8,0 M-8,0 L-2.5,-5.5 M-8,0 L-2.5,5.5" '+s+'/>',
+    h:'<circle r="3.6" '+f+'/><circle r="9" '+s+'/>',
+    f:'<path d="M-10,0 L8,0 M8,0 L2.5,-5.5 M8,0 L2.5,5.5" '+s+'/>'
+  };
+  return g[k] || '<circle r="8" '+f+'/>';
+}
+
+/* ================= Geometría ================= */
+const rad = a => a*Math.PI/180;
+const pol = (r,a) => [CX + r*Math.cos(rad(a)), CY + r*Math.sin(rad(a))];
+function sector(r0,r1,a0,a1,cx,cy){
+  cx = cx===undefined ? CX : cx; cy = cy===undefined ? CY : cy;
+  const p = (r,a) => (cx + r*Math.cos(rad(a))).toFixed(1)+','+(cy + r*Math.sin(rad(a))).toFixed(1), lg = (a1-a0)>180 ? 1 : 0;
+  return 'M'+p(r1,a0)+' A'+r1+','+r1+' 0 '+lg+' 1 '+p(r1,a1)+' L'+p(r0,a1)+' A'+r0+','+r0+' 0 '+lg+' 0 '+p(r0,a0)+' Z';
+}
+const at = (r,a,inner,sc) => { const [x,y] = pol(r,a); return '<g transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+')'+(sc?' scale('+sc+')':'')+'">'+inner+'</g>'; };
+/* Ángulos: cada sentido ocupa 60°, cada tono 20°, cada dirección 10° y cada tiempo 10/3° (el ojo, arriba) */
+const angS = si => -120 + si*60;
+const angT = (si,ti) => angS(si) + ti*20;
+const angC = (si,ti,ci) => angT(si,ti) + ci*10;
+const angK = (si,ti,ci,ki) => angC(si,ti,ci) + ki*10/3;
+function zona(id, i, inner, foco){
+  return '<g class="zona" data-n="'+id+'" tabindex="'+(foco?0:-1)+'" role="button" aria-label="'+N[id].titulo+'"><g class="pliegue" style="--i:'+i+'">'+inner+'</g></g>';
+}
+
+/* ================= Dibujo del mandala ================= */
+function dibujar(){
+  let s = '<defs><radialGradient id="cieloV" cx="50%" cy="50%"><stop offset="0" stop-color="#13285a"/><stop offset="1" stop-color="'+NOCHE+'"/></radialGradient>'+
+    '<radialGradient id="hubG"><stop offset="0" stop-color="#fff6dc"/><stop offset=".7" stop-color="#ecd28c"/><stop offset="1" stop-color="'+ORO+'"/></radialGradient>'+
+    '<radialGradient id="haloV"><stop offset="0" stop-color="#f6e7b8" stop-opacity=".5"/><stop offset="1" stop-color="#f6e7b8" stop-opacity="0"/></radialGradient>'+
+    '<filter id="brilloV" x="-1" y="-1" width="3" height="3"><feGaussianBlur stdDeviation="4"/></filter></defs>';
+  s += '<rect width="800" height="800" fill="url(#cieloV)"/>';
+  let seed = 11; const rnd = () => (seed = (seed*16807)%2147483647)/2147483647;
+  for(let i=0;i<120;i++){ const x = rnd()*800, y = rnd()*800; if(Math.hypot(x-CX,y-CY) < 368){ rnd(); continue; }
+    s += '<circle class="estrella" cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(rnd()*1.4+.4).toFixed(2)+'" fill="#fff" style="animation-delay:'+(rnd()*4).toFixed(2)+'s"/>'; }
+
+  // Los objetos de los sentidos, en arco por fuera del mandala
+  let arcos = '';
+  SENT.forEach((o,si) => {
+    const a0 = angS(si)+4, a1 = angS(si)+56, mid = angS(si)+30, abajo = Math.sin(rad(mid)) > .1;
+    const r = abajo ? R.obj+12 : R.obj, [x0,y0] = pol(r, abajo?a1:a0), [x1,y1] = pol(r, abajo?a0:a1);
+    arcos += '<path id="arcoO'+si+'" d="M'+x0.toFixed(1)+','+y0.toFixed(1)+' A'+r+','+r+' 0 0 '+(abajo?0:1)+' '+x1.toFixed(1)+','+y1.toFixed(1)+'" fill="none"/>';
+    s += '<text class="objeto"><textPath href="#arcoO'+si+'" startOffset="50%" text-anchor="middle">'+o.obj+' · '+o.objS+'</textPath></text>';
+  });
+  s = s.replace('</defs>', arcos+'</defs>');
+  s += '<circle cx="'+CX+'" cy="'+CY+'" r="'+(R.k1+4)+'" fill="none" stroke="'+ORO+'" stroke-opacity=".35"/>';
+
+  // Anillo 4: los 108 (tiempos)
+  let k4 = '', k3 = '', k2 = '', k1 = '';
+  SENT.forEach((o,si) => TONOS.forEach((t,ti) => CAMINOS.forEach((c,ci) => TIEMPOS.forEach((k,ki) => {
+    const a = angK(si,ti,ci,ki), kid = o.k+'-'+t.k+'-'+c.k+'-'+k.k, i = si*18+ti*6+ci*3+ki;
+    k4 += zona(kid, i, '<path class="seg" d="'+sector(R.k0,R.k1,a,a+10/3)+'" fill="'+k.color+'" fill-opacity=".82"/>');
+  }))));
+  // Anillo 3: los 36 (mundano o renuncia)
+  SENT.forEach((o,si) => TONOS.forEach((t,ti) => CAMINOS.forEach((c,ci) => {
+    const a = angC(si,ti,ci), cid = o.k+'-'+t.k+'-'+c.k;
+    k3 += zona(cid, si*6+ti*2+ci, '<path class="seg" d="'+sector(R.c0,R.c1,a,a+10)+'" fill="'+c.color+'" fill-opacity=".88"/>'+at((R.c0+R.c1)/2, a+5, glifo('c',c.k,INK), .5));
+  })));
+  // Anillo 2: los 18 (tonos)
+  SENT.forEach((o,si) => TONOS.forEach((t,ti) => {
+    const a = angT(si,ti), tid = o.k+'-'+t.k;
+    k2 += zona(tid, si*3+ti, '<path class="seg" d="'+sector(R.t0,R.t1,a,a+20)+'" fill="'+t.color+'" fill-opacity=".9"/>'+at((R.t0+R.t1)/2, a+10, glifo('t',t.k,INK), .78), true);
+  }));
+  // Anillo 1: los seis sentidos
+  SENT.forEach((o,si) => {
+    const a = angS(si), [x,y] = pol(112, a+30);
+    k1 += zona('s-'+o.k, si, '<path class="seg" d="'+sector(R.s0,R.s1,a,a+60)+'" fill="'+o.color+'"/>'+
+      '<g transform="translate('+x.toFixed(1)+' '+(y-11).toFixed(1)+')">'+glifo('s',o.k,INK)+'</g>'+
+      '<text class="nombre-s" x="'+x.toFixed(1)+'" y="'+(y+21).toFixed(1)+'" text-anchor="middle">'+o.nombre+'</text>', true);
+  });
+  s += '<g class="anillo" data-nivel="4" style="--d:7ms">'+k4+'</g><g class="anillo" data-nivel="3" style="--d:20ms">'+k3+'</g>'+
+       '<g class="anillo" data-nivel="2" style="--d:40ms">'+k2+'</g><g class="anillo" data-nivel="1" style="--d:90ms">'+k1+'</g>';
+
+  // Centro: el número
+  s += '<circle class="halo-c" cx="'+CX+'" cy="'+CY+'" r="'+(R.hub+18)+'" fill="url(#haloV)"/>';
+  s += zona('vedana', 0, '<circle cx="'+CX+'" cy="'+CY+'" r="'+R.hub+'" fill="url(#hubG)" stroke="'+NOCHE+'" stroke-width="1.5"/>'+
+       '<text class="cifra" id="cifra" x="'+CX+'" y="'+(CY+12)+'" text-anchor="middle">108</text>'+
+       '<text class="cifra-s" x="'+CX+'" y="'+(CY+33)+'" text-anchor="middle">vedanā</text>', true);
+
+  // Cuenta luminosa del recorrido de un contacto
+  s += '<line id="traza" x1="0" y1="0" x2="0" y2="0" stroke="#fff6dc" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round" opacity="0"/>';
+  s += '<g id="cuentaV" opacity="0"><circle r="14" fill="#fff6dc" filter="url(#brilloV)"/><circle r="6.5" fill="#fff6dc" stroke="'+NOCHE+'" stroke-width="1.5"/></g>';
+  return s;
+}
+const svg = document.getElementById('mandala');
+svg.innerHTML = dibujar();
+
+/* Leyenda bajo el mandala */
+document.getElementById('leyenda').innerHTML = [].concat(
+  TONOS.map(t => '<span style="--c:'+t.color+'">'+t.nombre+'</span>'),
+  CAMINOS.map(c => '<span style="--c:'+c.color+'">'+c.nombre+'</span>'),
+  TIEMPOS.map(k => '<span style="--c:'+k.color+'">'+k.nombre+'</span>')).join('');
+
+/* ================= Visor del panel ================= */
+/* Para un nodo combinado dibuja sus capas: el sentido al centro y, alrededor,
+   el tono, la dirección y el tiempo; para los niveles, sus elementos en órbita */
+function visor(n){
+  const c = n.color || ORO, v = n.v || {};
+  const disco = '<circle r="56" fill="'+c+'" opacity=".16"/><circle r="56" fill="none" stroke="'+c+'" stroke-width="1.2" opacity=".6"/>';
+  const orbita = (items, r, sc) => items.map(([dim,k,col],i) => { const a = rad(-90+i*360/items.length), x = Math.cos(a)*r, y = Math.sin(a)*r;
+    return '<g class="late" style="animation-delay:'+(i*.35)+'s"><circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(13*sc)+'" fill="'+col+'"/>'+
+      '<g transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+') scale('+(.62*sc)+')">'+glifo(dim,k,INK)+'</g></g>'; }).join('');
+  let d = '';
+  if(v.tipo==='mandala'){
+    SENT.forEach((o,si) => { d += '<path d="'+sector(14,26,angS(si),angS(si)+60,0,0)+'" fill="'+o.color+'"/>';
+      TONOS.forEach((t,ti) => { d += '<path d="'+sector(26,35,angT(si,ti),angT(si,ti)+20,0,0)+'" fill="'+t.color+'"/>';
+        CAMINOS.forEach((cc,ci) => { d += '<path d="'+sector(35,42,angC(si,ti,ci),angC(si,ti,ci)+10,0,0)+'" fill="'+cc.color+'"/>';
+          TIEMPOS.forEach((k,ki) => { d += '<path d="'+sector(42,48,angK(si,ti,ci,ki),angK(si,ti,ci,ki)+10/3,0,0)+'" fill="'+k.color+'"/>'; }); }); }); });
+    d = '<g class="gira-lento"><g stroke="'+NOCHE+'" stroke-width=".4">'+d+'</g></g><circle r="14" fill="#efd99a"/><text y="4.5" text-anchor="middle" class="visor-n" style="font-size:12px">108</text>';
+  }
+  else if(v.tipo==='sentidos') d = orbita(SENT.map(o => ['s',o.k,o.color]), 36, 1);
+  else if(v.tipo==='tonos') d = orbita(TONOS.map(t => ['t',t.k,t.color]), 28, 1.25);
+  else if(v.tipo==='caminos') d = orbita(CAMINOS.map(cc => ['c',cc.k,cc.color]), 24, 1.4);
+  else if(v.tipo==='tiempos') d = orbita(TIEMPOS.map(k => ['k',k.k,k.color]), 28, 1.25);
+  else if(v.tipo==='brecha') d = '<circle cx="-30" r="13" fill="#f0c75e"/><circle cx="30" r="13" fill="#e0654a"/><path d="M-15,0 L-6,0 M6,0 L15,0" stroke="'+INK+'" stroke-width="3" stroke-linecap="round"/>'+
+    '<g class="late"><path d="M0,-18 L0,18" stroke="#5fb39b" stroke-width="3" stroke-dasharray="3 4"/></g><text x="-30" y="30" text-anchor="middle" class="visor-t">vedanā</text><text x="30" y="30" text-anchor="middle" class="visor-t">taṇhā</text>';
+  else if(v.tipo==='flechas') d = '<g transform="translate(-10 4) scale(2)">'+glifo('t','d',INK)+'</g><g class="late" opacity=".45"><g transform="translate(14 -10) scale(1.6)">'+glifo('t','d','#cf5a78')+'</g></g>';
+  else if(v.tipo==='mala'){ for(let i=0;i<27;i++){ const a = rad(-90+i*360/27); d += '<circle cx="'+(Math.cos(a)*38).toFixed(1)+'" cy="'+(Math.sin(a)*38).toFixed(1)+'" r="3.4" fill="'+INK+'" opacity=".55"/>'; }
+    d += '<circle r="5.5" fill="#5fb39b" stroke="'+INK+'" stroke-width="1.4"><animateMotion dur="9s" repeatCount="indefinite" path="M0,-38 A38,38 0 1 1 -0.1,-38"/></circle><circle cy="44" r="4.5" fill="'+ORO+'"/>'; }
+  else if(v.tipo==='cuentas'){ const cifras = [2,3,5,6,18,36,108]; d = cifras.map((x,i) => { const a = rad(-90+i*360/7), px = Math.cos(a)*36, py = Math.sin(a)*36;
+    return '<g class="late" style="animation-delay:'+(i*.3)+'s"><circle cx="'+px.toFixed(1)+'" cy="'+py.toFixed(1)+'" r="11" fill="'+ORO+'"/><text x="'+px.toFixed(1)+'" y="'+(py+3.5).toFixed(1)+'" text-anchor="middle" class="visor-t" style="fill:'+INK+'">'+x+'</text></g>'; }).join(''); }
+  else {
+    // Capas de un nodo combinado (o de una sola dimensión)
+    const capas = [];
+    if(v.k!==undefined) capas.push(TIEMPOS[v.k].color);
+    if(v.c!==undefined) capas.push(CAMINOS[v.c].color);
+    if(v.t!==undefined) capas.push(TONOS[v.t].color);
+    const nucleo = v.s!==undefined ? ['s',SENT[v.s].k,SENT[v.s].color] : v.t!==undefined ? ['t',TONOS[v.t].k,TONOS[v.t].color] : v.c!==undefined ? ['c',CAMINOS[v.c].k,CAMINOS[v.c].color] : ['k',TIEMPOS[v.k].k,TIEMPOS[v.k].color];
+    if(v.s===undefined) capas.pop();
+    let r = 50;
+    capas.forEach((col,i) => { d += '<circle r="'+(r-4.5)+'" fill="none" stroke="'+col+'" stroke-width="9"'+(i===0?' class="late"':'')+'/>'; r -= 10; });
+    r = Math.min(r, 32);
+    d += '<circle r="'+r+'" fill="'+nucleo[2]+'"/><g transform="scale('+(r/16).toFixed(2)+')">'+glifo(nucleo[0], nucleo[1], INK)+'</g>';
+  }
+  return '<svg class="visor" viewBox="-60 -60 120 120" aria-hidden="true">'+disco+'<g class="flota">'+d+'</g></svg>';
+}
+
+/* ================= Resaltado ================= */
+/* Lo que se ilumina al abrir un nodo: su segmento, el camino desde el centro
+   y todo lo que se desprende de él; los nodos generales indican sus zonas */
+function descendientes(id){ return (N[id].hijos||[]).flatMap(h => [h].concat(descendientes(h))); }
+function zonasDe(id){
+  const n = N[id];
+  if(n.zonas) return n.zonas;
+  if(!svg.querySelector('[data-n="'+id+'"]')) return [];
+  const r = ruta(id).filter(k => svg.querySelector('[data-n="'+k+'"]') && k!=='vedana');
+  return r.concat(descendientes(id));
+}
+function resaltar(ids){
+  const set = new Set(ids);
+  svg.classList.toggle('has-sel', ids.length>0);
+  svg.querySelectorAll('.zona').forEach(z => z.classList.toggle('sel', set.has(z.dataset.n)));
+}
+const formula = document.querySelector('.formula');
+function marcarFormula(nivel){
+  formula.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('on', nivel ? +b.dataset.nivel===nivel : false));
+}
+
+/* ================= Panel ================= */
+const panel = document.getElementById('panel');
+const corto = k => N[k].corto || N[k].titulo.replace(/^(El|La|Los|Las) /,'').replace(/^./, m => m.toUpperCase());
+function ruta(id){ const r = [id]; while(PADRE[r[0]]) r.unshift(PADRE[r[0]]); return r; }
+const chip = k => '<button type="button" class="chip" data-ir="'+k+'" style="--ac:'+(N[k].color||ORO)+'"><span class="d"></span>'+(N[k].num?N[k].num+'. ':'')+corto(k)+'</button>';
+const chipLargo = k => '<button type="button" class="chip" data-ir="'+k+'" style="--ac:'+(N[k].color||ORO)+'"><span class="d"></span>'+N[k].titulo+'</button>';
+function abrir(id, desdeMandala){
+  detener(); terminarDespliegue();
+  const n = N[id], r = ruta(id);
+  let h = '<nav class="migas" aria-label="Ubicación">'+r.map((k,i) => i<r.length-1
+      ? '<button type="button" data-ir="'+k+'">'+corto(k)+'</button><span aria-hidden="true">›</span>'
+      : '<span aria-current="page">'+corto(k)+'</span>').join('')+'</nav>';
+  h += '<div class="cab">'+visor(n)+'<div><h2>'+(n.num?'<span class="num-g">'+n.num+'</span>':'')+n.titulo+'</h2>'+
+       (n.san?'<p class="san">'+n.san+'</p>':'')+(n.sub?'<p class="gloss">'+n.sub+'</p>':'')+'</div></div>';
+  h += (n.texto||[]).map(t => '<p>'+t+'</p>').join('');
+  if(n.lista) h += '<dl class="lista">'+n.lista.map(([k,v]) => '<div><dt>'+k+'</dt><dd>'+v+'</dd></div>').join('')+'</dl>';
+  if(n.sigue) h += '<div class="fila"><span class="k">Lo que suele seguir</span><p>'+n.sigue+'</p></div>';
+  if(n.practica) h += '<div class="fila"><span class="k">En la práctica</span><p>'+n.practica+'</p></div>';
+  if(n.cita) h += '<div class="ejemplo"><span class="k">Del Canon</span><p>'+n.cita+'</p></div>';
+  if(n.cotidiano) h += '<div class="ejemplo cotidiano"><span class="k">Ejemplo cotidiano</span><p>'+n.cotidiano+'</p></div>';
+  if(n.hijos) h += '<h3>'+(n.hijosTitulo||'Profundiza')+'</h3><div class="chips">'+n.hijos.map(chip).join('')+'</div>';
+  if(n.ver) h += '<h3>'+(n.verTitulo||'Véase también')+'</h3><div class="chips">'+n.ver.map(chipLargo).join('')+'</div>';
+  if(n.enlace) h += '<h3>En la rueda de la vida</h3><div class="chips">'+n.enlace.map(([href,t]) =>
+      '<a class="chip" href="'+href+'" style="--ac:#e0654a"><span class="d"></span>'+t+' →</a>').join('')+'</div>';
+  if(PADRE[id]){
+    const hermanos = N[PADRE[id]].hijos, i = hermanos.indexOf(id), prev = hermanos[i-1], next = hermanos[i+1];
+    if(prev || next) h += '<div class="pasar">'+(prev?'<button type="button" class="sbtn-c" data-ir="'+prev+'">← '+corto(prev)+'</button>':'<span></span>')+
+         (next?'<button type="button" class="sbtn-c" data-ir="'+next+'">'+corto(next)+' →</button>':'')+'</div>';
+  }
+  panel.innerHTML = '<div class="fadein" style="--ac:'+(n.color||ORO)+'">'+h+'</div>';
+  resaltar(id==='vedana' ? [] : zonasDe(id));
+  marcarFormula(n.nivel || (id==='vedana' ? 5 : 0));
+  lecturaDe(id);
+  if(desdeMandala && window.innerWidth < 1000) panel.scrollIntoView({block:'start', behavior: reduce?'auto':'smooth'});
+}
+panel.addEventListener('click', e => { const b = e.target.closest('button[data-ir]'); if(b) abrir(b.dataset.ir); });
+formula.addEventListener('click', e => { const b = e.target.closest('[data-ir]'); if(b) abrir(b.dataset.ir); });
+
+/* ================= Lectura bajo el mandala ================= */
+const pasoN = document.getElementById('pasoN'), pasoT = document.getElementById('pasoT');
+function lectura(num, html){ pasoN.textContent = num; pasoT.innerHTML = html; }
+function lecturaDe(id){
+  const n = N[id];
+  if(n.num) lectura(n.num, '<strong>'+n.titulo+'</strong> · uno de los 108.');
+  else if(n.v && n.v.c!==undefined && n.v.s!==undefined) lectura('36', '<strong>'+n.titulo+'</strong> · '+n.sub.toLowerCase()+'.');
+  else if(n.v && n.v.t!==undefined && n.v.s!==undefined) lectura('18', '<strong>'+n.titulo+'</strong> · se abre en dos direcciones.');
+  else if(n.v && n.v.s!==undefined) lectura('6', '<strong>'+n.titulo+'</strong> · una de las seis puertas.');
+  else if(n.nivel===1) lectura('6', '<strong>Seis bases sensoriales</strong> · ojo, oído, nariz, lengua, cuerpo y mente.');
+  else if(n.nivel===2) lectura('18', '<strong>6 × 3 = 18</strong> · cada sentido da un tono agradable, desagradable o neutro.');
+  else if(n.nivel===3) lectura('36', '<strong>18 × 2 = 36</strong> · cada tono, ligado al apego mundano o basado en la renuncia.');
+  else if(n.nivel===4) lectura('108', '<strong>36 × 3 = 108</strong> · cada uno, en el pasado, el presente o el futuro.');
+  else lectura('108', 'Toca un anillo del mandala, despliega los 108 paso a paso o <strong>sigue un contacto</strong> para ver cómo nace un sentimiento.');
+}
+
+/* ================= Animación: desplegar los 108 ================= */
+const anillos = [...svg.querySelectorAll('.anillo')].sort((a,b) => a.dataset.nivel - b.dataset.nivel);
+const cifra = document.getElementById('cifra');
+let tDesp = [], rafCifra = null;
+function contar(hasta){
+  if(rafCifra) cancelAnimationFrame(rafCifra);
+  const desde = +cifra.textContent || 1, t0 = performance.now();
+  if(reduce){ cifra.textContent = hasta; return; }
+  (function paso(t){ const k = Math.min(1, (t-t0)/650); cifra.textContent = Math.round(desde + (hasta-desde)*k);
+    rafCifra = k<1 ? requestAnimationFrame(paso) : null; })(t0);
+}
+function terminarDespliegue(){
+  if(!tDesp.length && !svg.classList.contains('plegado')) return;
+  tDesp.forEach(clearTimeout); tDesp = [];
+  anillos.forEach(a => a.classList.add('abierto'));
+  svg.classList.remove('plegado');
+  if(rafCifra){ cancelAnimationFrame(rafCifra); rafCifra = null; }
+  cifra.textContent = '108';
+  btnDesplegar.textContent = 'Desplegar los 108';
+}
+const PASOS = [
+  [1, 6, 'sentidos', '<strong>Seis bases sensoriales</strong> · ojo, oído, nariz, lengua, cuerpo y mente.'],
+  [2, 18, 'tonos', '<strong>× 3 tonos = 18</strong> · cada contacto llega agradable, desagradable o neutro.'],
+  [3, 36, 'caminos', '<strong>× 2 direcciones = 36</strong> · ligado al apego mundano o basado en la renuncia.'],
+  [4, 108, 'tiempos', '<strong>× 3 tiempos = 108</strong> · en el pasado, el presente o el futuro.']
+];
+function desplegar(){
+  detener();
+  resaltar([]);
+  if(reduce){ terminarDespliegue(); abrir('vedana'); return; }
+  svg.classList.add('plegado', 'sin-trans');
+  anillos.forEach(a => a.classList.remove('abierto'));
+  cifra.textContent = '1'; marcarFormula(0);
+  lectura('1', '<strong>Un contacto</strong> · todo empieza cuando un objeto toca un sentido.');
+  void svg.getBoundingClientRect();
+  svg.classList.remove('sin-trans');
+  btnDesplegar.textContent = 'Saltar la animación';
+  PASOS.forEach(([nivel, num, , texto], i) => {
+    tDesp.push(setTimeout(() => {
+      anillos[nivel-1].classList.add('abierto'); contar(num); marcarFormula(nivel); lectura(num, texto);
+    }, 500 + i*1700));
+  });
+  tDesp.push(setTimeout(() => {
+    tDesp = []; svg.classList.remove('plegado'); marcarFormula(5);
+    lectura('108', '<strong>6 × 3 × 2 × 3 = 108</strong> · ciento ocho maneras en que la experiencia se tiñe de gusto, rechazo o indiferencia.');
+    btnDesplegar.textContent = 'Desplegar los 108';
+  }, 500 + PASOS.length*1700 + 400));
+}
+const btnDesplegar = document.getElementById('btnDesplegar');
+btnDesplegar.addEventListener('click', () => {
+  if(tDesp.length){ terminarDespliegue(); lecturaDe('vedana'); marcarFormula(5); return; }
+  desplegar();
+});
+
+/* ================= Animación: seguir un contacto ================= */
+/* Un objeto toca un sentido; la cuenta luminosa viaja hacia fuera
+   atravesando el tono, la dirección y el tiempo hasta uno de los 108 */
+const cuentaV = document.getElementById('cuentaV'), traza = document.getElementById('traza');
+let rafC = null, tC = [];
+function detener(){
+  if(rafC){ cancelAnimationFrame(rafC); rafC = null; }
+  tC.forEach(clearTimeout); tC = [];
+  cuentaV.setAttribute('opacity','0'); traza.setAttribute('opacity','0');
+  btnContacto.textContent = 'Seguir un contacto';
+}
+function ponerCuenta(r, a){
+  const [x,y] = pol(r,a);
+  cuentaV.setAttribute('transform','translate('+x.toFixed(1)+' '+y.toFixed(1)+')');
+  traza.setAttribute('x2', x.toFixed(1)); traza.setAttribute('y2', y.toFixed(1));
+}
+function contacto(){
+  terminarDespliegue(); detener(); resaltar([]);
+  const si = Math.floor(Math.random()*6), ti = Math.floor(Math.random()*3), ci = Math.floor(Math.random()*2), ki = Math.floor(Math.random()*3);
+  const o = SENT[si], t = TONOS[ti], c = CAMINOS[ci], k = TIEMPOS[ki], q = CUAL[t.k+c.k];
+  const a = angK(si,ti,ci,ki) + 5/3, sid = 's-'+o.k, tid = o.k+'-'+t.k, cid = tid+'-'+c.k, kid = cid+'-'+k.k;
+  const etapas = [
+    [R.obj+6, 104, () => { resaltar([sid]); lectura('1', '<strong>Contacto</strong> · '+o.llega+'.'); }],
+    [104, (R.t0+R.t1)/2, () => { resaltar([sid,tid]); lectura('18', '<strong>Surge un tono: '+t.nombre.toLowerCase()+'</strong> · '+t.toque); }],
+    [(R.t0+R.t1)/2, (R.c0+R.c1)/2, () => { resaltar([sid,tid,cid]); lectura('36', '<strong>'+q.nombre+'</strong> · '+c.inclina+'.'); }],
+    [(R.c0+R.c1)/2, (R.k0+R.k1)/2, () => { resaltar([sid,tid,cid,kid]); lectura('108', '<strong>'+k.nombre+'</strong> · '+k.frase); }]
+  ];
+  const [x0,y0] = pol(R.obj+6, a);
+  traza.setAttribute('x1', x0.toFixed(1)); traza.setAttribute('y1', y0.toFixed(1));
+  const final = () => {
+    abrir(kid);
+    lectura(N[kid].num, '<strong>Nº '+N[kid].num+' de 108</strong> · '+q.sigue);
+  };
+  if(reduce){ etapas.forEach(e => e[2]()); final(); return; }
+  btnContacto.textContent = 'Detener';
+  ponerCuenta(R.obj+6, a); cuentaV.setAttribute('opacity','1'); traza.setAttribute('opacity','.6');
+  const dur = 1000, pausa = 900;
+  let i = 0;
+  function etapa(){
+    const [r0,r1,alLlegar] = etapas[i], t0 = performance.now();
+    (function paso(t){
+      const u = Math.min(1, (t-t0)/dur), e = u<.5 ? 2*u*u : 1-Math.pow(-2*u+2,2)/2;
+      ponerCuenta(r0 + (r1-r0)*e, a);
+      if(u<1){ rafC = requestAnimationFrame(paso); return; }
+      rafC = null; alLlegar(); i++;
+      tC.push(setTimeout(i<etapas.length ? etapa : () => { tC = []; cuentaV.setAttribute('opacity','0'); traza.setAttribute('opacity','0'); final(); btnContacto.textContent = 'Seguir otro contacto'; }, pausa + (i===etapas.length ? 600 : 0)));
+    })(t0);
+  }
+  etapa();
+}
+const btnContacto = document.getElementById('btnContacto');
+btnContacto.addEventListener('click', () => {
+  if(rafC || tC.length){ detener(); resaltar([]); lecturaDe('vedana'); return; }
+  contacto();
+});
+document.getElementById('btnInicio').addEventListener('click', () => abrir('vedana'));
+
+/* ---- Clic y teclado sobre el mandala ---- */
+svg.addEventListener('click', e => { const z = e.target.closest('.zona'); if(z) abrir(z.dataset.n, true); });
+svg.addEventListener('keydown', e => {
+  const z = e.target.closest('.zona'); if(!z) return;
+  if(e.key==='Enter' || e.key===' '){ e.preventDefault(); abrir(z.dataset.n, true); }
+});
+
+// Un enlace como vedanas-108.html#ojo-a-m abre directamente esa explicación
+const inicial = decodeURIComponent(location.hash.slice(1));
+abrir(Object.prototype.hasOwnProperty.call(N, inicial) ? inicial : 'vedana');
+if(!inicial) desplegar();
+})();
+</script>
+</body>
+</html>
