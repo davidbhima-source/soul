@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es" class="pg-arbol">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>El Árbol de la Vida · Bhima</title>
+<meta name="description" content="El Árbol de la Vida de la Cábala explicado de forma interactiva: las diez sefirot, los 22 senderos de las letras hebreas, las tres columnas, los cuatro mundos y la creación según Isaac Luria.">
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="home-link" href="kabbalah.html"><span aria-hidden="true">←</span>Kabbalah</a>
+  <h1>El Árbol de la Vida</h1>
+  <p class="lede">El <em>Ets Jaim</em> es el mapa central de la Cábala: diez sefirot, los modos en que el Infinito se manifiesta, unidas por veintidós senderos, uno por cada letra hebrea. Toca cualquier esfera o sendero; cada explicación se abre en niveles más finos.</p>
+</header>
+
+<main>
+  <section class="lienzo" aria-label="El Árbol de la Vida">
+    <svg id="arbol" viewBox="0 0 800 860" role="group" aria-label="Árbol de la Vida interactivo"></svg>
+    <div class="mando">
+      <div class="lectura" aria-live="polite"><span class="paso-n" id="pasoN">·</span><span id="pasoT"></span></div>
+      <div class="botones">
+        <button class="sbtn" id="btnDescenso" type="button">El descenso de la luz</button>
+        <button class="sbtn" id="btnAscenso" type="button">El ascenso por los senderos</button>
+        <button class="sbtn" id="btnLuria" type="button">La creación según Luria</button>
+        <button class="sbtn" id="btnTodo" type="button">Ver todo el árbol</button>
+      </div>
+    </div>
+  </section>
+  <aside class="panel-r" id="panel" aria-live="polite"></aside>
+</main>
+
+<footer class="pie">
+  <div class="nota">
+    <p><strong>Cómo leer el árbol.</strong> Se lee de arriba abajo, como desciende la luz, y de abajo arriba, como asciende quien practica. Las esferas de la derecha expanden, las de la izquierda contienen y las del centro equilibran. Las letras sobre los senderos son las 22 del alfabeto hebreo; con las diez sefirot forman los «32 senderos de sabiduría» del <em>Séfer Yetsirá</em>.</p>
+    <p><strong>Sobre las fuentes.</strong> El contenido resume la tradición cabalística judía —<em>Séfer Yetsirá</em>, <em>Bahir</em>, <em>Zóhar</em>, Gikatilla, Cordovero y la escuela de Isaac Luria— y el estudio académico de Gershom Scholem y Moshe Idel. El trazado de los senderos y sus letras sigue el de Athanasius Kircher (1652), el más difundido hoy; los colores, planetas y arcanos del tarot son correspondencias de la Qabalah hermética del siglo XIX, que el panel señala siempre como tales porque no forman parte de la Cábala judía. Los ejemplos marcados como «Ejemplo cotidiano» son ilustraciones añadidas.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ORO = '#d9b265', CIELO = '#060b1c', CREMA = '#ece6d6';
+const HEB = 'var(--hebreo)';
+
+/* ================= Las diez sefirot (y Dáat) ================= */
+const SEF = [
+  {id:'keter', n:1, he:'כתר', nombre:'Kéter', sig:'Corona', x:400, y:120, color:'#f4f1e6', tinta:'#17122b', col:'central',
+   texto:['La primera sefirá y la más alta: la voluntad primordial, anterior a todo pensamiento. Es tan elevada que muchos cabalistas dudan de llamarla sefirá: está en el límite entre el Ein Sof, el Infinito, y lo que se manifiesta.',
+          'Se la llama también <em>Ayin</em>, «nada»: no porque no exista, sino porque nada puede decirse de ella. Como una corona, está sobre la cabeza y no forma parte de ella.'],
+   nombreDivino:'Ehyeh (אהיה), «Seré» (Éxodo 3:14)', cuerpo:'La corona, por encima de la cabeza', figura:'—', alma:'La voluntad (ratsón) y el deleite (taanug)',
+   hermetica:'Primer móvil; blanco brillante; los cuatro ases del tarot',
+   cotidiano:'Antes de decidir estudiar algo hay un querer que todavía no sabe qué quiere. Ese impulso sin forma es la imagen humana de Kéter.'},
+  {id:'jojma', n:2, he:'חכמה', nombre:'Jojmá', sig:'Sabiduría', x:600, y:215, color:'#a3acb6', tinta:'#17122b', col:'derecha',
+   texto:['El primer destello: un punto de intuición que lo contiene todo sin desplegarlo. El Zóhar lee el «En el principio» del Génesis como «con Sabiduría»: Jojmá es el comienzo de todo lo que existe.',
+          'Es el Padre (<em>Abba</em>): una semilla que contiene el árbol entero, pero que todavía no lo muestra.'],
+   nombreDivino:'Yah (יה)', cuerpo:'El cerebro («Jojmá es el cerebro», Tikunéi Zóhar)', figura:'Abba, el Padre', alma:'La intuición, el relámpago de una idea',
+   hermetica:'El zodiaco; gris; los cuatro doses',
+   cotidiano:'La idea que llega de golpe, completa, antes de poder explicarla con palabras.'},
+  {id:'bina', n:3, he:'בינה', nombre:'Biná', sig:'Entendimiento', x:200, y:215, color:'#3a3550', tinta:'#ece6d6', col:'izquierda',
+   texto:['Recibe el destello de Jojmá y lo despliega: le da extensión, estructura y detalle. Es la Madre (<em>Ima</em>), en cuyo seno las ideas toman forma.',
+          'Jojmá y Biná son «dos compañeros que nunca se separan»: intuición y análisis, semilla y matriz. De Biná nacen las siete sefirot inferiores, como de una madre sus hijos.'],
+   nombreDivino:'YHVH, leído con las vocales de Elohim', cuerpo:'El corazón («Biná es el corazón», Tikunéi Zóhar)', figura:'Ima, la Madre', alma:'La comprensión que analiza y desarrolla',
+   hermetica:'Saturno; negro; los cuatro treses',
+   cotidiano:'Tomas esa idea repentina y la conviertes en un plan: preguntas, consecuencias, pasos. Eso es Biná.'},
+  {id:'jesed', n:4, he:'חסד', nombre:'Jésed', sig:'Misericordia', x:600, y:390, color:'#3f73c9', tinta:'#f4f1e6', col:'derecha',
+   texto:['La primera de las siete sefirot «de la construcción» del mundo: el amor que se derrama sin medida, la generosidad que da sin calcular. También se la llama <em>Guedulá</em>, grandeza.',
+          'Su figura es Abraham, que abría su tienda por los cuatro lados para recibir a los viajeros. Sin el límite de Guevurá, su exceso se vuelve indulgencia.'],
+   nombreDivino:'El (אל)', cuerpo:'El brazo derecho', figura:'Abraham', alma:'El amor y la bondad que se expanden',
+   hermetica:'Júpiter; azul; los cuatro cuatros',
+   cotidiano:'Dar tiempo, atención o perdón sin esperar nada a cambio.'},
+  {id:'guevura', n:5, he:'גבורה', nombre:'Guevurá', sig:'Rigor', x:200, y:390, color:'#c8463d', tinta:'#f4f1e6', col:'izquierda',
+   texto:['La fuerza que limita, mide y juzga. Donde Jésed se expande, Guevurá contiene: es la disciplina, la justicia y el «no» que protege. También se la llama <em>Din</em>, juicio, y <em>Pájad</em>, temor.',
+          'Su figura es Isaac, atado sobre el altar. En exceso se vuelve dureza; la tradición ve en ese exceso el origen de lo que llama el «otro lado» (<em>sitra ajra</em>).'],
+   nombreDivino:'Elohim (אלהים)', cuerpo:'El brazo izquierdo', figura:'Isaac', alma:'El rigor, la contención, el discernimiento',
+   hermetica:'Marte; rojo; los cuatro cincos',
+   cotidiano:'Decir que no a algo que te hace daño, aunque cueste.'},
+  {id:'tiferet', n:6, he:'תפארת', nombre:'Tiféret', sig:'Belleza', x:400, y:475, color:'#e8c04a', tinta:'#17122b', col:'central',
+   texto:['El centro del árbol: equilibra la expansión de Jésed y el límite de Guevurá en una compasión (<em>rajamim</em>) que sabe cuándo dar y cuándo contener. Es la belleza que nace de la proporción; también se la llama Verdad (<em>Emet</em>).',
+          'Su figura es Jacob, que integra a su abuelo Abraham y a su padre Isaac. Es el «Santo, bendito sea», el aspecto de lo divino que busca reunirse con la Shejiná en Maljut. Ocho senderos llegan a ella, que la unen con todas las demás sefirot salvo Maljut: es el corazón del árbol.'],
+   nombreDivino:'YHVH (יהוה), el Tetragrámaton', cuerpo:'El torso y el corazón', figura:'Jacob; Zeir Anpin, el Rostro Menor', alma:'La compasión que integra',
+   hermetica:'El Sol; amarillo; los cuatro seises',
+   cotidiano:'Corriges a alguien con firmeza y con cariño a la vez, y la corrección se recibe.'},
+  {id:'netsaj', n:7, he:'נצח', nombre:'Nétsaj', sig:'Victoria', x:600, y:565, color:'#45a86a', tinta:'#f4f1e6', col:'derecha',
+   texto:['La persistencia: la energía de Jésed convertida en acción que no se rinde. Es el impulso que conquista y que dura; su nombre significa también eternidad.',
+          'Su figura es Moisés. Con Hod forma una pareja inseparable, como las dos piernas: una avanza, la otra sostiene.'],
+   nombreDivino:'YHVH Tsevaot, «Señor de los ejércitos»', cuerpo:'La pierna derecha', figura:'Moisés', alma:'La perseverancia, la iniciativa',
+   hermetica:'Venus; verde; los cuatro sietes',
+   cotidiano:'Seguir practicando cuando el entusiasmo del principio ya se ha ido.'},
+  {id:'hod', n:8, he:'הוד', nombre:'Hod', sig:'Esplendor', x:200, y:565, color:'#e48a3c', tinta:'#17122b', col:'izquierda',
+   texto:['El reconocimiento y la entrega: la capacidad de agradecer, rendirse y dar forma. Si Nétsaj avanza, Hod reconoce los límites y los honra.',
+          'Su figura es Aarón, el sacerdote. En la lectura hermética es la esfera del intelecto, del lenguaje y del ritual.'],
+   nombreDivino:'Elohim Tsevaot', cuerpo:'La pierna izquierda', figura:'Aarón', alma:'La humildad, la gratitud, la forma',
+   hermetica:'Mercurio; naranja; los cuatro ochos',
+   cotidiano:'Admitir que otra persona tenía razón, y agradecérselo.'},
+  {id:'yesod', n:9, he:'יסוד', nombre:'Yesod', sig:'Fundamento', x:400, y:650, color:'#8a5fc4', tinta:'#f4f1e6', col:'central',
+   texto:['Reúne todas las energías de arriba y las transmite a Maljut: es el canal, el vínculo, la alianza. «El justo es el fundamento del mundo» (Proverbios 10:25).',
+          'Su figura es José, el justo (<em>tsadik</em>). En el cuerpo corresponde al órgano de la alianza: la capacidad de unir y de engendrar.'],
+   nombreDivino:'Shadai, o El Jai, «Dios vivo»', cuerpo:'El órgano de la alianza', figura:'José', alma:'El vínculo, la conexión que hace fecundo',
+   hermetica:'La Luna; violeta; los cuatro nueves',
+   cotidiano:'La confianza que hace que una buena intención llegue de verdad a otra persona.'},
+  {id:'maljut', n:10, he:'מלכות', nombre:'Maljut', sig:'Reino', x:400, y:770, color:'#a9973a', tinta:'#17122b', col:'central',
+   texto:['La última sefirá: el mundo manifiesto, la palabra dicha, el reino donde todo lo anterior se hace real. No tiene luz propia: como la luna, refleja la de las demás.',
+          'Es la <em>Shejiná</em>, la presencia divina que habita en el mundo y lo acompaña en el exilio. Su figura es David, el rey. Por ella empieza el camino de regreso.'],
+   nombreDivino:'Adonai (אדני), «mi Señor»', cuerpo:'La boca (la palabra) y los pies', figura:'David; la Shejiná', alma:'La presencia, la acción concreta',
+   hermetica:'La Tierra; cetrino, oliva, rojizo y negro; los cuatro dieces',
+   cotidiano:'Todo lo que pensaste, sentiste y planeaste se vuelve, al fin, un acto concreto.'}
+];
+const DAAT = {id:'daat', he:'דעת', nombre:'Dáat', sig:'Conocimiento', x:400, y:300};
+const POR = {}; SEF.forEach(s => POR[s.id] = s); POR.daat = DAAT;
+
+/* ================= Los 22 senderos ================= */
+// [número, letra, nombre, valor, significado, desde, hasta, tipo, atribución, arcano, lectura, posición de la letra]
+const SEND = [
+  [11,'א','Álef',1,'buey','keter','jojma','madre','el aire','El Loco (0)','El primer aliento: la Corona se abre a la Sabiduría. Álef casi no suena; contiene todas las letras como el aire contiene la palabra.'],
+  [12,'ב','Bet',2,'casa','keter','bina','doble','Mercurio','El Mago (I)','La Corona hacia el Entendimiento. Con Bet empieza la Torá (Bereshit): es la primera casa donde algo puede habitar.'],
+  [13,'ג','Guímel',3,'camello','keter','tiferet','doble','la Luna','La Sacerdotisa (II)','El sendero más largo del pilar central, que atraviesa el abismo de Dáat: el camello que cruza el desierto entre lo inefable y el corazón.',.648],
+  [14,'ד','Dálet',4,'puerta','jojma','bina','doble','Venus','La Emperatriz (III)','Une al Padre y a la Madre: la puerta por la que la intuición entra en la comprensión.'],
+  [15,'ה','He',5,'ventana','jojma','tiferet','simple','Aries','El Emperador (IV)','La Sabiduría ilumina el corazón. La He es el soplo que aparece dos veces en el Nombre divino.'],
+  [16,'ו','Vav',6,'clavo, gancho','jojma','jesed','simple','Tauro','El Hierofante (V)','Desciende por la columna derecha: el gancho que une lo alto con lo bajo, como la vav que en hebreo significa «y».'],
+  [17,'ז','Zain',7,'espada','bina','tiferet','simple','Géminis','Los Enamorados (VI)','El Entendimiento que discierne y separa, para que el corazón pueda elegir.'],
+  [18,'ח','Jet',8,'cerca, muro','bina','guevura','simple','Cáncer','El Carro (VII)','Desciende por la columna izquierda: el recinto que protege y delimita.'],
+  [19,'ט','Tet',9,'serpiente, vasija','jesed','guevura','simple','Leo','La Fuerza (VIII)','El puente horizontal entre el amor y el rigor: la fuerza que no destruye.'],
+  [20,'י','Yod',10,'mano','jesed','tiferet','simple','Virgo','El Ermitaño (IX)','La más pequeña de las letras, el punto del que nacen todas: la mano generosa que lleva el amor al centro.'],
+  [21,'כ','Kaf',20,'palma','jesed','netsaj','doble','Júpiter','La Rueda de la Fortuna (X)','La palma abierta del amor se vuelve acción constante.'],
+  [22,'ל','Lámed',30,'aguijada','guevura','tiferet','simple','Libra','La Justicia (XI)','La letra más alta, la que aprende y enseña: el rigor que endereza y equilibra.'],
+  [23,'מ','Mem',40,'agua','guevura','hod','madre','el agua','El Colgado (XII)','El agua que desciende por la columna del rigor y se vuelve entrega.'],
+  [24,'נ','Nun',50,'pez','tiferet','netsaj','simple','Escorpio','La Muerte (XIII)','El pez que nada en lo profundo: transformación entre el corazón y la perseverancia.'],
+  [25,'ס','Sámej',60,'apoyo, sostén','tiferet','yesod','simple','Sagitario','La Templanza (XIV)','El sostén del pilar central: el corazón desciende hasta el fundamento.',.32],
+  [26,'ע','Ayin',70,'ojo','tiferet','hod','simple','Capricornio','El Diablo (XV)','El ojo que mira: entre la belleza y la forma acecha el riesgo de quedarse en la apariencia.'],
+  [27,'פ','Pe',80,'boca','netsaj','hod','doble','Marte','La Torre (XVI)','La boca que habla une la fuerza que avanza con la forma que expresa.',.34],
+  [28,'צ','Tsadi',90,'anzuelo','netsaj','yesod','simple','Acuario','La Estrella (XVII)','El justo (tsadik) atrae hacia el fundamento lo que la perseverancia logró.'],
+  [29,'ק','Qof',100,'nuca','netsaj','maljut','simple','Piscis','La Luna (XVIII)','El camino de los instintos y los sueños, de la perseverancia al mundo.'],
+  [30,'ר','Resh',200,'cabeza','hod','yesod','doble','el Sol','El Sol (XIX)','La cabeza que entiende: el intelecto ilumina el fundamento.'],
+  [31,'ש','Shin',300,'diente','hod','maljut','madre','el fuego','El Juicio (XX)','El fuego que transforma el mundo concreto; sus tres brazos son tres llamas.'],
+  [32,'ת','Tav',400,'marca, sello','yesod','maljut','doble','Saturno','El Mundo (XXI)','La última letra, el sello: el fundamento se vuelve mundo. Es el primer sendero de quien empieza a subir.']
+];
+const TIPO_L = {
+  madre:{nombre:'Letra madre', color:'#e8c46a', sy:'elemento'},
+  doble:{nombre:'Letra doble', color:'#5fb2d9', sy:'planeta'},
+  simple:{nombre:'Letra simple', color:'#7fd0a0', sy:'signo del zodiaco'}
+};
+
+/* ================= Contenido ================= */
+const N = {
+  arbol:{titulo:'El Árbol de la Vida', corto:'El árbol', he:'עץ חיים', san:'Ets Jaim', sub:'El mapa central de la Cábala', color:ORO, v:{tipo:'arbol'},
+    texto:['<em>Cábala</em> (<em>kabbalah</em>) significa «lo recibido»: la tradición mística judía que se transmitía de maestro a discípulo. Su mapa más conocido es el Árbol de la Vida, un diagrama de diez esferas —las sefirot— unidas por veintidós senderos.',
+           'Las sefirot no son diez dioses ni diez partes de Dios, que es uno e indivisible, sino diez modos en que el Infinito (<em>Ein Sof</em>) se manifiesta y se deja conocer: como la luz blanca que se abre en colores al pasar por un prisma, sin dejar de ser una.',
+           'El árbol se lee en dos direcciones: de arriba abajo, como desciende la luz que crea el mundo; y de abajo arriba, como asciende quien practica. Y se lee también como un cuerpo humano, porque «a imagen de Dios lo creó» (Génesis 1:27).'],
+    lista:[['10 sefirot','las esferas: de Kéter, la Corona, a Maljut, el Reino'],['22 senderos','uno por cada letra del alfabeto hebreo'],['3 columnas','misericordia a la derecha, rigor a la izquierda, equilibrio en el centro'],['4 mundos','emanación, creación, formación y acción']],
+    cotidiano:'Al aprender algo nuevo recorres el árbol entero: un deseo de saber (Kéter), una intuición (Jojmá), un análisis (Biná), entusiasmo y disciplina (Jésed y Guevurá) en equilibrio (Tiféret), constancia y forma (Nétsaj y Hod), un vínculo (Yesod) y, al fin, un acto (Maljut).',
+    hijosTitulo:'Explora el árbol', hijos:['sefirot','senderos','columnas','triadas','mundos','ein-sof','luria','omer','lecturas','fuentes']},
+
+  sefirot:{titulo:'Las diez sefirot', corto:'Sefirot', he:'ספירות', san:'sefirot', sub:'Diez modos de manifestación', color:'#e8c04a', v:{tipo:'diez'},
+    texto:['La palabra <em>sefirá</em> se ha relacionado con <em>sapir</em> (zafiro, brillo), <em>séfer</em> (libro), <em>sipur</em> (relato) y <em>mispar</em> (número). El <em>Séfer Yetsirá</em> habla de «diez sefirot <em>belimá</em>», sin nada, cerradas en sí mismas: diez números primordiales.',
+           'Con el <em>Bahir</em> (Provenza, hacia 1180) y el <em>Zóhar</em> (Castilla, hacia 1280) se convierten en atributos divinos con nombre, color, figura bíblica y lugar en el cuerpo. Cada una es a la vez luz (<em>or</em>) y recipiente (<em>kli</em>).',
+           'El <em>Séfer Yetsirá</em> insiste: «diez y no nueve, diez y no once». Por eso Dáat, el conocimiento, aparece con línea punteada.'],
+    cita:'«Diez sefirot belimá: su medida es diez sin fin. Su final está clavado en su principio, y su principio en su final, como la llama atada a la brasa.» (Séfer Yetsirá 1:7)',
+    hijosTitulo:'Cada sefirá', hijos:SEF.map(s => s.id).concat(['daat'])},
+
+  daat:{titulo:'Dáat', he:'דעת', san:'Dáat', sub:'Conocimiento · la sefirá oculta', color:'#c9c2e8', v:{tipo:'sefira', id:'daat'},
+    texto:['Cuando Jojmá y Biná se unen nace Dáat, el conocimiento íntimo que se vuelve vida. En hebreo, «conocer» es también la palabra con que se nombra la unión de Adán y Eva.',
+           'No se cuenta como sefirá aparte. En unas escuelas ocupa el lugar de Kéter cuando se enumeran las sefirot; en otras es un puente oculto entre el intelecto y las emociones. La tradición jasídica de Jabad la incluye en su propio nombre: JaBaD es Jojmá, Biná y Dáat.'],
+    lista:[['Lugar','en el pilar central, entre las tres supremas y las siete inferiores'],['En la Qabalah hermética','el «abismo» que separa lo supremo del resto del árbol']],
+    cotidiano:'Saber que el fuego quema no es lo mismo que haberse quemado: Dáat es el conocimiento que ya te transformó.'},
+
+  senderos:{titulo:'Los veintidós senderos', corto:'Senderos', he:'נתיבות', san:'netivot', sub:'Las letras que unen las sefirot', color:'#5fb2d9', v:{tipo:'letras'},
+    texto:['«Con treinta y dos senderos maravillosos de sabiduría grabó Yah…»: así comienza el <em>Séfer Yetsirá</em>. Los 32 senderos son las diez sefirot más las veintidós letras del alfabeto hebreo, las piedras con las que se construyó el mundo.',
+           'El libro divide las letras en tres grupos: tres madres, siete dobles y doce simples. En el árbol cada letra ocupa un sendero; el reparto que ves aquí es el de Athanasius Kircher (1652), hoy el más difundido. Las escuelas judías de Isaac Luria y del Gaón de Vilna reparten las letras de otro modo.'],
+    lista:[['3 madres','Álef, Mem, Shin: el aire, el agua y el fuego'],['7 dobles','Bet, Guímel, Dálet, Kaf, Pe, Resh y Tav: tenían dos pronunciaciones; se asocian con los siete planetas clásicos'],['12 simples','las demás: se asocian con los doce signos del zodiaco y los doce meses']],
+    hijosTitulo:'Los tres grupos', hijos:['madres','dobles','simples']},
+  madres:{titulo:'Las tres letras madres', corto:'Madres', he:'אמש', san:'imot', sub:'Álef, Mem, Shin', color:'#e8c46a', v:{tipo:'grupo', g:'madre'},
+    texto:['Según el <em>Séfer Yetsirá</em>, de Álef, Mem y Shin nacen el aire, el agua y el fuego: el agua (Mem) abajo, el fuego (Shin) arriba y el aire (Álef) como fiel de la balanza entre ambos.',
+           'Shin sisea como el fuego, Mem murmura como el agua y Álef, casi muda, es el aliento que media.'],
+    hijosTitulo:'Sus senderos', hijos:['p11','p23','p31']},
+  dobles:{titulo:'Las siete letras dobles', corto:'Dobles', he:'בגדכפרת', san:'kefulot', sub:'Bet, Guímel, Dálet, Kaf, Pe, Resh, Tav', color:'#5fb2d9', v:{tipo:'grupo', g:'doble'},
+    texto:['Se llaman dobles porque tenían dos pronunciaciones, suave y fuerte. El <em>Séfer Yetsirá</em> las une a los siete planetas clásicos, a los siete días y a siete pares de opuestos: vida y muerte, paz y guerra, sabiduría y necedad, riqueza y pobreza, gracia y fealdad, semilla y desolación, dominio y servidumbre.',
+           'Qué planeta corresponde a cada letra varía según las versiones del libro; aquí se indica el de la tradición hermética.'],
+    hijosTitulo:'Sus senderos', hijos:['p12','p13','p14','p21','p27','p30','p32']},
+  simples:{titulo:'Las doce letras simples', corto:'Simples', he:'פשוטות', san:'peshutot', sub:'Una por cada signo y cada mes', color:'#7fd0a0', v:{tipo:'grupo', g:'simple'},
+    texto:['Doce letras de un solo sonido. El <em>Séfer Yetsirá</em> las asocia con los doce meses, los doce signos del zodiaco, doce funciones del ser humano —ver, oír, oler, hablar, comer, unirse, actuar, caminar, enojarse, reír, pensar y dormir— y doce «fronteras diagonales» del espacio.'],
+    hijosTitulo:'Sus senderos', hijos:['p15','p16','p17','p18','p19','p20','p22','p24','p25','p26','p28','p29']},
+
+  columnas:{titulo:'Las tres columnas', corto:'Columnas', he:'שלשה קווים', san:'tres líneas', sub:'Misericordia, rigor y equilibrio', color:'#c9c2e8', v:{tipo:'columnas'},
+    texto:['El árbol tiene tres columnas verticales. La de la derecha expande, la de la izquierda contiene y la del centro equilibra. La Cábala no busca suprimir ninguna de las dos fuerzas laterales, sino unirlas en el centro.',
+           'Algunas escuelas herméticas las identifican con las dos columnas del Templo de Salomón, Jakín y Boaz, con la del centro como el camino entre ambas.'],
+    hijosTitulo:'Cada columna', hijos:['col-derecha','col-izquierda','col-central']},
+  'col-derecha':{titulo:'La columna de la misericordia', corto:'Derecha', he:'ימין', san:'yamín · jésed', sub:'Jojmá, Jésed, Nétsaj', color:'#3f73c9', v:{tipo:'col', col:'derecha'}, zonas:['jojma','jesed','netsaj','p16','p21'],
+    texto:['La fuerza que da, expande y se derrama: la intuición, el amor y la perseverancia. Es masculina en el simbolismo clásico, activa y luminosa.','Sola, sin la izquierda, se desborda: generosidad sin medida que acaba por ahogar lo que quería nutrir.'],
+    cotidiano:'Una madre o un padre que solo consiente: mucho amor, ningún límite.'},
+  'col-izquierda':{titulo:'La columna del rigor', corto:'Izquierda', he:'שמאל', san:'smol · din', sub:'Biná, Guevurá, Hod', color:'#c8463d', v:{tipo:'col', col:'izquierda'}, zonas:['bina','guevura','hod','p18','p23'],
+    texto:['La fuerza que recibe, limita y da forma: el entendimiento, el juicio y la humildad. Es femenina en el simbolismo clásico y receptiva.','Sola, sin la derecha, se endurece: rigor sin amor, juicio sin compasión.'],
+    cotidiano:'Un maestro que solo corrige: mucha exigencia, ninguna ternura.'},
+  'col-central':{titulo:'La columna del equilibrio', corto:'Centro', he:'אמצע', san:'emtsá · rajamim', sub:'Kéter, Dáat, Tiféret, Yesod, Maljut', color:'#e8c04a', v:{tipo:'col', col:'central'}, zonas:['keter','daat','tiferet','yesod','maljut','p13','p25','p32'],
+    texto:['El camino del medio: la compasión que integra el amor y el rigor. Por ella baja la luz más directa y por ella sube quien busca la unión.','Es la columna de la conciencia: de la voluntad (Kéter) al corazón (Tiféret), al vínculo (Yesod) y al mundo (Maljut).'],
+    cotidiano:'Quien sabe cuándo dar y cuándo decir que no, y lo hace sin perder el cariño.'},
+
+  triadas:{titulo:'Las tríadas', corto:'Tríadas', he:'משולשים', san:'meshulashim', sub:'Intelecto, emoción y acción', color:'#c9c2e8', v:{tipo:'triadas'},
+    texto:['Las sefirot se agrupan de tres en tres, una de cada columna. La tradición jasídica las nombra por sus iniciales: JaBaD (Jojmá, Biná, Dáat), el intelecto; JaGaT (Jésed, Guevurá, Tiféret), las emociones; y NeHY (Nétsaj, Hod, Yesod), la acción y el instinto. Maljut las recibe todas.',
+           'La tradición hermética, que no cuenta Dáat, pone a Kéter en la primera tríada.'],
+    hijosTitulo:'Cada tríada', hijos:['tri-intelecto','tri-emocion','tri-accion']},
+  'tri-intelecto':{titulo:'La tríada del intelecto', corto:'Intelecto', he:'מוחין', san:'mojín · JaBaD', sub:'Kéter, Jojmá, Biná (y Dáat)', color:'#f4f1e6', v:{tipo:'tri', ids:['keter','jojma','bina']}, zonas:['keter','jojma','bina','daat','p11','p12','p14'],
+    texto:['Las «sefirot de la mente» (<em>mojín</em>): voluntad, intuición, comprensión. Es el mundo de las ideas antes de que toquen el corazón.'],
+    cotidiano:'Entender perfectamente por qué deberías hacer ejercicio sin haber movido todavía un músculo.'},
+  'tri-emocion':{titulo:'La tríada de la emoción', corto:'Emoción', he:'מידות', san:'midot · JaGaT', sub:'Jésed, Guevurá, Tiféret', color:'#e8c04a', v:{tipo:'tri', ids:['jesed','guevura','tiferet']}, zonas:['jesed','guevura','tiferet','p19','p20','p22'],
+    texto:['Las «sefirot del corazón» (<em>midot</em>, rasgos): el amor, el temor o rigor, y la compasión que los armoniza. Es el centro moral del árbol.'],
+    cotidiano:'Sentir a la vez el impulso de ayudar y el de poner un límite, y encontrar la respuesta justa.'},
+  'tri-accion':{titulo:'La tríada de la acción', corto:'Acción', he:'נה"י', san:'NeHY', sub:'Nétsaj, Hod, Yesod', color:'#8a5fc4', v:{tipo:'tri', ids:['netsaj','hod','yesod']}, zonas:['netsaj','hod','yesod','p27','p28','p30'],
+    texto:['Las sefirot de la conducta: perseverar, reconocer y vincularse. Son los instintos, los hábitos y la manera concreta de llevar las emociones al mundo. Bajo ellas, Maljut recibe el resultado.'],
+    cotidiano:'El hábito que te hace saludar con una sonrisa sin pensarlo: ahí vive la tríada de la acción.'},
+
+  mundos:{titulo:'Los cuatro mundos', corto:'Mundos', he:'ארבע עולמות', san:'arbá olamot', sub:'Emanación, creación, formación, acción', color:'#5fb2d9', v:{tipo:'mundos'},
+    texto:['La realidad se despliega en cuatro mundos, de lo más sutil a lo más concreto. La Cábala los encuentra en un versículo de Isaías (43:7): «a todo el que es llamado por mi nombre, para mi gloria lo <em>creé</em>, lo <em>formé</em> y lo <em>hice</em>».',
+           'Hay dos maneras de situarlos en el árbol. La luriánica los une a las cuatro letras del Nombre divino (YHVH): la punta de la Yod y la Yod, Kéter y Jojmá; la primera He, Biná; la Vav, las seis sefirot del centro; la segunda He, Maljut. La hermética los reparte por tríadas, como muestran las bandas del dibujo. Y para muchos cabalistas cada mundo contiene un árbol completo, como una escalera de cuatro árboles.'],
+    lista:[['Atsilut','emanación · letra Yod · alma Jayá'],['Beriá','creación · primera He · alma Neshamá'],['Yetsirá','formación · Vav · alma Rúaj'],['Asiyá','acción · segunda He · alma Néfesh']],
+    hijosTitulo:'Cada mundo', hijos:['atsilut','beria','yetsira','asiya']},
+  atsilut:{titulo:'Atsilut', he:'אצילות', san:'Atsilut', sub:'El mundo de la emanación', color:'#f4f1e6', v:{tipo:'mundo', i:0}, zonas:['keter','jojma','bina','p11','p12','p14'],
+    texto:['El mundo más cercano al Infinito, donde la luz aún no se separa de su fuente: «emanación» viene de <em>etsel</em>, «junto a». Corresponde a la Yod del Nombre y al nivel del alma llamado <em>Jayá</em>, la vida.'],
+    cotidiano:'Como la inspiración pura antes de que exista siquiera la idea de una obra.'},
+  beria:{titulo:'Beriá', he:'בריאה', san:'Beriá', sub:'El mundo de la creación', color:'#3f73c9', v:{tipo:'mundo', i:1}, zonas:['jesed','guevura','tiferet','daat','p19','p20','p22'],
+    texto:['El mundo de la creación «de la nada»: aparece la primera distancia entre el Creador y lo creado. Es el mundo del trono divino y de los arcángeles. Corresponde a la primera He y al alma <em>Neshamá</em>, el aliento del entendimiento.'],
+    cotidiano:'El arquitecto que concibe el edificio entero, aunque todavía no haya planos.'},
+  yetsira:{titulo:'Yetsirá', he:'יצירה', san:'Yetsirá', sub:'El mundo de la formación', color:'#45a86a', v:{tipo:'mundo', i:2}, zonas:['netsaj','hod','yesod','p27','p28','p30'],
+    texto:['El mundo de la formación: las cosas reciben su forma y sus emociones. Es el mundo de los ángeles y de las imágenes. Corresponde a la Vav del Nombre y al alma <em>Rúaj</em>, el espíritu que siente.'],
+    cotidiano:'Los planos del edificio, con cada pieza dibujada.'},
+  asiya:{titulo:'Asiyá', he:'עשייה', san:'Asiyá', sub:'El mundo de la acción', color:'#a9973a', v:{tipo:'mundo', i:3}, zonas:['maljut','p29','p31','p32'],
+    texto:['El mundo de la acción: lo físico, lo concreto, donde vivimos. Corresponde a la segunda He del Nombre y al alma <em>Néfesh</em>, la vida que anima el cuerpo. Para la Cábala no es el peor de los mundos, sino el lugar donde se cumple el propósito: aquí se hace el trabajo.'],
+    cotidiano:'El edificio construido, ladrillo a ladrillo, en el que por fin se puede vivir.'},
+
+  'ein-sof':{titulo:'Ein Sof', he:'אין סוף', san:'Ein Sof', sub:'El Infinito, por encima del árbol', color:'#fff6dc', v:{tipo:'einsof'},
+    texto:['Por encima de Kéter está el Ein Sof, «sin fin»: Dios en sí mismo, sin atributos, del que nada puede decirse. Las sefirot son su manifestación; él permanece más allá de toda forma.',
+           'La Qabalah hermética describe tres «velos de la existencia negativa» antes de Kéter: <em>Ayin</em> (la nada), <em>Ein Sof</em> (el sin fin) y <em>Ein Sof Or</em> (la luz sin fin). La Cábala judía habla sobre todo del Ein Sof y de su luz (<em>Or Ein Sof</em>).'],
+    cita:'«Tú eres Uno, pero no en la cuenta. Tú eres el más alto de los altos, el oculto de todos los ocultos; ningún pensamiento puede asirte.» (Tikunéi Zóhar, «Pataj Eliyahu»)',
+    cotidiano:'Como el silencio antes de la música: no es una nota, pero sin él no habría ninguna.'},
+
+  luria:{titulo:'La creación según Luria', corto:'Luria', he:'האר"י', san:'el Arí', sub:'Contracción, rayo, ruptura y reparación', color:'#e48a3c', v:{tipo:'luria'},
+    texto:['Isaac Luria, el «León» (Arí), enseñó en Safed, en Galilea, hasta su muerte en 1572; su discípulo Jaim Vital recogió sus enseñanzas en el libro titulado, precisamente, <em>Ets Jaim</em>, «Árbol de la Vida».',
+           'Su relato de la creación es un drama en cuatro actos que da sentido a la vida humana: el mundo está roto, y cada acto bueno ayuda a repararlo. El botón «La creación según Luria» lo muestra en movimiento.'],
+    hijosTitulo:'Los cuatro actos', hijos:['tsimtsum','kav','shevira','tikun']},
+  tsimtsum:{titulo:'Tsimtsum', he:'צמצום', san:'tsimtsum', sub:'La contracción', color:'#fff6dc', v:{tipo:'luria', paso:0},
+    texto:['Antes de la creación, la luz infinita lo llenaba todo: no había lugar para nada más. El Ein Sof se contrae, se retira de sí mismo hacia sí mismo, y deja un espacio vacío (<em>jalal panui</em>) donde el mundo pueda existir.',
+           'Crear, en este relato, empieza por retirarse: hacer sitio al otro.'],
+    cotidiano:'Quien escucha de verdad se calla y hace espacio para que el otro pueda hablar.'},
+  kav:{titulo:'Kav', he:'קו', san:'kav', sub:'El rayo de luz', color:'#f3c86a', v:{tipo:'luria', paso:1},
+    texto:['En ese vacío entra un rayo fino de luz (<em>kav</em>) que desciende desde el Infinito. Con él se forman los recipientes (<em>kelim</em>) de las sefirot, que debían contener y transmitir la luz.'],
+    cotidiano:'Después de hacer espacio, das un poco: lo justo para que el otro pueda recibirlo.'},
+  shevira:{titulo:'Shevirat ha-kelim', he:'שבירת הכלים', san:'shevirat ha-kelim', sub:'La ruptura de los recipientes', color:'#c8463d', v:{tipo:'luria', paso:2},
+    texto:['Los tres recipientes superiores resistieron la luz; los siete inferiores, de Jésed a Maljut, no pudieron contenerla y se rompieron. Sus fragmentos cayeron, y con ellos chispas de luz (<em>nitsotsot</em>) que quedaron atrapadas en cáscaras (<em>kelipot</em>).',
+           'Así explica Luria que el mundo esté incompleto y mezclado: hay luz escondida en todas partes, incluso en lo más bajo.'],
+    cotidiano:'Una ilusión que se rompe deja pedazos, pero en cada pedazo queda algo de lo que se quería.'},
+  tikun:{titulo:'Tikún', he:'תיקון', san:'tikún', sub:'La reparación', color:'#45a86a', v:{tipo:'luria', paso:3},
+    texto:['La tarea humana es rescatar las chispas y devolverlas a su lugar: <em>tikún</em>, reparación. Cada acto de bondad, cada mandamiento cumplido con intención (<em>kavaná</em>), eleva una chispa.',
+           'De aquí viene la expresión <em>tikún olam</em>, «reparar el mundo», que hoy se usa también para hablar de la justicia social.'],
+    cotidiano:'Pedir perdón, devolver lo prestado, ayudar sin que nadie lo vea: pequeñas chispas que vuelven a su lugar.'},
+
+  omer:{titulo:'La cuenta del Ómer', corto:'Ómer', he:'ספירת העומר', san:'sefirat ha-ómer', sub:'49 días para recorrer el árbol', color:'#45a86a', v:{tipo:'omer'}, especial:'omer',
+    texto:['Entre la Pascua (Pésaj) y Shavuot, la fiesta de la entrega de la Torá, se cuentan 49 días. La Cábala los convierte en un camino de purificación: siete semanas, una por cada sefirá de Jésed a Maljut, y en cada semana siete días, uno por cada sefirá.',
+           'Así cada día combina dos cualidades: el primer día es «Jésed dentro de Jésed», el amor dentro del amor; el último, «Maljut dentro de Maljut». Toca un día para verlo.'],
+    zonas:['jesed','guevura','tiferet','netsaj','hod','yesod','maljut']},
+
+  lecturas:{titulo:'Tres maneras de leer el árbol', corto:'Lecturas', he:'קבלה', san:'kabbalah · cábala · qabalah', sub:'Judía, cristiana y hermética', color:'#c9c2e8', v:{tipo:'lecturas'},
+    texto:['El mismo diagrama ha sido leído por tradiciones muy distintas. Distinguirlas evita confusiones: la Cábala hermética de los ocultistas no es la Cábala judía, y los propios cabalistas judíos no la reconocen como suya.'],
+    hijosTitulo:'Cada lectura', hijos:['lec-judia','lec-cristiana','lec-hermetica']},
+  'lec-judia':{titulo:'La Cábala judía', corto:'Judía', he:'קבלה', san:'kabbalah', sub:'La tradición original', color:'#3fa9b5', v:{tipo:'lecturas'},
+    texto:['Nace en Provenza y en Castilla en los siglos XII y XIII, con raíces en la mística judía antigua, y florece en Safed en el siglo XVI con Cordovero y Luria. Es inseparable de la Torá, de la oración y de los mandamientos: el árbol sirve para orientar la intención (<em>kavaná</em>) de la vida religiosa.'],
+    cotidiano:'Un rezo dicho con la intención de unir Tiféret y Maljut, «el Santo, bendito sea, y su Shejiná».'},
+  'lec-cristiana':{titulo:'La Cábala cristiana', corto:'Cristiana', he:'קבלה', san:'cábala', sub:'Desde el Renacimiento', color:'#e8c04a', v:{tipo:'lecturas'},
+    texto:['Giovanni Pico della Mirandola la introduce en 1486 y Johannes Reuchlin la desarrolla en <em>De arte cabalistica</em> (1517): usan la Cábala para buscar verdades cristianas en la tradición hebrea. En 1516 se publica en Augsburgo una traducción latina de las <em>Puertas de la luz</em> de Gikatilla con un grabado de un hombre que sostiene el árbol de las sefirot.'],
+    cotidiano:'Un humanista del siglo XVI que lee la Trinidad en las tres sefirot supremas.'},
+  'lec-hermetica':{titulo:'La Qabalah hermética', corto:'Hermética', he:'קבלה', san:'qabalah', sub:'El ocultismo del siglo XIX', color:'#d39b2c', v:{tipo:'lecturas'},
+    texto:['Éliphas Lévi y, sobre todo, la Golden Dawn (1888) convierten el árbol en un sistema universal de correspondencias: planetas, colores, arcanos del tarot, dioses de otras culturas. Cada grado iniciático de la orden corresponde a una sefirá y los 22 arcanos mayores, a los 22 senderos.',
+           'En este mapa esas correspondencias aparecen siempre marcadas como «En la Qabalah hermética».'],
+    enlace:[['esoterismo.html#golden_dawn','La Golden Dawn en la red del esoterismo'],['esoterismo.html#cabala','La Cábala en la red del esoterismo']],
+    cotidiano:'Un tarotista que, al sacar La Estrella, la sitúa en el sendero de Tsadi, entre Nétsaj y Yesod.'},
+
+  fuentes:{titulo:'Las fuentes', corto:'Fuentes', he:'ספרים', san:'sefarim', sub:'Los libros que dibujaron el árbol', color:ORO, v:{tipo:'libro'},
+    texto:['El árbol no aparece de golpe: se construye durante siglos, de libro en libro.'],
+    lista:[['Séfer Yetsirá','«Libro de la formación», entre los siglos II y VI (datación discutida): diez sefirot y 22 letras'],['Bahir','«Libro de la claridad», Provenza, hacia 1180: primer texto propiamente cabalístico'],['Zóhar','«Libro del esplendor», Castilla, hacia 1280–1290, redactado por Moisés de León'],['Shaaré Orá','«Puertas de la luz», Yosef Gikatilla, hacia 1290: los nombres divinos de cada sefirá'],['Pardés Rimonim','«Huerto de granadas», Moisés Cordovero, Safed, 1548: la gran sistematización'],['Ets Jaim','«Árbol de la Vida», Jaim Vital, enseñanzas de Isaac Luria, siglo XVI'],['Oedipus Aegyptiacus','Athanasius Kircher, 1652: fija el trazado de los senderos que usa este mapa'],['Kabbala Denudata','Christian Knorr von Rosenroth, 1677–1684: lleva el Zóhar al latín'],['Las grandes tendencias de la mística judía','Gershom Scholem, 1941: funda el estudio académico de la Cábala']]}
+};
+
+/* Nodos de cada sefirá */
+SEF.forEach(s => {
+  const vecinos = SEND.filter(p => p[5]===s.id || p[6]===s.id).map(p => 'p'+p[0]);
+  N[s.id] = {titulo:s.nombre, he:s.he, san:s.n+'.ª sefirá', sub:s.sig, color:s.color, v:{tipo:'sefira', id:s.id}, texto:s.texto,
+    lista:[['Nombre divino', s.nombreDivino], ['En el cuerpo', s.cuerpo], ['Figura', s.figura], ['En el alma', s.alma], ['Columna', {derecha:'derecha, la de la misericordia', izquierda:'izquierda, la del rigor', central:'central, la del equilibrio'}[s.col]]],
+    hermetica:s.hermetica, cotidiano:s.cotidiano, ver:vecinos, verTitulo:'Sus senderos'};
+});
+N.daat.ver = [];
+/* Nodos de cada sendero */
+SEND.forEach(p => {
+  const [num, letra, nombre, valor, sig, a, b, tipo, atr, arcano, lectura] = p, t = TIPO_L[tipo];
+  N['p'+num] = {titulo:'Sendero '+num+' · '+nombre, corto:nombre, he:letra, san:nombre+' · valor '+valor, sub:'Une '+POR[a].nombre+' ('+POR[a].sig.toLowerCase()+') con '+POR[b].nombre+' ('+POR[b].sig.toLowerCase()+')',
+    color:t.color, v:{tipo:'letra', letra, g:tipo}, letra,
+    texto:[lectura],
+    lista:[['Letra', nombre+' ('+letra+'), «'+sig+'»'], ['Valor numérico', String(valor)], ['Grupo', t.nombre+' del Séfer Yetsirá'], [tipo==='madre' ? 'Elemento' : 'Atribución', tipo==='madre' ? atr : atr+' (versión hermética)']],
+    hermetica:'Arcano mayor: '+arcano, ver:[a, b], verTitulo:'Las sefirot que une'};
+});
+const PADRE = {};
+Object.keys(N).forEach(k => (N[k].hijos||[]).forEach(h => PADRE[h] = k));
+
+/* ================= Geometría ================= */
+const R = 38;
+const pts = p => [POR[p[5]], POR[p[6]]];
+function posLetra(p){
+  const [A,B] = pts(p), t = p[11]===undefined ? .5 : p[11];
+  return [A.x + (B.x-A.x)*t, A.y + (B.y-A.y)*t];
+}
+function sector(cx,cy,r,a0,a1){
+  const P = a => (cx+r*Math.cos(a*Math.PI/180)).toFixed(1)+','+(cy+r*Math.sin(a*Math.PI/180)).toFixed(1);
+  return 'M'+cx+','+cy+' L'+P(a0)+' A'+r+','+r+' 0 0 1 '+P(a1)+' Z';
+}
+const zona = (id, inner, extra) => '<g class="zona" data-n="'+id+'" tabindex="0" role="button" aria-label="'+N[id].titulo+'"'+(extra||'')+'>'+inner+'</g>';
+
+/* ================= Dibujo ================= */
+const BANDAS = [[50,282,'Atsilut'],[282,522,'Beriá'],[522,708,'Yetsirá'],[708,830,'Asiyá']];
+function dibujar(){
+  let s = '<defs><radialGradient id="cieloA" cx="50%" cy="30%"><stop offset="0" stop-color="#13285a"/><stop offset="1" stop-color="'+CIELO+'"/></radialGradient>'+
+    '<radialGradient id="luzInf" cx="50%" cy="50%"><stop offset="0" stop-color="#fff6dc" stop-opacity=".95"/><stop offset=".35" stop-color="#f3d27c" stop-opacity=".45"/><stop offset="1" stop-color="#f3d27c" stop-opacity="0"/></radialGradient>'+
+    '<radialGradient id="brillo"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'+
+    '<filter id="difuso" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter></defs>';
+  s += '<rect width="800" height="860" fill="url(#cieloA)"/>';
+  let seed = 9; const rnd = () => (seed = (seed*16807)%2147483647)/2147483647;
+  for(let i=0;i<90;i++){ const x = rnd()*800, y = rnd()*860; if(Math.abs(x-400) < 230 && y > 60){ rnd(); continue; }
+    s += '<circle class="estrella" cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(rnd()*1.3+.4).toFixed(2)+'" fill="#fff" style="animation-delay:'+(rnd()*4).toFixed(2)+'s"/>'; }
+  // Bandas de los cuatro mundos (se muestran al elegir los mundos)
+  s += '<g class="bandas">'+BANDAS.map(([y0,y1,n],i) => '<g class="banda" data-i="'+i+'"><rect x="30" y="'+y0+'" width="740" height="'+(y1-y0)+'" rx="14" fill="'+['#f4f1e6','#3f73c9','#45a86a','#a9973a'][i]+'" opacity=".09"/>'+
+    '<text class="banda-t" x="44" y="'+(y0+24)+'">'+n+'</text></g>').join('')+'</g>';
+  // Ein Sof: velos de luz por encima de Kéter
+  s += zona('ein-sof', '<rect x="290" y="0" width="220" height="78" fill="transparent"/><circle class="velo" cx="400" cy="120" r="118" fill="url(#luzInf)" opacity=".35"/>'+
+    [104,88,72].map((r,i) => '<path d="M'+(400-r)+',120 A'+r+','+r+' 0 0 1 '+(400+r)+',120" fill="none" stroke="#f3d27c" stroke-width="1" stroke-dasharray="'+(i===0?'2 6':i===1?'5 5':'')+'" opacity="'+(.35+i*.15)+'"/>').join('')+
+    '<text class="heb ein-t" x="400" y="20" text-anchor="middle">אין סוף</text>');
+  // Senderos
+  let sendas = '', letras = '';
+  SEND.forEach(p => {
+    const [A,B] = pts(p), id = 'p'+p[0], [lx,ly] = posLetra(p), col = TIPO_L[p[7]].color;
+    sendas += '<g class="zona" data-n="'+id+'" tabindex="-1" aria-hidden="true"><path class="canal" d="M'+A.x+','+A.y+' L'+B.x+','+B.y+'"/><path class="hilo" d="M'+A.x+','+A.y+' L'+B.x+','+B.y+'" stroke="'+col+'"/></g>';
+    letras += zona(id, '<circle class="letra-c" cx="'+lx.toFixed(1)+'" cy="'+ly.toFixed(1)+'" r="13" stroke="'+col+'"/><text class="heb letra-t" x="'+lx.toFixed(1)+'" y="'+(ly+5.5).toFixed(1)+'" text-anchor="middle">'+p[1]+'</text>', ' data-tipo="'+p[7]+'"');
+  });
+  s += '<g class="sendas">'+sendas+'</g><g class="letras">'+letras+'</g>';
+  // La luz que baja por los senderos
+  if(!reduce){
+    let flujo = '';
+    SEND.forEach((p,i) => { const [A,B] = pts(p), dur = (5 + (i%5)).toFixed(1);
+      flujo += '<circle r="2" fill="#fff6dc" opacity="0"><animateMotion dur="'+dur+'s" begin="'+(i*.7).toFixed(1)+'s" repeatCount="indefinite" path="M'+A.x+','+A.y+' L'+B.x+','+B.y+'"/>'+
+        '<animate attributeName="opacity" dur="'+dur+'s" begin="'+(i*.7).toFixed(1)+'s" values="0;.9;.9;0" keyTimes="0;.15;.85;1" repeatCount="indefinite"/></circle>'; });
+    s += '<g class="flujo">'+flujo+'</g>';
+  }
+  // El relámpago del descenso (por debajo de las esferas)
+  s += '<path id="rayo" d="M'+['keter','jojma','bina','jesed','guevura','tiferet','netsaj','hod','yesod','maljut'].map(k => POR[k].x+','+POR[k].y).join(' L')+'" fill="none" stroke="#fff6dc" stroke-width="4" stroke-linejoin="round" opacity="0"/>';
+  // Dáat
+  s += zona('daat', '<circle class="esfera daat-c" cx="400" cy="300" r="'+(R-6)+'"/><text class="heb sef-he" x="400" y="298" text-anchor="middle" fill="#c9c2e8">דעת</text><text class="sef-es" x="400" y="316" text-anchor="middle" fill="#c9c2e8">Dáat</text>');
+  // Sefirot
+  SEF.forEach((x,i) => {
+    let fondo = '<circle class="esfera" cx="'+x.x+'" cy="'+x.y+'" r="'+R+'" fill="'+x.color+'"/>';
+    if(x.id==='maljut') fondo = [['#c9b53c',-90],['#7b8a3a',0],['#1c1a1a',90],['#8a4a2a',180]].map(([c,a]) => '<path class="esfera" d="'+sector(x.x,x.y,R,a-45,a+45)+'" fill="'+c+'"/>').join('')+'<circle cx="'+x.x+'" cy="'+x.y+'" r="'+R+'" fill="none" class="esfera-borde"/>';
+    s += zona(x.id, '<circle class="aura" cx="'+x.x+'" cy="'+x.y+'" r="'+(R+16)+'" fill="'+x.color+'" filter="url(#difuso)" style="animation-delay:'+(i*.4)+'s"/>'+fondo+
+      '<circle cx="'+x.x+'" cy="'+x.y+'" r="'+R+'" fill="none" stroke="'+ORO+'" stroke-width="1.6"/>'+
+      '<text class="heb sef-he" x="'+x.x+'" y="'+(x.y+2)+'" text-anchor="middle" fill="'+(x.id==='maljut'?'#fff6dc':x.tinta)+'">'+x.he+'</text>'+
+      '<text class="sef-es" x="'+x.x+'" y="'+(x.y+20)+'" text-anchor="middle" fill="'+(x.id==='maljut'?'#fff6dc':x.tinta)+'">'+x.nombre+'</text>'+
+      '<text class="sef-n" x="'+(x.x+(x.col==='izquierda'?-R-10:R+10))+'" y="'+(x.y+4)+'" text-anchor="'+(x.col==='izquierda'?'end':'start')+'">'+x.n+'</text>', x.n>3 ? ' data-inferior="1"' : '');
+  });
+  // Capas de animación: relámpago, luz infinita, fragmentos y chispas
+  s += '<g id="luria" class="luria"><circle id="lzLuz" cx="400" cy="430" r="560" fill="url(#luzInf)" opacity="0"/>'+
+       '<circle id="lzVacio" cx="400" cy="440" r="340" fill="'+CIELO+'"/>'+
+       '<path id="lzKav" d="M400,0 L400,770" stroke="#fff6dc" stroke-width="3" fill="none"/><g id="lzFragmentos"></g><g id="lzChispas"></g></g>';
+  return s;
+}
+const svg = document.getElementById('arbol');
+svg.innerHTML = dibujar();
+
+/* Fragmentos de los siete recipientes inferiores y sus chispas (para Luria) */
+const INFERIORES = ['jesed','guevura','tiferet','netsaj','hod','yesod','maljut'];
+{
+  let frag = '', chis = '';
+  let seed = 21; const rnd = () => (seed = (seed*16807)%2147483647)/2147483647;
+  INFERIORES.forEach(id => {
+    const x = POR[id];
+    for(let k=0;k<6;k++){ const a0 = k*60 + rnd()*10, a1 = a0 + 60, med = (a0+a1)/2*Math.PI/180, d = 50 + rnd()*70;
+      frag += '<path class="frag" d="'+sector(x.x,x.y,R,a0,a1)+'" fill="'+x.color+'" stroke="'+ORO+'" stroke-width=".8" style="--dx:'+(Math.cos(med)*d).toFixed(1)+'px;--dy:'+(Math.sin(med)*d+40).toFixed(1)+'px;--rot:'+((rnd()-.5)*160).toFixed(0)+'deg"/>'; }
+    for(let k=0;k<6;k++) chis += '<circle class="chispa" cx="'+x.x+'" cy="'+x.y+'" r="'+(1.5+rnd()*1.5).toFixed(1)+'" fill="#ffe3a0" style="--dx:'+((rnd()-.5)*160).toFixed(1)+'px;--dy:'+(80+rnd()*160).toFixed(1)+'px"/>';
+  });
+  document.getElementById('lzFragmentos').innerHTML = frag;
+  document.getElementById('lzChispas').innerHTML = chis;
+}
+
+/* ================= Visor del panel ================= */
+function miniArbol(resaltar, sc){
+  sc = sc || .1;
+  const t = (x,y) => [((x-400)*sc).toFixed(1), ((y-445)*sc).toFixed(1)];
+  let d = SEND.map(p => { const [A,B] = pts(p), a = t(A.x,A.y), b = t(B.x,B.y);
+    return '<path d="M'+a+' L'+b+'" stroke="'+(resaltar && resaltar.includes('p'+p[0]) ? '#17122b' : ORO)+'" stroke-width="'+(resaltar && resaltar.includes('p'+p[0]) ? 2 : .8)+'" opacity="'+(resaltar && !resaltar.includes('p'+p[0]) ? .35 : .8)+'"/>'; }).join('');
+  d += SEF.map(x => { const [a,b] = t(x.x,x.y), on = !resaltar || resaltar.includes(x.id);
+    return '<circle cx="'+a+'" cy="'+b+'" r="'+(R*sc*1.05).toFixed(1)+'" fill="'+x.color+'" stroke="'+ORO+'" stroke-width=".6" opacity="'+(on?1:.3)+'"/>'; }).join('');
+  return d;
+}
+function visor(n){
+  const c = n.color || ORO, v = n.v || {};
+  const disco = '<circle r="56" fill="'+c+'" opacity=".16"/><circle r="56" fill="none" stroke="'+c+'" stroke-width="1.2" opacity=".6"/>';
+  let d;
+  if(v.tipo==='sefira'){
+    const x = POR[v.id], col = v.id==='daat' ? 'none' : x.color, tinta = v.id==='daat' ? '#c9c2e8' : (v.id==='maljut' ? '#fff6dc' : x.tinta);
+    d = '<circle class="late" r="44" fill="'+c+'" opacity=".25" filter="url(#vDif)"/>';
+    d += v.id==='maljut' ? [['#c9b53c',-90],['#7b8a3a',0],['#1c1a1a',90],['#8a4a2a',180]].map(([cc,a]) => '<path d="'+sector(0,0,36,a-45,a+45)+'" fill="'+cc+'"/>').join('') : '<circle r="36" fill="'+col+'"'+(v.id==='daat'?' stroke="#c9c2e8" stroke-dasharray="4 4" stroke-width="2"':'')+'/>';
+    d += '<circle r="36" fill="none" stroke="'+ORO+'" stroke-width="1.6"/><text class="visor-he" y="9" text-anchor="middle" fill="'+tinta+'">'+x.he+'</text>';
+  }
+  else if(v.tipo==='letra') d = '<circle r="38" fill="#0f1d3f" stroke="'+c+'" stroke-width="2"/><text class="visor-letra" y="17" text-anchor="middle" fill="'+c+'">'+v.letra+'</text>';
+  else if(v.tipo==='einsof') d = '<circle class="late" r="40" fill="#fff6dc" opacity=".35"/>'+[34,26,18].map((r,i) => '<circle r="'+r+'" fill="none" stroke="'+ORO+'" stroke-width="1.2" opacity="'+(.4+i*.2)+'"/>').join('')+'<circle r="8" fill="#fff6dc"/>';
+  else if(v.tipo==='luria'){
+    const p = v.paso===undefined ? -1 : v.paso;
+    if(p===0) d = '<circle r="40" fill="#fff6dc" opacity=".55"/><circle class="late" r="22" fill="#0f1d3f"/>';
+    else if(p===1) d = '<circle r="40" fill="#fff6dc" opacity=".45"/><circle r="26" fill="#0f1d3f"/><path d="M0,-40 L0,18" stroke="#fff6dc" stroke-width="3"/>';
+    else if(p===2) d = [0,72,144,216,288].map(a => '<path class="late" d="'+sector(0,0,24,a+6,a+60)+'" fill="#c8463d" transform="rotate('+(a/6)+') translate('+(Math.cos(a*Math.PI/180)*10).toFixed(1)+' '+(Math.sin(a*Math.PI/180)*10).toFixed(1)+')"/>').join('')+'<circle cy="30" r="2.4" fill="#ffe3a0"/><circle cx="-14" cy="36" r="2" fill="#ffe3a0"/><circle cx="12" cy="40" r="2" fill="#ffe3a0"/>';
+    else if(p===3) d = '<circle r="26" fill="#45a86a"/><circle r="26" fill="none" stroke="'+ORO+'" stroke-width="1.6"/>'+[[-12,30],[10,24],[0,38]].map(([x,y],i) => '<circle class="sube" style="animation-delay:'+(i*.6)+'s" cx="'+x+'" cy="'+y+'" r="2.2" fill="#ffe3a0"/>').join('');
+    else d = '<g transform="scale(1.1)">'+miniArbol(null, .1)+'</g>';
+  }
+  else if(v.tipo==='omer'){ d = ''; for(let i=0;i<7;i++) for(let j=0;j<7;j++) d += '<rect x="'+(-35+j*10)+'" y="'+(-35+i*10)+'" width="8" height="8" rx="1.5" fill="'+POR[INFERIORES[i]].color+'" opacity="'+(i===j?1:.55)+'"/>'; }
+  else if(v.tipo==='mundo'){ d = [0,1,2,3].map(i => '<rect x="-34" y="'+(-34+i*17.5)+'" width="68" height="15" rx="4" fill="'+['#f4f1e6','#3f73c9','#45a86a','#a9973a'][i]+'" opacity="'+(i===v.i?1:.25)+'"/>').join('')+'<text class="visor-he" y="'+(-22+v.i*17.5)+'" text-anchor="middle" font-size="11" fill="'+(v.i===0?'#17122b':'#fff6dc')+'">'+'יההו'[v.i]+'</text>'; }
+  else if(v.tipo==='mundos') d = [0,1,2,3].map(i => '<rect x="-34" y="'+(-34+i*17.5)+'" width="68" height="15" rx="4" fill="'+['#f4f1e6','#3f73c9','#45a86a','#a9973a'][i]+'"/>').join('');
+  else if(v.tipo==='col'){ const ids = SEF.filter(x => x.col===v.col).map(x => x.id); d = '<g transform="scale(1.1)">'+miniArbol(ids, .1)+'</g>'; }
+  else if(v.tipo==='tri') d = '<g transform="scale(1.1)">'+miniArbol(v.ids, .1)+'</g>';
+  else if(v.tipo==='grupo'){ const ps = SEND.filter(p => p[7]===v.g); d = ps.map((p,i) => { const a = (i*360/ps.length - 90)*Math.PI/180, r = ps.length>3 ? 34 : 24;
+      return '<text class="visor-he" x="'+(Math.cos(a)*r).toFixed(1)+'" y="'+(Math.sin(a)*r+5).toFixed(1)+'" text-anchor="middle" font-size="'+(ps.length>7?13:18)+'" fill="'+c+'">'+p[1]+'</text>'; }).join(''); }
+  else if(v.tipo==='letras') d = '<g class="gira-lento">'+SEND.map((p,i) => { const a = (i*360/22 - 90)*Math.PI/180; return '<text class="visor-he" x="'+(Math.cos(a)*40).toFixed(1)+'" y="'+(Math.sin(a)*40+4).toFixed(1)+'" text-anchor="middle" font-size="11" fill="'+TIPO_L[p[7]].color+'">'+p[1]+'</text>'; }).join('')+'</g><text class="visor-he" y="9" text-anchor="middle" font-size="24" fill="'+ORO+'">32</text>';
+  else if(v.tipo==='columnas') d = [['#c8463d',-26],['#e8c04a',0],['#3f73c9',26]].map(([cc,x]) => '<rect x="'+(x-7)+'" y="-38" width="14" height="76" rx="7" fill="'+cc+'"/>').join('');
+  else if(v.tipo==='triadas') d = [['#f4f1e6',-26],['#e8c04a',2],['#8a5fc4',30]].map(([cc,y]) => '<path d="M0,'+(y-12)+' L14,'+(y+8)+' L-14,'+(y+8)+' Z" fill="none" stroke="'+cc+'" stroke-width="2.4"/>').join('');
+  else if(v.tipo==='lecturas') d = [['#3fa9b5',-20],['#e8c04a',0],['#d39b2c',20]].map(([cc,x],i) => '<circle cx="'+x+'" cy="'+(i===1?-10:8)+'" r="20" fill="'+cc+'" opacity=".55"/>').join('');
+  else if(v.tipo==='libro') d = '<path d="M-34,-24 Q-17,-32 0,-22 Q17,-32 34,-24 L34,26 Q17,18 0,28 Q-17,18 -34,26 Z" fill="#f4f1e6" stroke="'+ORO+'" stroke-width="1.6"/><path d="M0,-22 L0,28" stroke="'+ORO+'"/><text class="visor-he" x="-16" y="6" text-anchor="middle" font-size="13" fill="#17122b">ספר</text>';
+  else if(v.tipo==='diez') d = '<g transform="scale(1.1)">'+miniArbol(SEF.map(x => x.id), .1)+'</g>';
+  else d = '<g transform="scale(1.15)">'+miniArbol(null, .1)+'</g>';
+  return '<svg class="visor" viewBox="-60 -60 120 120" aria-hidden="true"><defs><filter id="vDif" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5"/></filter></defs>'+disco+'<g class="flota">'+d+'</g></svg>';
+}
+
+/* ================= Resaltado ================= */
+function descendientes(id){ return (N[id].hijos||[]).flatMap(h => [h].concat(descendientes(h))); }
+function zonasDe(id){
+  const n = N[id];
+  if(n.zonas) return n.zonas;
+  if(svg.querySelector('.zona[data-n="'+id+'"]')){
+    if(id.startsWith('p')){ const p = SEND.find(x => 'p'+x[0]===id); return [id, p[5], p[6]]; }
+    return [id].concat(SEND.filter(p => p[5]===id || p[6]===id).map(p => 'p'+p[0]));
+  }
+  const des = descendientes(id).filter(k => svg.querySelector('.zona[data-n="'+k+'"]'));
+  return des;
+}
+function resaltar(ids){
+  const set = new Set(ids);
+  svg.classList.toggle('has-sel', ids.length>0);
+  svg.querySelectorAll('.zona').forEach(z => z.classList.toggle('sel', set.has(z.dataset.n)));
+}
+function bandas(i){ svg.querySelectorAll('.banda').forEach(b => b.classList.toggle('on', i==='todas' || +b.dataset.i===i)); }
+
+/* ================= Panel ================= */
+const panel = document.getElementById('panel');
+const corto = k => N[k].corto || N[k].titulo;
+function ruta(id){ const r = [id]; while(PADRE[r[0]]) r.unshift(PADRE[r[0]]); return r; }
+const chip = k => '<button type="button" class="chip" data-ir="'+k+'" style="--ac:'+(N[k].color||ORO)+'"><span class="d"></span>'+(N[k].letra ? '<span class="heb-chip">'+N[k].letra+'</span> ' : '')+N[k].titulo+'</button>';
+function abrir(id, desdeArbol){
+  detener();
+  const n = N[id], r = ruta(id);
+  let h = '<nav class="migas" aria-label="Ubicación">'+r.map((k,i) => i<r.length-1
+      ? '<button type="button" data-ir="'+k+'">'+corto(k)+'</button><span aria-hidden="true">›</span>'
+      : '<span aria-current="page">'+corto(k)+'</span>').join('')+'</nav>';
+  h += '<div class="cab">'+visor(n)+'<div><h2>'+n.titulo+'</h2>'+(n.he?'<p class="he" lang="he" dir="rtl">'+n.he+'</p>':'')+
+       (n.san?'<p class="san">'+n.san+'</p>':'')+(n.sub?'<p class="gloss">'+n.sub+'</p>':'')+'</div></div>';
+  h += (n.texto||[]).map(t => '<p>'+t+'</p>').join('');
+  if(n.lista) h += '<dl class="lista">'+n.lista.map(([k,v]) => '<div><dt>'+k+'</dt><dd>'+v+'</dd></div>').join('')+'</dl>';
+  if(n.hermetica) h += '<div class="fila"><span class="k">En la Qabalah hermética</span><p>'+n.hermetica+'</p></div>';
+  if(n.especial==='omer') h += omer();
+  if(n.cita) h += '<div class="ejemplo"><span class="k">De las fuentes</span><p>'+n.cita+'</p></div>';
+  if(n.cotidiano) h += '<div class="ejemplo cotidiano"><span class="k">Ejemplo cotidiano</span><p>'+n.cotidiano+'</p></div>';
+  if(n.hijos) h += '<h3>'+(n.hijosTitulo||'Profundiza')+'</h3><div class="chips">'+n.hijos.map(chip).join('')+'</div>';
+  if(n.ver && n.ver.length) h += '<h3>'+(n.verTitulo||'Véase también')+'</h3><div class="chips">'+n.ver.map(chip).join('')+'</div>';
+  if(n.enlace) h += '<h3>En este portal</h3><div class="chips">'+n.enlace.map(([href,t]) => '<a class="chip" href="'+href+'" style="--ac:#d39b2c"><span class="d"></span>'+t+' →</a>').join('')+'</div>';
+  if(PADRE[id]){
+    const hermanos = N[PADRE[id]].hijos, i = hermanos.indexOf(id), prev = hermanos[i-1], next = hermanos[i+1];
+    if(prev || next) h += '<div class="pasar">'+(prev?'<button type="button" class="sbtn-c" data-ir="'+prev+'">← '+corto(prev)+'</button>':'<span></span>')+
+         (next?'<button type="button" class="sbtn-c" data-ir="'+next+'">'+corto(next)+' →</button>':'')+'</div>';
+  }
+  panel.innerHTML = '<div class="fadein" style="--ac:'+(n.color||ORO)+'">'+h+'</div>';
+  resaltar(id==='arbol' ? [] : zonasDe(id));
+  bandas(id==='mundos' ? 'todas' : (n.v && n.v.tipo==='mundo') ? n.v.i : -1);
+  lecturaDe(id);
+  if(desdeArbol && window.innerWidth < 1000) panel.scrollIntoView({block:'start', behavior: reduce?'auto':'smooth'});
+}
+panel.addEventListener('click', e => {
+  const b = e.target.closest('button[data-ir]'); if(b){ abrir(b.dataset.ir); return; }
+  const d = e.target.closest('[data-dia]'); if(d) diaOmer(+d.dataset.dia);
+});
+
+/* ---- La cuenta del Ómer: 7 × 7 ---- */
+const CUALIDAD = {jesed:'el amor', guevura:'el límite', tiferet:'la armonía', netsaj:'la perseverancia', hod:'la humildad', yesod:'el vínculo', maljut:'la presencia'};
+const PREGUNTA = {jesed:'¿doy sin esperar nada a cambio?', guevura:'¿sé poner límites sin dureza?', tiferet:'¿encuentro el equilibrio entre dar y contener?', netsaj:'¿sigo adelante cuando cuesta?', hod:'¿reconozco y agradezco lo que no es mío?', yesod:'¿estoy de verdad presente en mis vínculos?', maljut:'¿se vuelve acto lo que siento y pienso?'};
+function omer(){
+  let h = '<div class="omer" role="group" aria-label="Los 49 días del Ómer"><div class="omer-cab"><span></span>'+INFERIORES.map(k => '<span>'+POR[k].nombre.slice(0,3)+'</span>').join('')+'</div>';
+  INFERIORES.forEach((sem,i) => {
+    h += '<div class="omer-fila"><span class="omer-sem">'+POR[sem].nombre+'</span>';
+    INFERIORES.forEach((dia,j) => { const n = i*7+j+1;
+      h += '<button type="button" class="omer-dia" data-dia="'+n+'" style="--c:'+POR[dia].color+'" aria-label="Día '+n+': '+POR[dia].nombre+' dentro de '+POR[sem].nombre+'">'+n+'</button>'; });
+    h += '</div>';
+  });
+  return h+'</div><p class="omer-t" id="omerT">Toca un día.</p>';
+}
+function diaOmer(n){
+  const sem = INFERIORES[Math.floor((n-1)/7)], dia = INFERIORES[(n-1)%7];
+  panel.querySelectorAll('.omer-dia').forEach(b => b.classList.toggle('on', +b.dataset.dia===n));
+  document.getElementById('omerT').innerHTML = '<strong>Día '+n+' · '+POR[dia].nombre+' dentro de '+POR[sem].nombre+'.</strong> '+
+    CUALIDAD[dia].charAt(0).toUpperCase()+CUALIDAD[dia].slice(1)+' dentro de '+CUALIDAD[sem]+'. Pregunta para el día: '+PREGUNTA[dia].replace('¿','¿en '+CUALIDAD[sem]+', ');
+  resaltar([sem, dia].concat(SEND.filter(p => (p[5]===sem && p[6]===dia) || (p[5]===dia && p[6]===sem)).map(p => 'p'+p[0])));
+}
+
+/* ================= Lectura ================= */
+const pasoN = document.getElementById('pasoN'), pasoT = document.getElementById('pasoT');
+function lectura(num, html){ pasoN.textContent = num; pasoT.innerHTML = html; }
+function lecturaDe(id){
+  const n = N[id], s = POR[id];
+  if(s && id!=='daat') lectura(s.n, '<strong>'+s.nombre+'</strong> · '+s.sig+' · <span class="heb-in">'+s.he+'</span>');
+  else if(id.startsWith('p') && n.letra) lectura(id.slice(1), '<strong>'+n.corto+'</strong> <span class="heb-in">'+n.letra+'</span> · '+n.sub.toLowerCase()+'.');
+  else if(id==='arbol') lectura('·', 'Toca una sefirá o un sendero, o recorre el <strong>descenso de la luz</strong>, el <strong>ascenso</strong> o <strong>la creación según Luria</strong>.');
+  else lectura('·', '<strong>'+n.titulo+'</strong>'+(n.sub?' · '+n.sub:''));
+}
+
+/* ================= Animaciones ================= */
+let tAnim = [], rafA = null;
+const btnDescenso = document.getElementById('btnDescenso'), btnAscenso = document.getElementById('btnAscenso'), btnLuria = document.getElementById('btnLuria');
+const rayo = document.getElementById('rayo');
+function detener(){
+  tAnim.forEach(clearTimeout); tAnim = [];
+  if(rafA){ cancelAnimationFrame(rafA); rafA = null; }
+  rayo.setAttribute('opacity', 0);
+  svg.classList.remove('l-luz','l-vacio','l-kav','l-rota','l-tikun','animando');
+  svg.querySelectorAll('.zona.encendida').forEach(z => z.classList.remove('encendida'));
+  btnDescenso.textContent = 'El descenso de la luz'; btnAscenso.textContent = 'El ascenso por los senderos'; btnLuria.textContent = 'La creación según Luria';
+}
+const enAnim = () => tAnim.length || rafA;
+function en(ms, f){ tAnim.push(setTimeout(f, reduce ? 0 : ms)); }
+
+/* 1. El descenso de la luz: el relámpago de Kéter a Maljut */
+const ORDEN = ['keter','jojma','bina','jesed','guevura','tiferet','netsaj','hod','yesod','maljut'];
+const DESC = ['la voluntad primordial, sin forma','el destello de la intuición','la comprensión que despliega','el amor que se derrama','el límite que contiene','la armonía del corazón','la constancia que avanza','la forma que reconoce','el vínculo que transmite','el mundo donde todo se cumple'];
+function descenso(){
+  abrir('arbol'); detener(); svg.classList.add('animando'); resaltar(ORDEN);
+  btnDescenso.textContent = 'Detener';
+  const largo = rayo.getTotalLength();
+  rayo.setAttribute('stroke-dasharray', largo); rayo.setAttribute('stroke-dashoffset', largo); rayo.setAttribute('opacity', reduce ? .8 : .9);
+  const paso = 1100, total = paso*(ORDEN.length-1), t0 = performance.now();
+  // longitudes acumuladas hasta cada sefirá
+  const acum = [0]; for(let i=1;i<ORDEN.length;i++){ const a = POR[ORDEN[i-1]], b = POR[ORDEN[i]]; acum.push(acum[i-1] + Math.hypot(b.x-a.x, b.y-a.y)); }
+  let ultimo = -1;
+  function f(t){
+    const k = reduce ? 1 : Math.min(1, (t-t0)/total), L = k*largo;
+    rayo.setAttribute('stroke-dashoffset', (largo - L).toFixed(1));
+    let i = 0; while(i+1 < acum.length && acum[i+1] <= L+.5) i++;
+    if(i!==ultimo){ for(let j=ultimo+1;j<=i;j++){ svg.querySelector('.zona[data-n="'+ORDEN[j]+'"]').classList.add('encendida'); } ultimo = i;
+      const s = POR[ORDEN[i]]; lectura(s.n, '<strong>'+s.nombre+'</strong> · '+DESC[i]+'.'); }
+    if(k<1) rafA = requestAnimationFrame(f);
+    else { rafA = null; en(1400, () => { lectura('10', '<strong>De la Corona al Reino.</strong> La luz desciende en zigzag, como un relámpago, y llega al mundo; quien practica recorre el mismo camino de regreso.'); btnDescenso.textContent = 'El descenso de la luz'; tAnim = []; }); }
+  }
+  rafA = requestAnimationFrame(f);
+}
+/* 2. El ascenso por los senderos: de Tav (32) a Álef (11) */
+function ascenso(){
+  abrir('senderos'); detener(); svg.classList.add('animando'); resaltar([]);
+  btnAscenso.textContent = 'Detener';
+  const lista = SEND.slice().reverse();
+  lista.forEach((p,i) => en(i*900, () => {
+    const id = 'p'+p[0]; svg.querySelectorAll('.zona[data-n="'+id+'"]').forEach(z => z.classList.add('encendida'));
+    [p[5],p[6]].forEach(k => svg.querySelector('.zona[data-n="'+k+'"]').classList.add('encendida'));
+    lectura(p[0], '<strong>'+p[2]+'</strong> <span class="heb-in">'+p[1]+'</span> · de '+POR[p[6]].nombre+' a '+POR[p[5]].nombre+'.');
+  }));
+  en(lista.length*900 + 600, () => { lectura('32', '<strong>Los 32 senderos de sabiduría:</strong> diez sefirot y veintidós letras. La tradición hermética los recorre de abajo arriba, de la Tav a la Álef.'); btnAscenso.textContent = 'El ascenso por los senderos'; tAnim = []; });
+}
+/* 3. La creación según Luria */
+function luria(){
+  abrir('luria'); detener(); svg.classList.add('animando'); resaltar([]);
+  btnLuria.textContent = 'Detener';
+  svg.classList.add('l-luz');
+  lectura('1', '<strong>Al principio, la luz infinita lo llenaba todo.</strong> No había lugar para nada más.');
+  en(2600, () => { svg.classList.add('l-vacio'); lectura('1', '<strong>Tsimtsum.</strong> El Infinito se contrae y deja un espacio vacío donde el mundo pueda existir.'); });
+  en(5600, () => { svg.classList.add('l-kav'); lectura('2', '<strong>Kav.</strong> Un rayo fino de luz entra en el vacío y forma los recipientes de las sefirot.'); });
+  en(8600, () => { svg.classList.remove('l-luz','l-vacio'); svg.classList.add('l-rota'); lectura('3', '<strong>Shevirat ha-kelim.</strong> Los siete recipientes inferiores no soportan la luz y se rompen; las chispas caen.'); });
+  en(12600, () => { svg.classList.remove('l-rota'); svg.classList.add('l-tikun'); lectura('4', '<strong>Tikún.</strong> Cada acto bueno eleva una chispa; los recipientes se reparan y el mundo vuelve a su lugar.'); });
+  en(16600, () => { svg.classList.remove('l-kav','l-tikun','animando'); INFERIORES.forEach(k => svg.querySelector('.zona[data-n="'+k+'"]').classList.add('encendida'));
+    lectura('4', '<strong>El mundo reparado.</strong> Para Luria, esa reparación todavía está en curso, y es tarea de cada persona.'); btnLuria.textContent = 'La creación según Luria'; tAnim = []; });
+}
+btnDescenso.addEventListener('click', () => { if(enAnim() && btnDescenso.textContent==='Detener'){ detener(); abrir('arbol'); return; } descenso(); });
+btnAscenso.addEventListener('click', () => { if(enAnim() && btnAscenso.textContent==='Detener'){ detener(); abrir('arbol'); return; } ascenso(); });
+btnLuria.addEventListener('click', () => { if(enAnim() && btnLuria.textContent==='Detener'){ detener(); abrir('arbol'); return; } luria(); });
+document.getElementById('btnTodo').addEventListener('click', () => abrir('arbol'));
+
+/* ---- Clic y teclado sobre el árbol ---- */
+svg.addEventListener('click', e => { const z = e.target.closest('.zona'); if(z) abrir(z.dataset.n, true); });
+svg.addEventListener('keydown', e => {
+  const z = e.target.closest('.zona'); if(!z) return;
+  if(e.key==='Enter' || e.key===' '){ e.preventDefault(); abrir(z.dataset.n, true); }
+});
+
+// Un enlace como arbol-de-la-vida.html#tiferet abre directamente esa explicación
+const inicial = decodeURIComponent(location.hash.slice(1));
+abrir(Object.prototype.hasOwnProperty.call(N, inicial) ? inicial : 'arbol');
+})();
+</script>
+</body>
+</html>
