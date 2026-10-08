@@ -342,6 +342,14 @@ a.card:hover .go .arr{transform:translateX(5px);}
 .figura .fig-letras{transform-box:view-box; transform-origin:150px 186px; animation:spin 180s linear infinite;}
 .figura .fig-sefira{animation:pulse 3s ease-in-out infinite;}
 @keyframes fig-onda{0%{transform:scale(.5); opacity:.6;}100%{transform:scale(2.6); opacity:0;}}
+/* Ankh: el sol late en el lazo, la luz recorre el oro, brota el aliento de vida y fluye el Nilo */
+.figura .fig-sol{transform-box:fill-box; transform-origin:center; animation:breathe 5s ease-in-out infinite;}
+.figura .fig-brillo{animation:fig-brillo 7s ease-in-out infinite;}
+.figura .fig-aliento{opacity:0; animation:fig-aliento 4s ease-out infinite;}
+.figura .fig-nilo{animation:fig-nilo 5s linear infinite;}
+@keyframes fig-brillo{0%{transform:translateY(-40px); opacity:0;}15%{opacity:1;}70%{opacity:1;}100%{transform:translateY(300px); opacity:0;}}
+@keyframes fig-aliento{0%{transform:translate(0,0) scale(1); opacity:0;}15%{opacity:1;}100%{transform:translate(var(--dx),var(--dy)) scale(.4); opacity:0;}}
+@keyframes fig-nilo{to{transform:translateX(-40px);}}
 .figura .fig-rayos{transform-box:view-box; transform-origin:150px 102px; animation:spin 40s linear infinite; opacity:.8;}
 .camino:hover .fig-aro,.camino:focus-visible .fig-aro{transform:scale(1.05);}
 .camino:hover .fig-halo,.camino:focus-visible .fig-halo{opacity:.9;}

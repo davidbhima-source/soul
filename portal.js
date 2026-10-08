@@ -64,7 +64,7 @@ const PORTAL = {
        descripcion:'Seis sentidos, tres tonos, mundano o renuncia, y tres tiempos: un mandala que se despliega para mostrar cómo nace cada sentimiento y por qué del sentimiento nace el deseo.',
        href:'vedanas-108.html', color:'#d9b265', icono:'vedanas'}
      ]},
-    {id:'ocultismo', titulo:'Ocultismo', subtitulo:'Ocultismo occidental', href:'ocultismo.html', color:'#d39b2c', figura:'egipto',
+    {id:'ocultismo', titulo:'Ocultismo', subtitulo:'Ocultismo occidental', href:'ocultismo.html', color:'#d39b2c', figura:'ankh',
      descripcion:'Hermetismo, alquimia, Cábala y las órdenes iniciáticas: el esoterismo de Occidente, de sus raíces en el Egipto helenístico a las síntesis modernas.',
      secciones:[
       {id:'esoterismo', titulo:'La red del esoterismo', subtitulo:'Raíces y vínculos de las tradiciones', grupo:'Mapa general',
@@ -227,8 +227,7 @@ const MEDALLON = {
            feather:'#2f58bd', plinth:'#e3a52a'},
   buda:   {bg:['#e2654a','#9c2c1d'], skin:'#f2b53c', skin2:'#b77d17', robeFill:'#7a2214', robe2:'#52160c', hair:'#3a1a10',
            gold:'#f2b53c', lotus:'#f39a7f', lotus2:'#c4472f', dark:'#5a2a08', plinth:'#f2b53c'},
-  egipto: {bg:['#f6dc93','#c8892a'], skin:'#b5602e', skin2:'#8a4520', gold:'#f2c14e', lapis:'#24479e', turq:'#2fa79a',
-           kilt:'#f5ecd4', throne:'#7c4f1c', throne2:'#5c3812', dark:'#1d1408', plinth:'#24479e', water:'#24479e'},
+  ankh:   {bg:['#3a66c4','#0d1d4a'], gold:'#f2c14e', lapis:'#24479e', turq:'#2fa79a', cornalina:'#b8402c', plinth:'#24479e', water:'#24479e'},
   jamsa:  {bg:['#d8f0ee','#3b9aa6'], gold:'#e2b552', hand:'#f4f7f6', hand2:'#c9dcdc', blue:'#1f4f9a', blue2:'#5fb2d9', turq:'#2fa79a', dark:'#0d1a33',
            halo:[150,214,52]}
 };
@@ -302,60 +301,51 @@ function figuraClasica(tipo, c){
   for(let i=-3;i<=3;i++) s += trazo(petalo(150+i*24, 364, 326, 12), {fill:c.lotus, stroke:c.lotus2, 'stroke-width':1});
   return s;
 }
-/* Figura egipcia: sentada en su trono como las estatuas de los templos, con el
-   nemes, el collar wesekh y el ankh en la mano; detrás, el disco solar con sus rayos */
-function figuraEgipto(c){
-  let s = '';
-  // Rayos del disco solar, que giran despacio detrás de la cabeza
+/* Ankh: la cruz egipcia de la vida, de oro con incrustaciones de lapislázuli,
+   cornalina y turquesa, sobre el azul nocturno de los techos de las tumbas. El disco solar brilla en su lazo, la luz recorre el oro de arriba
+   abajo, el «aliento de vida» brota en motas de oro y el Nilo fluye a sus pies */
+function figuraAnkh(c, id){
+  let s = '<defs><linearGradient id="'+id+'-oro" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffe28e"/><stop offset=".5" stop-color="'+c.gold+'"/><stop offset="1" stop-color="#b9802a"/></linearGradient>'+
+    '<linearGradient id="'+id+'-luz" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff8dc" stop-opacity="0"/><stop offset=".5" stop-color="#fff8dc" stop-opacity=".85"/><stop offset="1" stop-color="#fff8dc" stop-opacity="0"/></linearGradient>'+
+    '<clipPath id="'+id+'-rio"><rect x="66" y="342" width="168" height="26"/></clipPath>'+
+    '<clipPath id="'+id+'-ankh"><path d="'+ANKH_CUERPO+'"/><path d="'+ANKH_LAZO+'" clip-rule="evenodd" fill-rule="evenodd"/></clipPath></defs>';
+  // Rayos del disco solar, que giran despacio detrás del lazo
   let rayos = '';
   for(let i=0;i<16;i++){ const a = i*Math.PI/8, x0 = 150+Math.cos(a)*46, y0 = 102+Math.sin(a)*46, x1 = 150+Math.cos(a)*(i%2?58:66), y1 = 102+Math.sin(a)*(i%2?58:66);
     rayos += '<line x1="'+x0.toFixed(1)+'" y1="'+y0.toFixed(1)+'" x2="'+x1.toFixed(1)+'" y2="'+y1.toFixed(1)+'"/>'; }
   s += '<g class="fig-rayos" stroke="'+c.gold+'" stroke-width="2.4" stroke-linecap="round">'+rayos+'</g>';
-  // Agua del Nilo bajo la peana
-  s += trazo('M70,352 q10,-6 20,0 t20,0 t20,0 t20,0 t20,0 t20,0 t20,0 t20,0 M86,362 q10,-6 20,0 t20,0 t20,0 t20,0 t20,0 t20,0 t20,0', {fill:'none', stroke:c.water, 'stroke-width':2.2, 'stroke-linecap':'round', opacity:.75});
-  // Trono con su respaldo y el borde del asiento
-  s += '<rect x="80" y="158" width="140" height="178" rx="4" fill="'+c.throne+'"/>';
-  s += '<rect x="88" y="166" width="124" height="162" rx="2" fill="none" stroke="'+c.gold+'" stroke-width="1.4" opacity=".55"/>';
-  s += '<rect x="80" y="262" width="140" height="8" fill="'+c.throne2+'"/>';
-  // Piernas y pies
-  s += trazo('M122,268 L144,268 L143,328 L124,328 Z', {fill:c.skin}) + trazo('M156,268 L178,268 L176,328 L157,328 Z', {fill:c.skin});
-  s += '<ellipse cx="132" cy="331" rx="14" ry="5" fill="'+c.skin+'"/><ellipse cx="168" cy="331" rx="14" ry="5" fill="'+c.skin+'"/>';
-  // Faldellín (shendyt) con su lengüeta central y pliegues
-  s += trazo('M112,222 L188,222 L194,270 L106,270 Z', {fill:c.kilt});
-  s += trazo('M120,232 L114,266 M130,232 L126,266 M170,232 L174,266 M180,232 L186,266', {fill:'none', stroke:c.skin2, 'stroke-width':1, opacity:.35});
-  s += trazo('M144,226 L156,226 L154,268 L146,268 Z', {fill:c.gold});
-  s += '<rect x="111" y="216" width="78" height="8" rx="2" fill="'+c.gold+'"/>';
-  // Torso
-  s += trazo('M150,144 C124,144 104,150 100,162 C96,186 104,206 112,220 L188,220 C196,206 204,186 200,162 C196,150 176,144 150,144 Z', {fill:c.skin});
-  // Brazos sobre los muslos
-  s += trazo('M102,158 C90,180 92,206 100,224 C104,238 108,250 112,260 L126,258 C122,244 116,230 114,218 C112,200 112,182 116,166 Z', {fill:c.skin});
-  s += trazo('M198,158 C210,180 208,206 200,224 C196,238 192,250 188,260 L174,258 C178,244 184,230 186,218 C188,200 188,182 184,166 Z', {fill:c.skin});
-  s += trazo('M116,166 C112,182 112,200 114,218 C116,230 122,244 126,258 M184,166 C188,182 188,200 186,218 C184,230 178,244 174,258', {fill:'none', stroke:c.skin2, 'stroke-width':1.6, opacity:.7});
-  // Ankh en la mano derecha y la otra mano abierta sobre la rodilla
-  s += '<g fill="none" stroke="'+c.gold+'" stroke-width="3.4" stroke-linecap="round"><ellipse cx="118" cy="236" rx="6" ry="8.5"/><path d="M107,248 L129,248 M118,245 L118,292"/></g>';
-  s += '<ellipse cx="118" cy="260" rx="9" ry="6.5" fill="'+c.skin+'"/><ellipse cx="183" cy="262" rx="10" ry="6" fill="'+c.skin+'"/>';
-  // Collar wesekh en bandas
-  s += trazo('M112,150 Q150,208 188,150', {fill:'none', stroke:c.lapis, 'stroke-width':6});
-  s += trazo('M118,149 Q150,196 182,149', {fill:'none', stroke:c.gold, 'stroke-width':5});
-  s += trazo('M124,148 Q150,184 176,148', {fill:'none', stroke:c.turq, 'stroke-width':6});
-  // Cuello y cabeza
-  s += '<rect x="141" y="120" width="18" height="28" fill="'+c.skin+'"/>';
-  s += '<ellipse cx="150" cy="104" rx="19" ry="23" fill="'+c.skin+'"/>';
-  // Nemes: tocado a rayas con sus dos caídas sobre el pecho
-  s += trazo('M128,98 L115,142 L132,150 L132,100 Z M172,98 L185,142 L168,150 L168,100 Z', {fill:c.lapis});
-  s += trazo('M127,98 C124,76 136,67 150,67 C164,67 176,76 173,98 Z', {fill:c.lapis});
-  s += trazo('M124,112 L132,112 M121,122 L132,122 M118,132 L132,132 M116,141 L132,141 M176,112 L168,112 M179,122 L168,122 M182,132 L168,132 M184,141 L168,141', {fill:'none', stroke:c.gold, 'stroke-width':3.2});
-  s += trazo('M150,68 L150,94 M140,70 L136,94 M160,70 L164,94 M131,76 L128,94 M169,76 L172,94', {fill:'none', stroke:c.gold, 'stroke-width':2.6});
-  s += '<rect x="126" y="93" width="48" height="6" rx="2" fill="'+c.gold+'"/>';
-  // Ureo sobre la frente
-  s += trazo('M150,98 C146,92 154,88 150,82 C148,79 152,77 153,80', {fill:'none', stroke:c.turq, 'stroke-width':2.4, 'stroke-linecap':'round'});
-  // Ojos cerrados con la línea de kohl, y barba postiza
-  s += trazo('M136,108 Q141,111 146,108 L150,106 M164,108 Q159,111 154,108', {fill:'none', stroke:c.dark, 'stroke-width':1.6, 'stroke-linecap':'round', opacity:.9});
-  s += '<rect x="146.5" y="125" width="7" height="16" rx="2.5" fill="'+c.lapis+'"/><path d="M146.5,131 L153.5,131 M146.5,136 L153.5,136" stroke="'+c.gold+'" stroke-width="1.4"/>';
-  // Peana
-  s += '<rect x="66" y="334" width="168" height="10" rx="3" fill="'+c.plinth+'"/>';
+  // El disco solar dentro del lazo
+  s += '<circle class="fig-sol" cx="150" cy="104" r="15" fill="#fff3c4"/>';
+  // Agua del Nilo, que fluye bajo la peana
+  const ondas = n => ' q10,-6 20,0'+' t20,0'.repeat(n);
+  s += '<g clip-path="url(#'+id+'-rio)"><g class="fig-nilo">'+trazo('M30,352'+ondas(13)+' M50,362'+ondas(12), {fill:'none', stroke:c.water, 'stroke-width':2.2, 'stroke-linecap':'round', opacity:.75})+'</g></g>';
+  // La cruz: lazo, brazos y fuste de oro
+  s += '<path d="'+ANKH_LAZO+'" fill="url(#'+id+'-oro)" fill-rule="evenodd" stroke="#8a5a14" stroke-width="1.2"/>';
+  s += '<path d="'+ANKH_CUERPO+'" fill="url(#'+id+'-oro)" stroke="#8a5a14" stroke-width="1.2"/>';
+  // Incrustaciones: filete de lapislázuli siguiendo la forma y bandas de turquesa
+  s += '<ellipse cx="150" cy="106" rx="23" ry="34" fill="none" stroke="'+c.lapis+'" stroke-width="3"/>';
+  s += trazo('M104,154 L138,160 L138,164 L104,172 Z M196,154 L162,160 L162,164 L196,172 Z', {fill:c.cornalina});
+  s += trazo('M146,176 L154,176 L162,306 L138,306 Z', {fill:c.lapis});
+  s += '<rect x="138" y="150" width="24" height="24" rx="3" fill="'+c.turq+'" stroke="#8a5a14" stroke-width="1"/>';
+  s += '<circle cx="150" cy="162" r="5" fill="'+c.gold+'"/>';
+  [196,226,256,286].forEach(y => { const w = 8 + (y-176)*.065; s += '<rect x="'+(150-w).toFixed(1)+'" y="'+y+'" width="'+(2*w).toFixed(1)+'" height="4" fill="'+c.turq+'" opacity=".9"/>'; });
+  // Luz que recorre el oro de arriba abajo
+  s += '<g clip-path="url(#'+id+'-ankh)"><rect class="fig-brillo" x="80" y="40" width="140" height="70" fill="url(#'+id+'-luz)"/></g>';
+  // Aliento de vida: motas de oro que brotan del lazo y de los brazos
+  let seed = 5; const r = () => (seed = (seed*16807)%2147483647)/2147483647;
+  let motas = '';
+  [[150,70,0,-1],[96,163,-1,0],[204,163,1,0]].forEach(([x,y,dx,dy],k) => {
+    for(let i=0;i<5;i++) motas += '<circle class="fig-aliento" cx="'+x+'" cy="'+y+'" r="'+(1.2+r()*1.4).toFixed(1)+'" fill="#fff1c0" style="--dx:'+((dx*34)+(r()-.5)*24).toFixed(0)+'px;--dy:'+((dy*34)+(r()-.5)*24-(dy?0:10)).toFixed(0)+'px;animation-delay:-'+(r()*4).toFixed(2)+'s"/>';
+  });
+  s += '<g>'+motas+'</g>';
+  // Peana de lapislázuli
+  s += '<rect x="96" y="320" width="108" height="10" rx="3" fill="'+c.plinth+'"/><rect x="80" y="332" width="140" height="8" rx="3" fill="'+c.plinth+'" opacity=".8"/>';
   return s;
 }
+// Lazo (con su hueco) y cuerpo de la cruz: brazos que se abren hacia fuera y fuste que se ensancha
+const ANKH_LAZO = 'M150,66 C171,66 180,86 180,106 C180,128 166,146 150,150 C134,146 120,128 120,106 C120,86 129,66 150,66 Z '+
+                  'M150,80 C140,80 135,92 135,106 C135,120 142,132 150,136 C158,132 165,120 165,106 C165,92 160,80 150,80 Z';
+const ANKH_CUERPO = 'M138,148 L162,148 L162,154 L204,146 L208,180 L162,172 L174,320 L126,320 L138,172 L92,180 L96,146 L138,154 Z';
 /* Jamsa: la mano protectora con el ojo en la palma, la letra He (5) y un pequeño
    Árbol de la Vida; alrededor gira el anillo de las 22 letras hebreas */
 const LETRAS = 'אבגדהוזחטיכלמנסעפצקרשת';
@@ -402,7 +392,7 @@ function jamsaFondo(c){
 function figura(tipo){
   const c = MEDALLON[tipo], id = 'fg'+(++uid), h = c.halo || [150,102,40];
   // Cielo de puntos: posiciones fijas para que la figura sea siempre igual
-  let seed = {krishna:11, buda:29, egipto:47, jamsa:61}[tipo] || 7, stars = '';
+  let seed = {krishna:11, buda:29, ankh:47, jamsa:61}[tipo] || 7, stars = '';
   const r = () => { seed = (seed*16807)%2147483647; return seed/2147483647; };
   for(let i=0;i<70;i++){
     const a = r()*Math.PI*2, d = 40 + r()*150, x = 150+Math.cos(a)*d, y = 186+Math.sin(a)*d*.95, z = r();
@@ -417,7 +407,7 @@ function figura(tipo){
     '<circle cx="'+h[0]+'" cy="'+h[1]+'" r="'+h[2]+'" fill="none" stroke="'+c.gold+'" stroke-width="1.2" opacity=".7"/>'+
     '<ellipse cx="150" cy="214" rx="94" ry="118" fill="none" stroke="'+c.gold+'" stroke-width="1" opacity=".45"/>'+
     (tipo==='jamsa' ? jamsaFondo(c) : '')+
-    '<g class="fig-body">'+(tipo==='egipto' ? figuraEgipto(c) : tipo==='jamsa' ? figuraJamsa(c) : figuraClasica(tipo, c))+'</g>'+
+    '<g class="fig-body">'+(tipo==='ankh' ? figuraAnkh(c, id) : tipo==='jamsa' ? figuraJamsa(c) : figuraClasica(tipo, c))+'</g>'+
     '<g class="fig-cielo">'+stars+'</g></svg>';
 }
 
